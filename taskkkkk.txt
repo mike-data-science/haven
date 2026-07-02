@@ -1,0 +1,59 @@
+⏳ PAS 4 — loading.tsx 🔥
+🎯 Creează:
+/items/loading.tsx
+
+și:
+
+/items/[id]/loading.tsx
+
+👉 afișează:
+
+skeleton simplu
+sau
+„Loading...”
+🧠 CONCEPT IMPORTANT
+
+👉 loading.tsx este AUTOMAT detectat de App Router.
+
+💥 PAS 5 — error.tsx
+🎯 Creează:
+/items/error.tsx
+
+👉 testează:
+
+aruncă error manual
+🧠 Întrebare:
+
+De ce:
+
+throw new Error()
+
+e diferit de:
+
+return null
+🧭 PAS 6 — not-found.tsx
+🎯 Creează:
+/items/[id]/not-found.tsx
+
+👉 dacă item nu există:
+
+afișează pagină custom
+
+👉 hint:
+există funcție specială în Next.js docs 😉
+
+
+
+
+
+
+These features fit specific UI patterns, such as slot-based layouts or modal routing.
+
+Use @slot for named slots rendered by a parent layout. Use intercept patterns to render another route inside the current layout without changing the URL, for example, to show a details view as a modal over a list.
+
+Pattern (docs)	Meaning	Typical use case
+@folder	Named slot	Sidebar + main content
+(.)folder	Intercept same level	Preview sibling route in a modal
+(..)folder	Intercept parent	Open a child of the parent as an overlay
+(..)(..)folder	Intercept two levels	Deeply nested overlay
+(...)folder	Intercept from root	Show arbitrary route in current view
