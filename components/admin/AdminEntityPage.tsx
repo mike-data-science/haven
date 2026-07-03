@@ -265,6 +265,7 @@ export default function AdminEntityPage({ table }: AdminEntityPageProps) {
 
             <form onSubmit={handleSubmit} className="mt-6 space-y-5">
               {fieldSpecs.map((field) => {
+                if (field.name === "latitude" || field.name === "longitude") return null;
                 const value = formData[field.name];
                 const commonProps = {
                   id: field.name,
@@ -328,6 +329,21 @@ export default function AdminEntityPage({ table }: AdminEntityPageProps) {
                   </div>
                 );
               })}
+
+              {/* Render MapPicker explicitly if the entity has latitude/longitude fields */}
+              {fieldSpecs.some((f) => f.name === "latitude") && fieldSpecs.some((f) => f.name === "longitude") && (
+                <div className="grid gap-2">
+                  <label className="text-sm font-medium text-slate-700">Location (Pin on map)</label>
+                  <MapPicker
+                    latitude={formData.latitude ? Number(formData.latitude) : undefined}
+                    longitude={formData.longitude ? Number(formData.longitude) : undefined}
+                    onChange={(lat, lng) => {
+                      handleInputChange("latitude", String(lat));
+                      handleInputChange("longitude", String(lng));
+                    }}
+                  />
+                </div>
+              )}
 
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm leading-6 text-slate-600">Submit the form to POST or PUT to your API. Use the row actions to load a record for update or delete.</p>

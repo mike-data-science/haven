@@ -41,7 +41,9 @@ export default async function Page({ params }) {
       email: rawProperty.user.email || "",
       image: rawProperty.user.avatarUrl || ""
     } : null,
-    pin: { top: rawProperty.pinTop || "50%", left: rawProperty.pinLeft || "50%" }
+    pin: { top: rawProperty.pinTop || "50%", left: rawProperty.pinLeft || "50%" },
+    latitude: rawProperty.latitude,
+    longitude: rawProperty.longitude
   };
 
   const similarRaw = await propertyRepo.find({

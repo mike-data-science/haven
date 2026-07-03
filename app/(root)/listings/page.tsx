@@ -44,7 +44,9 @@ async function getListingsData() {
       email: p.user.email || "",
       image: p.user.avatarUrl || "https://placehold.co/100x100?text=Agent"
     } : null,
-    pin: { top: p.pinTop || "50%", left: p.pinLeft || "50%" }
+    pin: { top: p.pinTop || "50%", left: p.pinLeft || "50%" },
+    latitude: p.latitude,
+    longitude: p.longitude
   }));
 
   const agents = rawAgents.map(a => ({
