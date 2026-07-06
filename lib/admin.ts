@@ -179,25 +179,7 @@ export const adminEntities: AdminEntity[] = [
       { name: "message", example: "Can I schedule a viewing?" },
     ],
   },
-  {
-    slug: "locations",
-    label: "Locations",
-    description: "Manage location metadata and region data.",
-    icon: MapPin,
-    fields: [
-      { name: "address", label: "Address", type: "text", placeholder: "Strada Stefan cel Mare 1" },
-      { name: "city", label: "City", type: "text", placeholder: "Chișinău" },
-      { name: "state", label: "State", type: "text", placeholder: "Chisinau" },
-      { name: "country", label: "Country", type: "text", placeholder: "Moldova" },
-      { name: "latitude", label: "Latitude", type: "number", placeholder: "47.0105" },
-      { name: "longitude", label: "Longitude", type: "number", placeholder: "28.8638" },
-    ],
-    exampleFields: [
-      { name: "city", example: "Chișinău" },
-      { name: "country", example: "Moldova" },
-      { name: "latitude", example: "47.0105" },
-    ],
-  },
+
   {
     slug: "messages",
     label: "Messages",

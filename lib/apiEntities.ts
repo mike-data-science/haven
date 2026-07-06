@@ -94,20 +94,6 @@ export const inquiryHandlers = createCrudHandlers({
     }),
 });
 
-export const locationHandlers = createCrudHandlers({
-  entity: Location,
-  entityName: "Location",
-  relations: ["properties"],
-  buildData: (body) =>
-    pickDefined({
-      address: body.address,
-      city: body.city,
-      state: body.state,
-      country: body.country,
-      latitude: numberValue(body.latitude),
-      longitude: numberValue(body.longitude),
-    }),
-});
 
 export const messageHandlers = createCrudHandlers({
   entity: Message,
@@ -124,7 +110,7 @@ export const messageHandlers = createCrudHandlers({
 export const propertyHandlers = createCrudHandlers({
   entity: Property,
   entityName: "Property",
-  relations: ["user", "category", "location"],
+  relations: ["user", "category"],
   buildData: (body) =>
     pickDefined({
       title: body.title,

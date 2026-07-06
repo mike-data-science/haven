@@ -32,7 +32,7 @@ export function Navbar() {
           <Link href="/about" className="font-sans text-[15px] font-bold text-slate transition-colors hover:text-navy">About</Link>
           <Link href="/contact" className="font-sans text-[15px] font-bold text-slate transition-colors hover:text-navy">Contact</Link>
         </div>
-        <button className="bg-navy text-white font-sans text-[14px] font-bold py-[11px] px-6 rounded-[10px] cursor-pointer transition-transform hover:-translate-y-[2px] shadow-sm">Sign in</button>
+        <button className="bg-[#0B3D91] text-white font-sans text-[14px] font-bold py-[11px] px-6 rounded-[10px] cursor-pointer transition-transform hover:-translate-y-[2px] shadow-sm">Sign in</button>
       </div>
     </nav>
   );

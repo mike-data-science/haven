@@ -315,8 +315,8 @@ export default function AdminEntityPage({ table }: AdminEntityPageProps) {
                         latitude={formData.latitude ? Number(formData.latitude) : undefined}
                         longitude={formData.longitude ? Number(formData.longitude) : undefined}
                         onChange={(lat, lng) => {
-                          handleInputChange("latitude", lat);
-                          handleInputChange("longitude", lng);
+                          handleInputChange("latitude", String(lat));
+                          handleInputChange("longitude", String(lng));
                         }}
                       />
                     ) : (

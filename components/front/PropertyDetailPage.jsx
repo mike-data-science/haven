@@ -4,10 +4,13 @@ import { useState } from "react";
 import { Navbar } from "./Navbar";
 import { PropertyCard } from "./PropertyCard";
 import { COLORS, TOUR_DATES, TOUR_TIMES, formatPrice } from "../../lib/data";
+import dynamic from "next/dynamic";
+
+const PropertyMapDisplay = dynamic(() => import("./PropertyMapDisplay"), { ssr: false });
 
 function HeroGallery({ property }) {
   return (
-    <section className="w-full max-w-[1400px] mx-auto px-5 md:px-10 py-6">
+    <section className="w-full max-w-[1400px] mx-auto px-5 md:px-10 py-6 pt-[120px]">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         <img
           src={property.image}
@@ -66,28 +69,7 @@ function PropertyMap({ property }) {
   return (
     <div className="bg-white rounded-[20px] p-6 md:p-8 border border-line shadow-sm">
       <h2 className="font-serif text-[22px] font-semibold text-ink mb-6">Location</h2>
-      <div className="relative h-[300px] bg-paleBlue rounded-[14px] overflow-hidden border border-line">
-        <div 
-          className="absolute inset-0" 
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(43,127,255,0.06) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(43,127,255,0.06) 1px, transparent 1px)
-            `,
-            backgroundSize: '32px 32px'
-          }}
-        >
-          <div 
-            className="absolute -translate-x-1/2 -translate-y-full flex flex-col items-center"
-            style={{ top: property.pin?.top || '50%', left: property.pin?.left || '50%' }}
-          >
-            <div className="bg-navy text-white font-bold text-[13px] px-3 py-1.5 rounded-[8px] shadow-[0_4px_12px_rgba(11,61,145,0.3)] mb-1">
-              {formatPrice(property.price)}
-            </div>
-            <div className="w-3 h-3 bg-navy rotate-45 -translate-y-1.5"></div>
-          </div>
-        </div>
-      </div>
+      <PropertyMapDisplay property={property} />
     </div>
   );
 }
@@ -117,7 +99,7 @@ function ContactAgentForm({ agent }) {
 }
 
 function TourScheduler() {
-  const [selectedDate, setSelectedDate] = useState(TOUR_DATES[0].id);
+  const [selectedDate, setSelectedDate] = useState(TOUR_DATES[0].day);
   const [selectedTime, setSelectedTime] = useState(null);
 
   return (
@@ -128,14 +110,14 @@ function TourScheduler() {
       <div className="flex overflow-x-auto gap-2.5 pb-2 mb-4 snap-x no-scrollbar">
         {TOUR_DATES.map(d => (
           <button 
-            key={d.id}
+            key={d.day}
             className={`flex-shrink-0 w-[64px] rounded-[12px] py-2 flex flex-col items-center justify-center border transition-all snap-start cursor-pointer ${
-              selectedDate === d.id ? "border-navy bg-navy text-white" : "border-line bg-warm text-ink hover:border-slate"
+              selectedDate === d.day ? "border-navy bg-navy text-white" : "border-line bg-warm text-ink hover:border-slate"
             }`}
-            onClick={() => setSelectedDate(d.id)}
+            onClick={() => setSelectedDate(d.day)}
           >
-            <span className="text-[11px] uppercase tracking-[0.5px] opacity-80 mb-0.5">{d.day}</span>
-            <span className="text-[18px] font-bold font-serif">{d.num}</span>
+            <span className="text-[11px] uppercase tracking-[0.5px] opacity-80 mb-0.5">{d.label}</span>
+            <span className="text-[18px] font-bold font-serif">{d.day}</span>
           </button>
         ))}
       </div>

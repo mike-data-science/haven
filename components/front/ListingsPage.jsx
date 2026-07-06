@@ -1,97 +1,50 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Navbar } from "./Navbar";
 import { PropertyCard } from "./PropertyCard";
 import { IconBed, IconBath, IconArea } from "./Icons";
-import { formatPrice } from "../../lib/data";
+import dynamic from "next/dynamic";
 
-function MapPanel({ listings, selectedId, onSelectPin }) {
-  const selected = listings.find((l) => l.id === selectedId);
-
-  return (
-    <div className="relative rounded-[14px] overflow-hidden bg-paleBlue h-full min-h-[400px]">
-      <div 
-        className="absolute inset-0" 
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(43,127,255,0.06) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(43,127,255,0.06) 1px, transparent 1px)
-          `,
-          backgroundSize: '32px 32px'
-        }}
-      >
-        {listings.map((l) => (
-          <button
-            key={l.id}
-            className={`absolute -translate-x-1/2 -translate-y-full text-[11px] font-bold px-[9px] py-[5px] rounded-full border-none cursor-pointer transition-all ${
-              selectedId === l.id 
-                ? "bg-ink text-white shadow-[0_4px_12px_rgba(26,26,24,0.3)] scale-110 z-20" 
-                : "bg-navy text-white hover:scale-105 z-10"
-            }`}
-            style={{ top: l.pin.top, left: l.pin.left }}
-            title={`${l.title} — ${formatPrice(l.price)}`}
-            onClick={() => onSelectPin?.(l.id)}
-          >
-            {formatPrice(l.price)}
-          </button>
-        ))}
-
-        {selected && (
-          <div
-            className="absolute -translate-x-1/2 mt-2 w-[280px] bg-white rounded-[16px] shadow-[0_12px_32px_rgba(26,26,24,0.15)] overflow-hidden z-30 transition-all duration-200"
-            style={{ top: selected.pin.top, left: selected.pin.left }}
-          >
-            <button
-              className="absolute top-2 right-2 w-[24px] h-[24px] bg-ink/50 hover:bg-ink text-white rounded-full flex items-center justify-center border-none cursor-pointer z-10 text-[14px] leading-none"
-              onClick={() => onSelectPin?.(null)}
-              aria-label="Close"
-            >
-              ×
-            </button>
-            <div className="relative h-[140px] w-full">
-              <img src={selected.image} alt={selected.title} className="w-full h-full object-cover block" />
-            </div>
-            <div className="p-4">
-              <span className="font-sans text-[16px] font-bold text-navy block mb-1.5">{formatPrice(selected.price)}</span>
-              <div className="flex gap-[12px] text-[12px] text-slate mb-3">
-                <span className="flex items-center gap-1"><span className="text-navy flex-shrink-0"><IconBed /></span> {selected.beds}</span>
-                <span className="flex items-center gap-1"><span className="text-navy flex-shrink-0"><IconBath /></span> {selected.baths}</span>
-                <span className="flex items-center gap-1"><span className="text-navy flex-shrink-0"><IconArea /></span> {selected.sqft.toLocaleString()} m²</span>
-              </div>
-              <p className="font-serif text-[15px] font-semibold text-ink mb-1 truncate">{selected.title}</p>
-              <p className="text-[12px] text-slate truncate">{selected.location}</p>
-            </div>
-          </div>
-        )}
-      </div>
-      <div className="absolute right-4 top-4 flex flex-col gap-2">
-        <button className="w-8 h-8 bg-white border border-line rounded-[8px] flex items-center justify-center font-bold text-ink cursor-pointer hover:bg-slate-50 transition-colors shadow-sm">+</button>
-        <button className="w-8 h-8 bg-white border border-line rounded-[8px] flex items-center justify-center font-bold text-ink cursor-pointer hover:bg-slate-50 transition-colors shadow-sm">−</button>
-      </div>
-      <span className="absolute left-4 top-4 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-[6px] text-[11px] font-bold text-navy shadow-sm uppercase tracking-[0.5px]">
-        Interactive map
-      </span>
-    </div>
-  );
-}
+const MultiMapDisplay = dynamic(() => import('./ListingsMap'), { ssr: false });
 
 export default function ListingsPage({ properties, agents, categories }) {
   const [selectedId, setSelectedId] = useState(null);
+  const [filteredListings, setFilteredListings] = useState(properties || []);
+  const [layoutMode, setLayoutMode] = useState('list'); // 'list' | 'grid'
 
   return (
-    <div className="min-h-screen bg-warm flex flex-col">
-      <Navbar />
-
-      <main className="flex-grow w-full max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)_minmax(300px,1.2fr)] h-[calc(100vh-80px)]">
+    <div className="font-sans text-[#1A1A18] bg-[#FAFAF8] min-h-screen flex flex-col h-screen overflow-hidden">
+      <div className="shrink-0 h-[120px]">
+        <Navbar />
+      </div>
+      
+      <main className="flex-1 flex overflow-hidden w-full max-w-[1600px] mx-auto">
         
-        {/* Sidebar Filters */}
-        <aside className="border-r border-line bg-white flex flex-col h-full overflow-y-auto">
-          <div className="p-6 border-b border-line">
+        {/* Sidebar Filters (Visible only in list mode) */}
+        <aside className={`w-[280px] shrink-0 border-r border-line bg-white flex-col h-full overflow-y-auto ${layoutMode === 'grid' ? 'hidden' : 'hidden md:flex'}`}>
+          <div className="p-6 border-b border-line flex justify-between items-center">
             <h2 className="font-serif text-[22px] font-semibold text-ink">Filter</h2>
+            <button 
+              onClick={() => setLayoutMode('grid')}
+              className="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-[#E8E5DF] hover:border-[#0B3D91] text-[#1A1A18] transition-colors cursor-pointer"
+              title="Switch to Grid layout"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            </button>
           </div>
           
           <div className="p-6 flex flex-col gap-8 flex-grow">
+            {/* Sort Dropdown moved to sidebar */}
+            <div className="flex flex-col gap-3">
+              <label className="text-[12px] font-bold text-slate uppercase tracking-[1px]">Sort By</label>
+              <select className="w-full border border-line rounded-[8px] px-3 py-2.5 text-[14px] bg-white outline-none focus:border-navy text-ink cursor-pointer">
+                <option>Recommended</option>
+                <option>Price: Low to High</option>
+                <option>Price: High to Low</option>
+                <option>Newest</option>
+              </select>
+            </div>
             <div className="flex flex-col gap-3">
               <label className="text-[12px] font-bold text-slate uppercase tracking-[1px]">Location</label>
               <select defaultValue="all" className="w-full border border-line rounded-[8px] px-3 py-2.5 text-[14px] bg-white outline-none focus:border-navy text-ink">
@@ -141,34 +94,90 @@ export default function ListingsPage({ properties, agents, categories }) {
           </div>
         </aside>
 
-        {/* Listings Center Column */}
-        <div className="bg-warm border-r border-line flex flex-col h-full overflow-y-auto">
-          <div className="p-6 border-b border-line bg-warm/80 backdrop-blur-md sticky top-0 z-10">
-            <p className="font-serif text-[18px] font-semibold text-ink">{properties.length} results found</p>
-          </div>
-          <div className="p-6 flex flex-col gap-5">
-            {properties.map((l) => (
-              <div key={l.id} className="bg-white rounded-[16px] overflow-hidden">
-                <PropertyCard
-                  listing={l}
-                  compact={false}
-                  selected={selectedId === l.id}
-                  onSelect={setSelectedId}
-                />
+        {/* Dynamic Center Column + Right Map */}
+        <div className="flex-1 flex overflow-hidden">
+          
+          {/* Listings List/Grid */}
+          <div className={`flex flex-col h-full bg-[#FAFAF8] border-r border-[#E8E5DF] relative z-10 shadow-[4px_0_24px_rgba(0,0,0,0.02)] transition-all duration-300 ${layoutMode === 'grid' ? 'w-[60%]' : 'w-full max-w-[600px] flex-1 lg:max-w-none lg:flex-[1.2]'}`}>
+            
+            {/* Top Bar (Pills + Layout Toggle) - Visible only in grid mode */}
+            <div className={`items-center justify-between gap-4 px-6 py-4 border-b border-[#E8E5DF] bg-white shrink-0 overflow-x-auto ${layoutMode === 'list' ? 'hidden' : 'flex'}`}>
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 border border-[#E8E5DF] rounded-full px-4 py-2 hover:border-[#0B3D91] transition-colors cursor-pointer whitespace-nowrap">
+                  <span className="text-[13px] font-bold text-[#1A1A18]">Price</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+                <div className="flex items-center gap-2 border border-[#E8E5DF] rounded-full px-4 py-2 hover:border-[#0B3D91] transition-colors cursor-pointer whitespace-nowrap">
+                  <span className="text-[13px] font-bold text-[#1A1A18]">Property Type</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+                <div className="flex items-center gap-2 border border-[#E8E5DF] rounded-full px-4 py-2 hover:border-[#0B3D91] transition-colors cursor-pointer whitespace-nowrap hidden sm:flex">
+                  <span className="text-[13px] font-bold text-[#1A1A18]">Beds & Baths</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
+              
+              <div className="flex items-center gap-3">
+                <select className="bg-transparent border-none font-sans text-[14px] text-[#6B7280] outline-none cursor-pointer hidden md:block">
+                  <option>Recommended</option>
+                  <option>Price: Low to High</option>
+                  <option>Price: High to Low</option>
+                  <option>Newest</option>
+                </select>
+                <div className="w-px h-6 bg-[#E8E5DF] hidden md:block mx-1"></div>
+                <button 
+                  onClick={() => setLayoutMode('list')}
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-white border border-[#E8E5DF] hover:border-[#0B3D91] text-[#1A1A18] transition-colors cursor-pointer"
+                  title="Switch to List layout"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                </button>
+              </div>
+            </div>
+            
+            <div className="px-6 py-4 shrink-0 bg-[#FAFAF8]">
+              <h1 className="font-serif text-[20px] font-bold text-[#1A1A18]">
+                {filteredListings.length} results found
+              </h1>
+            </div>
 
-        {/* Map Right Column */}
-        <div className="p-6 h-full hidden lg:block">
-          <MapPanel
-            listings={properties}
-            selectedId={selectedId}
-            onSelectPin={setSelectedId}
-          />
+            <div className="flex-1 overflow-y-auto px-6 pb-24">
+              <div className={`grid gap-6 ${layoutMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'}`}>
+                {filteredListings.map(l => (
+                  <div 
+                    key={l.id} 
+                    className="bg-white rounded-[16px] overflow-hidden"
+                    onMouseEnter={() => setSelectedId(l.id)} 
+                    onMouseLeave={() => {
+                      // Only clear if it was a hover selection. If clicked via map, keep it.
+                      // Simple implementation: clear on leave for fluid UX, or keep it.
+                      // We will just clear it for a very responsive feeling.
+                      setSelectedId(null);
+                    }}
+                  >
+                    <PropertyCard
+                      listing={l}
+                      compact={false}
+                      selected={selectedId === l.id}
+                      onSelect={setSelectedId}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Interactive Map */}
+          <div className={`h-full bg-[#EAF2FF] relative p-4 transition-all duration-300 hidden sm:block ${layoutMode === 'grid' ? 'w-[40%]' : 'flex-1 min-w-[300px]'}`}>
+             <MultiMapDisplay 
+               listings={filteredListings} 
+               selectedId={selectedId} 
+               onSelectPin={setSelectedId} 
+             />
+          </div>
         </div>
       </main>
     </div>
   );
 }
+

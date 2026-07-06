@@ -7,7 +7,7 @@ import { formatPrice } from "../../lib/data";
 
 function HeroGradient() {
   return (
-    <section className="relative w-full h-[600px] flex flex-col items-center justify-center text-center px-5 pt-[100px] bg-gradient-to-b from-[#EAF2FF] from-40% to-[#FAFAF8] overflow-hidden">
+    <section className="relative w-full min-h-[700px] h-auto flex flex-col items-center justify-center text-center px-5 pt-[140px] pb-16 bg-gradient-to-b from-[#EAF2FF] from-40% to-[#FAFAF8] overflow-hidden">
       <div className="relative z-10 w-full max-w-[800px] flex flex-col items-center mt-[40px]">
         <p className="font-sans text-[12px] font-bold uppercase tracking-[1.5px] text-[#2B7FFF] mb-4 bg-white/60 px-3 py-1 rounded-full border border-[#2B7FFF]/20 backdrop-blur-sm">
           142 new listings this week
@@ -205,7 +205,7 @@ function AboutSplit() {
   );
 }
 
-export default function HomePage({ properties = [], agents = [] }) {
+export default function HomePage({ properties, agents }) {
   return (
     <div className="font-sans text-[#1A1A18] bg-[#FAFAF8] min-h-screen">
       <Navbar />
