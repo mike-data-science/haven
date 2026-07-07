@@ -1,41 +1,27 @@
-import { Appointment } from "@/entities/Appointment";
-import { Category } from "@/entities/Category";
-import { Conversation } from "@/entities/Conversation";
-import { Favorite } from "@/entities/Favorite";
-import { Image } from "@/entities/Image";
-import { Inquiry } from "@/entities/Inquiry";
-
-import { Message } from "@/entities/Message";
-import { Property } from "@/entities/Property";
-import { Review } from "@/entities/Rewiew";
-import { Role } from "@/entities/Role";
-import { User } from "@/entities/User";
 import {
   booleanValue,
   createCrudHandlers,
   dateValue,
-  nullableRelation,
   numberValue,
   pickDefined,
-  relation,
 } from "@/lib/apiCrud";
 
 export const appointmentHandlers = createCrudHandlers({
-  entity: Appointment,
+  modelName: "appointment",
   entityName: "Appointment",
-  relations: ["user", "property"],
+  include: { user: true, property: true },
   buildData: (body) =>
     pickDefined({
       visitDate: dateValue(body.visitDate),
       status: body.status,
       notes: body.notes,
-      user: relation(body.userId),
-      property: relation(body.propertyId),
+      userId: numberValue(body.userId),
+      propertyId: numberValue(body.propertyId),
     }),
 });
 
 export const categoryHandlers = createCrudHandlers({
-  entity: Category,
+  modelName: "category",
   entityName: "Category",
   buildData: (body) =>
     pickDefined({
@@ -45,72 +31,73 @@ export const categoryHandlers = createCrudHandlers({
 });
 
 export const conversationHandlers = createCrudHandlers({
-  entity: Conversation,
+  modelName: "conversation",
   entityName: "Conversation",
-  relations: ["user", "property"],
+  include: { user: true, property: true },
   buildData: (body) =>
     pickDefined({
-      user: relation(body.userId),
-      property: nullableRelation(body.propertyId),
+      userId: numberValue(body.userId),
+      propertyId: numberValue(body.propertyId) ?? null,
     }),
 });
 
 export const favoriteHandlers = createCrudHandlers({
-  entity: Favorite,
+  modelName: "favorite",
   entityName: "Favorite",
-  relations: ["user", "property"],
+  include: { user: true, property: true },
   buildData: (body) =>
     pickDefined({
-      user: relation(body.userId),
-      property: relation(body.propertyId),
+      userId: numberValue(body.userId),
+      propertyId: numberValue(body.propertyId),
     }),
 });
 
 export const imageHandlers = createCrudHandlers({
-  entity: Image,
+  modelName: "image",
   entityName: "Image",
-  relations: ["property"],
+  include: { property: true },
   buildData: (body) =>
     pickDefined({
       url: body.url,
       alt: body.alt,
       order: numberValue(body.order),
-      property: relation(body.propertyId),
+      propertyId: numberValue(body.propertyId),
     }),
 });
 
 export const inquiryHandlers = createCrudHandlers({
-  entity: Inquiry,
+  modelName: "inquiry",
   entityName: "Inquiry",
-  relations: ["user", "property"],
+  include: { user: true, property: true },
   buildData: (body) =>
     pickDefined({
       name: body.name,
       email: body.email,
       phone: body.phone,
       message: body.message,
-      user: nullableRelation(body.userId),
-      property: relation(body.propertyId),
+      userId: numberValue(body.userId) ?? null,
+      propertyId: numberValue(body.propertyId),
     }),
 });
 
-
 export const messageHandlers = createCrudHandlers({
-  entity: Message,
+  modelName: "message",
   entityName: "Message",
-  relations: ["conversation", "sender"],
+  include: { conversation: true, sender: true },
   buildData: (body) =>
     pickDefined({
       content: body.content,
-      conversation: relation(body.conversationId),
-      sender: relation(body.senderId),
+      conversationId: numberValue(body.conversationId),
+      senderId: numberValue(body.senderId),
     }),
 });
 
 export const propertyHandlers = createCrudHandlers({
-  entity: Property,
+  modelName: "property",
   entityName: "Property",
-  relations: ["user", "category"],
+  include: { user: true, category: true, images: true },
+  allowedRoles: ['ADMIN', 'AGENT', 'USER'],
+  ownershipField: 'userId',
   buildData: (body) =>
     pickDefined({
       title: body.title,
@@ -124,45 +111,38 @@ export const propertyHandlers = createCrudHandlers({
       floor: numberValue(body.floor),
       yearBuilt: numberValue(body.yearBuilt),
       isPublished: booleanValue(body.isPublished),
-      user: relation(body.userId),
-      category: nullableRelation(body.categoryId),
+      categoryId: numberValue(body.categoryId) ?? null,
       latitude: numberValue(body.latitude),
       longitude: numberValue(body.longitude),
+      pinTop: body.pinTop,
+      pinLeft: body.pinLeft,
     }),
 });
 
 export const reviewHandlers = createCrudHandlers({
-  entity: Review,
+  modelName: "review",
   entityName: "Review",
-  relations: ["user", "property"],
+  include: { user: true, property: true },
   buildData: (body) =>
     pickDefined({
       rating: numberValue(body.rating),
       comment: body.comment,
-      user: relation(body.userId),
-      property: relation(body.propertyId),
-    }),
-});
-
-export const roleHandlers = createCrudHandlers({
-  entity: Role,
-  entityName: "Role",
-  buildData: (body) =>
-    pickDefined({
-      name: body.name,
+      userId: numberValue(body.userId),
+      propertyId: numberValue(body.propertyId),
     }),
 });
 
 export const userHandlers = createCrudHandlers({
-  entity: User,
+  modelName: "user",
   entityName: "User",
-  relations: ["userRole"],
   buildData: (body) =>
     pickDefined({
       name: body.name,
       email: body.email,
-      password: body.password,
-      role: body.role,
-      userRole: nullableRelation(body.userRoleId ?? body.roleId),
+      clerkId: body.clerkId,
+      avatarUrl: body.avatarUrl,
+      phone: body.phone,
+      title: body.title,
+      role: body.role, // Prisma enum matches strings nicely if valid
     }),
 });

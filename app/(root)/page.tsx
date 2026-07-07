@@ -1,24 +1,16 @@
 import HomePage from '@/components/front/HomePage';
-import { initializeDB } from '@/lib/db';
-import { Property } from '@/entities/Property';
-import { User } from '@/entities/User';
-import { Category } from '@/entities/Category';
+import prisma from '@/lib/db';
 
 export const revalidate = 0; // Ensures fresh data is fetched
 
 async function getHomeData() {
-  const db = await initializeDB();
-  const propertyRepo = db.getRepository(Property);
-  const userRepo = db.getRepository(User);
-  const categoryRepo = db.getRepository(Category);
-
-  const rawProperties = await propertyRepo.find({
-    relations: ['user', 'images', 'category'],
-    order: { id: 'DESC' },
+  const rawProperties = await prisma.property.findMany({
+    include: { user: true, images: true, category: true },
+    orderBy: { id: 'desc' },
     take: 6,
   });
 
-  const rawAgents = await userRepo.find({
+  const rawAgents = await prisma.user.findMany({
     where: { role: 'AGENT' },
     take: 3,
   });

@@ -1,56 +1,49 @@
 import { NextResponse } from "next/server";
-import { initializeDB } from "@/lib/db";
-import { Property } from "@/entities/Property";
-import { Image } from "@/entities/Image";
-import { User } from "@/entities/User";
-import { Category } from "@/entities/Category";
-import { Favorite } from "@/entities/Favorite";
-import { Inquiry } from "@/entities/Inquiry";
-import { Message } from "@/entities/Message";
-import { Review } from "@/entities/Rewiew";
-import { Appointment } from "@/entities/Appointment";
-import { Conversation } from "@/entities/Conversation";
+import prisma from "@/lib/db";
 
 export async function GET() {
   try {
-    const db = await initializeDB();
-
-    // 1. Delete all existing data in proper dependency order
-    await db.getRepository(Appointment).query('TRUNCATE TABLE "appointment" CASCADE');
-    await db.getRepository(Message).query('TRUNCATE TABLE "message" CASCADE');
-    await db.getRepository(Conversation).query('TRUNCATE TABLE "conversation" CASCADE');
-    await db.getRepository(Inquiry).query('TRUNCATE TABLE "inquiry" CASCADE');
-    await db.getRepository(Review).query('TRUNCATE TABLE "review" CASCADE');
-    await db.getRepository(Favorite).query('TRUNCATE TABLE "favorite" CASCADE');
-    await db.getRepository(Image).query('TRUNCATE TABLE "image" CASCADE');
-    await db.getRepository(Property).query('TRUNCATE TABLE "property" CASCADE');
-    await db.getRepository(User).query('TRUNCATE TABLE "user" CASCADE');
-    await db.getRepository(Category).query('TRUNCATE TABLE "category" CASCADE');
+    // 1. Delete all existing data in proper dependency order using raw SQL
+    // so we can use CASCADE safely. (PostgreSQL syntax)
+    await prisma.$executeRawUnsafe('TRUNCATE TABLE "Appointment" CASCADE');
+    await prisma.$executeRawUnsafe('TRUNCATE TABLE "Message" CASCADE');
+    await prisma.$executeRawUnsafe('TRUNCATE TABLE "Conversation" CASCADE');
+    await prisma.$executeRawUnsafe('TRUNCATE TABLE "Inquiry" CASCADE');
+    await prisma.$executeRawUnsafe('TRUNCATE TABLE "Review" CASCADE');
+    await prisma.$executeRawUnsafe('TRUNCATE TABLE "Favorite" CASCADE');
+    await prisma.$executeRawUnsafe('TRUNCATE TABLE "Image" CASCADE');
+    await prisma.$executeRawUnsafe('TRUNCATE TABLE "Property" CASCADE');
+    await prisma.$executeRawUnsafe('TRUNCATE TABLE "User" CASCADE');
+    await prisma.$executeRawUnsafe('TRUNCATE TABLE "Category" CASCADE');
 
     // 2. Create Categories
-    const houseCat = await db.getRepository(Category).save({ name: "House", slug: "house" });
-    const apartmentCat = await db.getRepository(Category).save({ name: "Apartment", slug: "apartment" });
-    const condoCat = await db.getRepository(Category).save({ name: "Condo", slug: "condo" });
+    const houseCat = await prisma.category.create({ data: { name: "House", slug: "house" } });
+    const apartmentCat = await prisma.category.create({ data: { name: "Apartment", slug: "apartment" } });
+    const condoCat = await prisma.category.create({ data: { name: "Condo", slug: "condo" } });
 
     // 3. Create Agents
-    const agent1 = await db.getRepository(User).save({
-      name: "Alexandru Rusu",
-      email: "alexandru.rusu@example.md",
-      password: "password123", // Assuming hashed in a real app, plaintext here is fine for seeding
-      role: "AGENT",
-      title: "Senior Real Estate Agent",
-      phone: "+373 60 123 456",
-      avatarUrl: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80",
+    const agent1 = await prisma.user.create({
+      data: {
+        clerkId: "mock_clerk_id_agent1",
+        name: "Alexandru Rusu",
+        email: "alexandru.rusu@example.md",
+        role: "AGENT",
+        title: "Senior Real Estate Agent",
+        phone: "+373 60 123 456",
+        avatarUrl: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80",
+      }
     });
 
-    const agent2 = await db.getRepository(User).save({
-      name: "Maria Ceban",
-      email: "maria.ceban@example.md",
-      password: "password123",
-      role: "AGENT",
-      title: "Luxury Property Specialist",
-      phone: "+373 69 987 654",
-      avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80",
+    const agent2 = await prisma.user.create({
+      data: {
+        clerkId: "mock_clerk_id_agent2",
+        name: "Maria Ceban",
+        email: "maria.ceban@example.md",
+        role: "AGENT",
+        title: "Luxury Property Specialist",
+        phone: "+373 69 987 654",
+        avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80",
+      }
     });
 
     // 4. Create Properties in Chisinau
@@ -67,8 +60,8 @@ export async function GET() {
         floor: 4,
         yearBuilt: 2015,
         isPublished: true,
-        user: agent1,
-        category: apartmentCat,
+        userId: agent1.id,
+        categoryId: apartmentCat.id,
         latitude: 46.9749,
         longitude: 28.8596,
         pinTop: "70%",
@@ -92,8 +85,8 @@ export async function GET() {
         floor: 2,
         yearBuilt: 2020,
         isPublished: true,
-        user: agent2,
-        category: houseCat,
+        userId: agent2.id,
+        categoryId: houseCat.id,
         latitude: 46.9934,
         longitude: 28.8145,
         pinTop: "50%",
@@ -117,8 +110,8 @@ export async function GET() {
         floor: 8,
         yearBuilt: 2018,
         isPublished: true,
-        user: agent1,
-        category: apartmentCat,
+        userId: agent1.id,
+        categoryId: apartmentCat.id,
         latitude: 47.0425,
         longitude: 28.8643,
         pinTop: "20%",
@@ -142,8 +135,8 @@ export async function GET() {
         floor: 12,
         yearBuilt: 2022,
         isPublished: true,
-        user: agent2,
-        category: condoCat,
+        userId: agent2.id,
+        categoryId: condoCat.id,
         latitude: 47.0245,
         longitude: 28.8322,
         pinTop: "40%",
@@ -159,14 +152,16 @@ export async function GET() {
 
     for (const pData of propertiesData) {
       const { images, ...propertyData } = pData;
-      const property = await db.getRepository(Property).save(propertyData);
+      const property = await prisma.property.create({ data: propertyData });
       
       for (let i = 0; i < images.length; i++) {
-        await db.getRepository(Image).save({
-          url: images[i],
-          alt: `${property.title} - Image ${i + 1}`,
-          order: i,
-          property: property
+        await prisma.image.create({
+          data: {
+            url: images[i],
+            alt: `${property.title} - Image ${i + 1}`,
+            order: i,
+            propertyId: property.id
+          }
         });
       }
     }

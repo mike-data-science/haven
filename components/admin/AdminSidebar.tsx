@@ -36,30 +36,39 @@ const navItems = [
   { slug: "images", label: "Images", subtitle: "Media assets", icon: Image },
 ];
 
-export default function AdminSidebar() {
+export default function AdminSidebar({ role }: { role: string }) {
   const pathname = usePathname() || "";
+  
+  // Filter out CRUD routes for non-ADMIN users, except properties
+  const visibleItems = navItems.filter(item => 
+    item.slug === "dashboard" || role === "ADMIN" || item.slug === "properties"
+  );
 
   return (
     <div className="flex h-full flex-col bg-slate-950 text-slate-100">
       <div className="border-b border-slate-800 px-6 py-6">
-        <p className="text-sm uppercase tracking-[0.3em] text-slate-500">Admin panel</p>
+        <p className="text-sm uppercase tracking-[0.3em] text-slate-500">
+          {role === 'ADMIN' ? 'Admin Panel' : 'Dashboard'}
+        </p>
         <h2 className="mt-4 text-2xl font-semibold tracking-tight text-white">Real Estate</h2>
-        <p className="mt-3 text-sm leading-6 text-slate-400">A beautiful place to manage your data tables.</p>
+        <p className="mt-3 text-sm leading-6 text-slate-400">
+          {role === 'ADMIN' ? 'A beautiful place to manage your data tables.' : 'Welcome back! Here is your overview.'}
+        </p>
       </div>
 
       <nav className="flex-1 overflow-y-auto px-4 py-6">
         <div className="space-y-2">
-          {navItems.map((item) => {
+          {visibleItems.map((item) => {
             const isActive =
               item.slug === "dashboard"
-                ? pathname === "/admin" || pathname === "/admin/"
-                : pathname.startsWith(`/admin/${item.slug}`);
+                ? pathname === "/dashboard" || pathname === "/dashboard/"
+                : pathname.startsWith(`/dashboard/${item.slug}`);
             const Icon = item.icon;
 
             return (
               <Link
                 key={item.slug}
-                href={item.slug === "dashboard" ? "/admin" : `/admin/${item.slug}`}
+                href={item.slug === "dashboard" ? "/dashboard" : `/dashboard/${item.slug}`}
                 className={`group flex items-center gap-4 rounded-3xl border px-4 py-4 text-sm transition ${
                   isActive
                     ? "border-cyan-500 bg-cyan-500/10 text-white shadow-lg"

@@ -37,10 +37,10 @@ export function PropertyCard({ listing, compact, selected, onSelect }) {
           <h3 className="font-serif text-[16px] font-semibold mb-1 text-ink truncate">{listing.title}</h3>
           <p className="text-slate text-[13px] mb-2 truncate">{listing.location}</p>
         </div>
-        <div className="flex gap-[14px] text-[12px] text-slate pt-2.5 border-t border-line mt-2">
-          <span className="flex items-center gap-1 shrink-0"><span className="text-navy flex-shrink-0"><IconBed /></span> {listing.beds}</span>
-          <span className="flex items-center gap-1 shrink-0"><span className="text-navy flex-shrink-0"><IconBath /></span> {listing.baths}</span>
-          <span className="flex items-center gap-1 shrink-0"><span className="text-navy flex-shrink-0"><IconArea /></span> {listing.sqft?.toLocaleString()} m²</span>
+        <div className="flex gap-2 text-[12px] text-slate-600 pt-3 border-t border-line mt-2">
+          <span className="flex items-center gap-1.5 shrink-0 bg-slate-100 px-2.5 py-1.5 rounded-xl"><span className="text-navy flex-shrink-0"><IconBed /></span> {listing.beds}</span>
+          <span className="flex items-center gap-1.5 shrink-0 bg-slate-100 px-2.5 py-1.5 rounded-xl"><span className="text-navy flex-shrink-0"><IconBath /></span> {listing.baths}</span>
+          <span className="flex items-center gap-1.5 shrink-0 bg-slate-100 px-2.5 py-1.5 rounded-xl"><span className="text-navy flex-shrink-0"><IconArea /></span> {listing.sqft?.toLocaleString()} m²</span>
         </div>
       </div>
     </>
@@ -76,10 +76,10 @@ export function PropertyCard({ listing, compact, selected, onSelect }) {
                <h3 className="font-serif text-[15px] font-semibold text-ink mb-1 truncate">{listing.title}</h3>
                <p className="font-sans text-[12px] text-slate mb-2 truncate">{listing.location}</p>
              </div>
-             <div className="flex gap-2 text-[11px] text-slate pt-2 border-t border-line mt-2">
-               <span className="flex items-center gap-1 shrink-0"><span className="w-3 h-3 text-navy"><IconBed /></span> {listing.beds}</span>
-               <span className="flex items-center gap-1 shrink-0"><span className="w-3 h-3 text-navy"><IconBath /></span> {listing.baths}</span>
-               <span className="flex items-center gap-1 shrink-0"><span className="w-3 h-3 text-navy"><IconArea /></span> {listing.sqft?.toLocaleString()}</span>
+             <div className="flex gap-1.5 text-[11px] text-slate-600 pt-2 border-t border-line mt-2">
+               <span className="flex items-center gap-1 shrink-0 bg-slate-100 px-2 py-1 rounded-lg"><span className="w-3 h-3 text-navy"><IconBed /></span> {listing.beds}</span>
+               <span className="flex items-center gap-1 shrink-0 bg-slate-100 px-2 py-1 rounded-lg"><span className="w-3 h-3 text-navy"><IconBath /></span> {listing.baths}</span>
+               <span className="flex items-center gap-1 shrink-0 bg-slate-100 px-2 py-1 rounded-lg"><span className="w-3 h-3 text-navy"><IconArea /></span> {listing.sqft?.toLocaleString()}</span>
              </div>
            </div>
          </>

@@ -1,27 +1,19 @@
 import ListingsPage from '@/components/front/ListingsPage';
-import { initializeDB } from '@/lib/db';
-import { Property } from '@/entities/Property';
-import { User } from '@/entities/User';
-import { Category } from '@/entities/Category';
+import prisma from '@/lib/db';
 
 export const revalidate = 0;
 
 async function getListingsData() {
-  const db = await initializeDB();
-  const propertyRepo = db.getRepository(Property);
-  const userRepo = db.getRepository(User);
-  const categoryRepo = db.getRepository(Category);
-
-  const rawProperties = await propertyRepo.find({
-    relations: ['user', 'images', 'category'],
-    order: { id: 'DESC' }
+  const rawProperties = await prisma.property.findMany({
+    include: { user: true, images: true, category: true },
+    orderBy: { id: 'desc' }
   });
 
-  const rawAgents = await userRepo.find({
+  const rawAgents = await prisma.user.findMany({
     where: { role: 'AGENT' }
   });
 
-  const rawCategories = await categoryRepo.find();
+  const rawCategories = await prisma.category.findMany();
 
   const properties = rawProperties.map(p => ({
     id: p.id,

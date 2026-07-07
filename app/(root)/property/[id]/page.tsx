@@ -1,6 +1,5 @@
 import PropertyDetailPage from '@/components/front/PropertyDetailPage';
-import { initializeDB } from '@/lib/db';
-import { Property } from '@/entities/Property';
+import prisma from '@/lib/db';
 import { notFound } from 'next/navigation';
 
 export const revalidate = 0;
@@ -8,12 +7,9 @@ export const revalidate = 0;
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   
-  const db = await initializeDB();
-  const propertyRepo = db.getRepository(Property);
-
-  const rawProperty = await propertyRepo.findOne({
+  const rawProperty = await prisma.property.findUnique({
     where: { id: parseInt(id, 10) },
-    relations: ['user', 'images', 'category'],
+    include: { user: true, images: true, category: true },
   });
 
   if (!rawProperty) {
@@ -46,14 +42,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     longitude: rawProperty.longitude
   };
 
-  const similarRaw = await propertyRepo.find({
+  const similarRaw = await prisma.property.findMany({
     where: { city: rawProperty.city },
-    relations: ['user', 'images', 'category'],
-    take: 4,
+    include: { user: true, images: true, category: true },
+    take: 5, // We take 5 in case we need to filter out the current one
   });
 
   const similarProperties = similarRaw
     .filter(p => p.id !== rawProperty.id)
+    .slice(0, 4) // Ensure we only get up to 4
     .map(p => ({
       id: p.id,
       title: p.title,

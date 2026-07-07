@@ -1,0 +1,173 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  AGENT
+  AGENCY
+  ADMIN
+  MODERATOR
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  clerkId   String   @unique
+  name      String
+  email     String   @unique
+  avatarUrl String?
+  phone     String?
+  title     String?
+  role      Role     @default(USER)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  properties    Property[]
+  appointments  Appointment[]
+  conversations Conversation[]
+  favorites     Favorite[]
+  inquiries     Inquiry[]
+  messages      Message[]
+  reviews       Review[]
+}
+
+model Category {
+  id         Int        @id @default(autoincrement())
+  name       String     @unique
+  slug       String     @unique
+  properties Property[]
+}
+
+model Property {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  price       Float
+  city        String
+  address     String
+  rooms       Int
+  bathrooms   Int
+  area        Float
+  floor       Int
+  yearBuilt   Int
+  isPublished Boolean  @default(true)
+  latitude    Float?
+  longitude   Float?
+  pinTop      String?
+  pinLeft     String?
+
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+
+  categoryId  Int?
+  category    Category? @relation(fields: [categoryId], references: [id])
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  images        Image[]
+  appointments  Appointment[]
+  conversations Conversation[]
+  favorites     Favorite[]
+  inquiries     Inquiry[]
+  reviews       Review[]
+}
+
+model Image {
+  id         Int      @id @default(autoincrement())
+  url        String
+  alt        String?
+  order      Int      @default(0)
+  propertyId Int
+  property   Property @relation(fields: [propertyId], references: [id])
+}
+
+model Appointment {
+  id         Int      @id @default(autoincrement())
+  visitDate  DateTime
+  status     String   @default("PENDING")
+  notes      String?
+  
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  
+  propertyId Int
+  property   Property @relation(fields: [propertyId], references: [id])
+  
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Conversation {
+  id         Int       @id @default(autoincrement())
+  
+  userId     Int
+  user       User      @relation(fields: [userId], references: [id])
+  
+  propertyId Int?
+  property   Property? @relation(fields: [propertyId], references: [id])
+  
+  createdAt  DateTime  @default(now())
+  
+  messages   Message[]
+}
+
+model Message {
+  id             Int          @id @default(autoincrement())
+  content        String
+  
+  conversationId Int
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  
+  senderId       Int
+  sender         User         @relation(fields: [senderId], references: [id])
+  
+  createdAt      DateTime     @default(now())
+}
+
+model Favorite {
+  id         Int      @id @default(autoincrement())
+  
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  
+  propertyId Int
+  property   Property @relation(fields: [propertyId], references: [id])
+  
+  createdAt  DateTime @default(now())
+}
+
+model Inquiry {
+  id         Int       @id @default(autoincrement())
+  name       String
+  email      String
+  phone      String
+  message    String
+  
+  userId     Int?
+  user       User?     @relation(fields: [userId], references: [id])
+  
+  propertyId Int
+  property   Property  @relation(fields: [propertyId], references: [id])
+  
+  createdAt  DateTime  @default(now())
+}
+
+model Review {
+  id         Int      @id @default(autoincrement())
+  rating     Int
+  comment    String
+  
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  
+  propertyId Int
+  property   Property @relation(fields: [propertyId], references: [id])
+  
+  createdAt  DateTime @default(now())
+}

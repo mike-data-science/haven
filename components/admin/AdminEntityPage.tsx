@@ -9,6 +9,8 @@ const MapPicker = dynamic(() => import("./MapPicker"), { ssr: false });
 
 interface AdminEntityPageProps {
   table: string;
+  categories?: { id: number; name: string }[];
+  currentUser?: { id: number; role: string };
 }
 
 type RecordData = Record<string, unknown> & { id?: number };
@@ -27,7 +29,7 @@ function createEmptyForm(fields: AdminField[]) {
   }, {});
 }
 
-export default function AdminEntityPage({ table }: AdminEntityPageProps) {
+export default function AdminEntityPage({ table, categories, currentUser }: AdminEntityPageProps) {
   const entity = getAdminEntity(table);
   const [items, setItems] = useState<RecordData[]>([]);
   const [formData, setFormData] = useState<Record<string, string | boolean>>({});
@@ -36,6 +38,8 @@ export default function AdminEntityPage({ table }: AdminEntityPageProps) {
   const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [message, setMessage] = useState("");
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [existingImages, setExistingImages] = useState<any[]>([]);
 
   const fieldSpecs = useMemo(() => entity?.fields ?? [], [entity]);
 
@@ -44,6 +48,8 @@ export default function AdminEntityPage({ table }: AdminEntityPageProps) {
     setFormData(createEmptyForm(entity.fields));
     setSelectedId(null);
     setMessage("");
+    setSelectedFiles([]);
+    setExistingImages([]);
   }, [entity]);
 
   const loadItems = useCallback(async () => {
@@ -82,7 +88,7 @@ export default function AdminEntityPage({ table }: AdminEntityPageProps) {
         <p className="text-sm uppercase tracking-[0.35em] text-rose-500">Not found</p>
         <h1 className="mt-4 text-3xl font-semibold">Table not recognized</h1>
         <p className="mt-3 text-sm leading-7 text-slate-600">The selected admin path does not match a known table. Please use the sidebar links.</p>
-        <Link href="/admin" className="mt-6 inline-flex rounded-2xl bg-slate-950 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800">
+        <Link href="/dashboard" className="mt-6 inline-flex rounded-2xl bg-slate-950 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800">
           Back to dashboard
         </Link>
       </div>
@@ -109,14 +115,32 @@ export default function AdminEntityPage({ table }: AdminEntityPageProps) {
         body: JSON.stringify(formData),
       });
 
+      let savedId = selectedId;
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);
         throw new Error(errorData?.detail || errorData?.error || `Request failed with status ${response.status}`);
+      } else {
+        const savedRecord = await response.json();
+        savedId = savedRecord.id;
+      }
+      
+      if (entity.slug === "properties" && selectedFiles.length > 0 && savedId) {
+        setMessage(selectedId ? "Property updated. Uploading photos..." : "Property created. Uploading photos...");
+        const uploadData = new FormData();
+        uploadData.append("propertyId", String(savedId));
+        selectedFiles.forEach(file => uploadData.append("files", file));
+        
+        const uploadRes = await fetch("/api/upload", { method: "POST", body: uploadData });
+        if (!uploadRes.ok) {
+          throw new Error("Failed to upload photos, but property was saved.");
+        }
       }
 
       setMessage(selectedId ? "Record updated successfully." : "Record created successfully.");
       setSelectedId(null);
       setFormData(createEmptyForm(entity.fields));
+      setSelectedFiles([]);
+      setExistingImages([]);
       await loadItems();
     } catch (error) {
       console.error(error);
@@ -135,6 +159,12 @@ export default function AdminEntityPage({ table }: AdminEntityPageProps) {
 
     setFormData(nextForm);
     setSelectedId(item.id ?? null);
+    if (entity.slug === "properties" && item.images) {
+      setExistingImages(item.images as any[]);
+    } else {
+      setExistingImages([]);
+    }
+    setSelectedFiles([]);
     setMessage("Loaded record for editing.");
   };
 
@@ -169,6 +199,8 @@ export default function AdminEntityPage({ table }: AdminEntityPageProps) {
     setFormData(createEmptyForm(entity.fields));
     setSelectedId(null);
     setMessage("");
+    setSelectedFiles([]);
+    setExistingImages([]);
   };
 
   const apiBasePath = `/api/${entity.slug}`;
@@ -184,7 +216,7 @@ export default function AdminEntityPage({ table }: AdminEntityPageProps) {
               <p className="mt-3 text-sm leading-7 text-slate-600">All CRUD operations are wired to <code className="rounded bg-slate-100 px-2 py-1 text-xs text-slate-700">{apiBasePath}</code>.</p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <Link href="/admin" className="rounded-3xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">
+              <Link href="/dashboard" className="rounded-3xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">
                 Back to dashboard
               </Link>
               <button
@@ -266,6 +298,11 @@ export default function AdminEntityPage({ table }: AdminEntityPageProps) {
             <form onSubmit={handleSubmit} className="mt-6 space-y-5">
               {fieldSpecs.map((field) => {
                 if (field.name === "latitude" || field.name === "longitude") return null;
+                // Automatically injected by the backend, so we hide it from the form
+                if (field.name === "userId") return null;
+                // Hide publish toggle from non-admins
+                if (field.name === "isPublished" && currentUser?.role !== "ADMIN") return null;
+                
                 const value = formData[field.name];
                 const commonProps = {
                   id: field.name,
@@ -281,7 +318,7 @@ export default function AdminEntityPage({ table }: AdminEntityPageProps) {
                 return (
                   <div key={field.name} className="grid gap-2">
                     <label htmlFor={field.name} className="text-sm font-medium text-slate-700">
-                      {field.label}
+                      {field.name === "categoryId" ? "Category" : field.label}
                     </label>
                     {field.type === "textarea" ? (
                       <textarea
@@ -299,6 +336,18 @@ export default function AdminEntityPage({ table }: AdminEntityPageProps) {
                         />
                         <span>{field.label}</span>
                       </label>
+                    ) : field.name === "categoryId" ? (
+                      <select
+                        {...commonProps}
+                        className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-cyan-500"
+                      >
+                        <option value="">Select a category...</option>
+                        {categories?.map((cat) => (
+                          <option key={cat.id} value={cat.id}>
+                            {cat.name}
+                          </option>
+                        ))}
+                      </select>
                     ) : field.type === "select" ? (
                       <select
                         {...commonProps}
@@ -342,6 +391,52 @@ export default function AdminEntityPage({ table }: AdminEntityPageProps) {
                       handleInputChange("longitude", String(lng));
                     }}
                   />
+                </div>
+              )}
+
+              {/* Photos Uploader for Properties */}
+              {entity.slug === "properties" && (
+                <div className="grid gap-4 mt-6 border-t border-slate-200 pt-6">
+                  <div>
+                    <label className="text-sm font-medium text-slate-700">Property Photos</label>
+                    <p className="text-xs text-slate-500 mb-2">Upload multiple images. They will be saved when you submit the form.</p>
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={(e) => {
+                        if (e.target.files) {
+                          setSelectedFiles(Array.from(e.target.files));
+                        }
+                      }}
+                      className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100"
+                    />
+                  </div>
+
+                  {/* Preview selected files */}
+                  {selectedFiles.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {selectedFiles.map((f, i) => (
+                        <div key={i} className="text-xs bg-slate-100 rounded-md px-2 py-1 text-slate-600 truncate max-w-[150px]">
+                          {f.name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Show existing images when editing */}
+                  {existingImages.length > 0 && (
+                    <div className="mt-2">
+                      <p className="text-xs font-semibold text-slate-600 mb-2">Existing Photos:</p>
+                      <div className="flex flex-wrap gap-3">
+                        {existingImages.map((img) => (
+                          <div key={img.id} className="relative w-16 h-16 rounded-md overflow-hidden border border-slate-200">
+                            <img src={img.url} alt={img.alt || "Property"} className="w-full h-full object-cover" />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
