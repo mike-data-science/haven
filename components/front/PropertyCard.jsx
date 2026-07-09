@@ -77,7 +77,7 @@ function ImageCarousel({ images, alt }) {
   );
 }
 
-export function PropertyCard({ listing, compact, selected, onSelect }) {
+export function PropertyCard({ listing, compact = false, selected = false, onSelect }) {
   const images = listing.gallery && listing.gallery.length > 0 ? listing.gallery : [listing.image].filter(Boolean);
 
   const cardContent = (

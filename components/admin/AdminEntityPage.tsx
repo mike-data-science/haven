@@ -268,7 +268,7 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
                       <div>
                         <p className="font-medium text-slate-900 flex items-center gap-2">
                           {String(item[entity.fields[0].name] ?? `Record ${item.id ?? ""}`)}
-                          {entity.slug === "properties" && item.status && (
+                          {entity.slug === "properties" && Boolean(item.status) && (
                             <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                               item.status === 'APPROVED' ? 'bg-green-100 text-green-700' :
                               item.status === 'PENDING' ? 'bg-amber-100 text-amber-700' :
@@ -282,7 +282,7 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
                         <p className="mt-1 text-sm text-slate-600">
                           {entity.fields.slice(1, 4).map((field) => `${formatFieldLabel(field.name)}: ${String(item[field.name] ?? "—")}`).join(" • ")}
                         </p>
-                        {entity.slug === "properties" && item.status === "REJECTED" && item.rejectionReason && (
+                        {entity.slug === "properties" && item.status === "REJECTED" && Boolean(item.rejectionReason) && (
                           <p className="mt-1 text-xs font-semibold text-red-600 flex items-center gap-1">
                             Rejected: {String(item.rejectionReason)}
                           </p>

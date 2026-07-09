@@ -56,7 +56,7 @@ export function createCrudHandlers({
   ownershipField,
   buildData,
 }: CrudConfig) {
-  const getModel = () => prisma[modelName as string] as any;
+  const getModel = () => (prisma as any)[modelName as string] as any;
 
   async function findById(id: number) {
     return getModel().findUnique({

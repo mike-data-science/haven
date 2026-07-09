@@ -12,7 +12,7 @@ export default async function DiscoverPage() {
     }
   });
 
-  const formattedProperties = properties.map(p => ({
+  const formattedProperties = properties.map((p: any) => ({
     id: p.id,
     title: p.title,
     location: p.city,
@@ -39,8 +39,8 @@ export default async function DiscoverPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {formattedProperties.map(listing => (
-            <PropertyCard key={listing.id} listing={listing} compact={false} />
+          {formattedProperties.map((listing: any) => (
+            <PropertyCard key={listing.id} listing={listing} compact={false} selected={false} onSelect={undefined} />
           ))}
         </div>
       )}
