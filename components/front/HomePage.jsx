@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Link from 'next/link';
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { formatPrice } from "../../lib/data";
+import ImageCarousel from './ImageCarousel';
 
-function ModernSelect({ id, label, options, defaultValue, isLast }) {
+function ModernSelect({ id, label, options, defaultValue, isLast, className }) {
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState(defaultValue);
   const ref = useRef(null);
@@ -23,7 +25,7 @@ function ModernSelect({ id, label, options, defaultValue, isLast }) {
   const selectedOption = options.find((o) => o.value === value) || options[0];
 
   return (
-    <div className={`flex-[0.8] px-4 py-3 flex items-center border-b lg:border-b-0 ${isLast ? '' : 'lg:border-r'} border-[#E8E5DF] relative`} ref={ref}>
+    <div className={`flex-[0.8] px-2 sm:px-4 py-3 flex items-center border-[#E8E5DF] relative ${className ? className : `border-b lg:border-b-0 ${isLast ? '' : 'lg:border-r'}`}`} ref={ref}>
       <div 
         className="relative w-full cursor-pointer flex items-center justify-between"
         onClick={() => setIsOpen(!isOpen)}
@@ -83,12 +85,13 @@ function HeroGradient() {
         </p>
 
         <form className="flex flex-col bg-white p-2 rounded-[20px] lg:rounded-full shadow-2xl border border-[#E8E5DF] w-full max-w-[1250px] relative z-20" onSubmit={(e) => e.preventDefault()}>
-          <div className="flex flex-col lg:flex-row w-full items-stretch">
+          <div className="grid grid-cols-2 lg:flex lg:flex-row w-full items-stretch">
             <ModernSelect 
               id="transaction" 
               label="Action" 
               defaultValue="buy" 
               options={[{ value: 'buy', label: 'Buy' }, { value: 'rent', label: 'Rent' }, { value: 'sell', label: 'Sell' }]} 
+              className="border-b border-r lg:border-b-0 lg:border-r"
             />
             
             <ModernSelect 
@@ -102,6 +105,7 @@ function HeroGradient() {
                 { value: 'land', label: 'Land' }, 
                 { value: 'commercial', label: 'Commercial' }
               ]} 
+              className="border-b lg:border-b-0 lg:border-r"
             />
 
             <ModernSelect 
@@ -115,23 +119,13 @@ function HeroGradient() {
                 { value: '3', label: '3+' }, 
                 { value: '4', label: '4+' }
               ]} 
+              className="border-b border-r lg:border-b-0 lg:border-r"
             />
-
-            {/* 4. Price From-To */}
-            <div className="flex-[1.4] px-4 py-3 flex items-center border-b lg:border-b-0 lg:border-r border-[#E8E5DF]">
-              <div className="flex items-center gap-2 w-full">
-                <span className="font-sans text-[16px] text-slate-500 whitespace-nowrap">Price (€):</span>
-                <input type="number" placeholder="Min" className="w-full border-none bg-transparent font-sans text-[17px] font-semibold text-[#1A1A18] outline-none placeholder:text-slate-400 placeholder:font-normal" />
-                <span className="text-slate-400">-</span>
-                <input type="number" placeholder="Max" className="w-full border-none bg-transparent font-sans text-[17px] font-semibold text-[#1A1A18] outline-none placeholder:text-slate-400 placeholder:font-normal" />
-              </div>
-            </div>
 
             <ModernSelect 
               id="region" 
               label="Sector" 
               defaultValue="any" 
-              isLast={true}
               options={[
                 { value: 'any', label: 'All' }, 
                 { value: 'centru', label: 'Centru' }, 
@@ -142,29 +136,27 @@ function HeroGradient() {
                 { value: 'telecentru', label: 'Telecentru' }, 
                 { value: 'posta-veche', label: 'Poșta Veche' }
               ]} 
+              className="border-b lg:border-b-0 lg:border-r"
             />
 
+            {/* Price From-To */}
+            <div className="col-span-2 lg:col-span-1 flex-[1.4] px-4 py-3 flex items-center border-b lg:border-b-0 lg:border-r border-[#E8E5DF]">
+              <div className="flex items-center gap-2 w-full">
+                <span className="font-sans text-[16px] text-slate-500 whitespace-nowrap">Price (€):</span>
+                <input type="number" placeholder="Min" className="w-full border-none bg-transparent font-sans text-[17px] font-semibold text-[#1A1A18] outline-none placeholder:text-slate-400 placeholder:font-normal min-w-0" />
+                <span className="text-slate-400">-</span>
+                <input type="number" placeholder="Max" className="w-full border-none bg-transparent font-sans text-[17px] font-semibold text-[#1A1A18] outline-none placeholder:text-slate-400 placeholder:font-normal min-w-0" />
+              </div>
+            </div>
+
             {/* Search Button */}
-            <button type="submit" className="bg-[#0B3D91] text-white font-sans text-[18px] font-bold py-0 px-10 rounded-full cursor-pointer transition-transform hover:-translate-y-[2px] h-[52px] lg:h-auto mt-3 lg:mt-0 lg:ml-2 shrink-0 shadow-md hover:shadow-lg">
-              Search
-            </button>
+            <div className="col-span-2 lg:col-span-1 flex justify-center mt-3 lg:mt-0 p-2 lg:p-0">
+              <button type="submit" className="w-full lg:w-auto bg-[#0B3D91] text-white font-sans text-[18px] font-bold py-0 px-10 rounded-full cursor-pointer transition-transform hover:-translate-y-[2px] h-[52px] lg:h-full lg:ml-2 shrink-0 shadow-md hover:shadow-lg">
+                Search
+              </button>
+            </div>
           </div>
         </form>
-        
-        <div className="flex flex-col md:flex-row items-center gap-10 mt-16 pt-8 border-t border-[#1A1A18]/5">
-          <div className="flex flex-col items-center md:items-start text-left">
-            <strong className="font-serif text-[28px] font-bold text-[#1A1A18] tracking-[-0.5px]">10,400+</strong>
-            <span className="font-sans text-[13px] text-[#6B7280]">Active listings</span>
-          </div>
-          <div className="flex flex-col items-center md:items-start text-left">
-            <strong className="font-serif text-[28px] font-bold text-[#1A1A18] tracking-[-0.5px]">312</strong>
-            <span className="font-sans text-[13px] text-[#6B7280]">Verified agents</span>
-          </div>
-          <div className="flex flex-col items-center md:items-start text-left">
-            <strong className="font-serif text-[28px] font-bold text-[#1A1A18] tracking-[-0.5px]">4.8/5</strong>
-            <span className="font-sans text-[13px] text-[#6B7280]">Average rating</span>
-          </div>
-        </div>
       </div>
     </section>
   );
@@ -173,7 +165,7 @@ function HeroGradient() {
 function PopularProperties({ properties }) {
   return (
     <section id="properties" className="max-w-[1400px] mx-auto px-6 py-24">
-      <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
         <div>
           <p className="font-sans text-[13px] font-bold uppercase tracking-[1px] text-[#2B7FFF] mb-3">Hand-picked</p>
           <h2 className="font-serif text-[clamp(32px,4vw,44px)] font-bold text-[#1A1A18] tracking-[-1px] leading-[1.1]">Popular properties</h2>
@@ -187,12 +179,11 @@ function PopularProperties({ properties }) {
         {properties.map((p) => (
           <a href={`/property/${p.id}`} key={p.id} className="group flex flex-col bg-white rounded-3xl overflow-hidden border border-[#E8E5DF] shadow-[0_4px_24px_rgba(0,0,0,0.02)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_48px_rgba(0,0,0,0.06)] no-underline text-[#1A1A18]">
             <div className="relative h-[240px] overflow-hidden">
-              {p.image ? (
-                <img src={p.image} alt={p.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
-              ) : (
-                <div className="w-full h-full bg-slate-200" />
-              )}
-              <span className="absolute top-4 left-4 bg-white/90 backdrop-blur-[4px] text-[#1A1A18] font-sans text-[12px] font-bold px-3 py-[5px] rounded-full uppercase tracking-[0.5px]">
+              <ImageCarousel 
+                images={p.gallery && p.gallery.length > 0 ? p.gallery : [p.image].filter(Boolean)} 
+                alt={p.title} 
+              />
+              <span className="absolute top-4 left-4 bg-white/90 backdrop-blur-[4px] text-[#1A1A18] font-sans text-[12px] font-bold px-3 py-[5px] rounded-full uppercase tracking-[0.5px] z-30">
                 {p.tag || "For Sale"}
               </span>
               <button className="absolute top-4 right-4 w-9 h-9 bg-white/90 backdrop-blur-[4px] text-[#1A1A18] rounded-full flex items-center justify-center border-none cursor-pointer transition-transform hover:scale-110" aria-label="Save property">♡</button>
@@ -232,7 +223,7 @@ function Agents({ agents }) {
   return (
     <section id="agents" className="bg-[#EAF2FF]/50 py-24">
       <div className="max-w-[1400px] mx-auto px-6">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
           <div>
             <p className="font-sans text-[13px] font-bold uppercase tracking-[1px] text-[#2B7FFF] mb-3">Talk to a human</p>
             <h2 className="font-serif text-[clamp(32px,4vw,44px)] font-bold text-[#1A1A18] tracking-[-1px] leading-[1.1]">Agents in your area</h2>

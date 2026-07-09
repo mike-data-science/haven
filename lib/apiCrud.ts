@@ -13,7 +13,7 @@ type CrudConfig = {
   include?: Record<string, boolean>;
   allowedRoles?: Role[];
   ownershipField?: string;
-  buildData: (body: Body) => Body;
+  buildData: (body: Body, user?: { id: number; role: Role }, existing?: any) => Body;
 };
 
 function toId(value: string) {
@@ -93,7 +93,7 @@ export function createCrudHandlers({
       try {
         const user = await requireRole(allowedRoles);
         const body = (await request.json()) as Body;
-        let data = buildData(body);
+        let data = buildData(body, user);
         
         // Auto-inject ownership for both ADMIN and normal users if field exists
         if (ownershipField) {
@@ -162,7 +162,7 @@ export function createCrudHandlers({
           return NextResponse.json({ error: "Access denied." }, { status: 403 });
         }
 
-        let data = buildData(body);
+        let data = buildData(body, user, existing);
         if (ownershipField) {
           data[ownershipField] = existing[ownershipField]; // Prevent changing owner
         }

@@ -1,43 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
-import DashboardMap from "./DashboardMap";
+import { PropertyCard } from "@/components/front/PropertyCard";
+import dynamic from "next/dynamic";
+const ListingsMap = dynamic(() => import("@/components/front/ListingsMap"), { ssr: false });
+import { Search, SlidersHorizontal, Map as MapIcon, ChevronDown, Activity } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
-// Icons
-function IconBed() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-900">
-      <path d="M2 9V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3" />
-      <path d="M2 11h20v6H2z" />
-      <path d="M2 17v3" />
-      <path d="M22 17v3" />
-      <path d="M6 11V8a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v3" />
-    </svg>
-  );
-}
-function IconBath() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-900">
-      <path d="M9 6V4a2 2 0 0 1 4 0v2" />
-      <path d="M4 11h16v2a6 6 0 0 1-6 6H10a6 6 0 0 1-6-6z" />
-      <path d="M6 19v2" />
-      <path d="M16 19v2" />
-    </svg>
-  );
-}
-function IconArea() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-900">
-      <rect x="3" y="3" width="18" height="18" rx="1" />
-      <path d="M3 9h4v4H3z" />
-    </svg>
-  );
-}
-
-function formatPrice(n: number) {
-  return `$${n.toLocaleString()}`;
-}
+const chartData = [
+  { name: "Mon", value: 40 },
+  { name: "Tue", value: 30 },
+  { name: "Wed", value: 55 },
+  { name: "Thu", value: 45 },
+  { name: "Fri", value: 70 },
+  { name: "Sat", value: 25 },
+  { name: "Sun", value: 35 },
+];
 
 export default function DashboardPage({
   recentListings,
@@ -51,122 +29,145 @@ export default function DashboardPage({
   typeCounts: any[];
 }) {
   const [selectedId, setSelectedId] = useState<number | null>(null);
-
-  const maxCount = Math.max(...typeCounts.map((t) => t.count), 1);
+  const [activeTab, setActiveTab] = useState("Buy");
+  const [subTab, setSubTab] = useState("Recommended");
+  const [mapView, setMapView] = useState(true);
 
   return (
-    <div className="font-sans text-slate-900 min-h-screen">
-      {/* Stats Row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <span className="text-xs font-semibold uppercase tracking-widest text-slate-500">Total listings</span>
-          <strong className="block mt-2 font-serif text-3xl font-semibold text-blue-900">{stats.totalListings}</strong>
-        </div>
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <span className="text-xs font-semibold uppercase tracking-widest text-slate-500">Active agents</span>
-          <strong className="block mt-2 font-serif text-3xl font-semibold text-blue-900">{stats.activeAgents}</strong>
-        </div>
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <span className="text-xs font-semibold uppercase tracking-widest text-slate-500">Avg. days on market</span>
-          <strong className="block mt-2 font-serif text-3xl font-semibold text-blue-900">{stats.avgDaysOnMarket}</strong>
-        </div>
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <span className="text-xs font-semibold uppercase tracking-widest text-slate-500">This week</span>
-          <strong className="block mt-2 font-serif text-3xl font-semibold text-blue-900">+{stats.thisWeek}</strong>
-        </div>
-      </div>
-
-      {/* Main Grid */}
-      <div className="grid lg:grid-cols-3 gap-6 mb-8">
-        {/* Top Agents */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <h3 className="font-serif text-xl font-semibold mb-6">Top agents</h3>
-          <div className="space-y-4">
-            {topAgents.map((a) => (
-              <div key={a.id} className="flex items-center gap-4">
-                <Image src={a.image} alt={a.name} width={48} height={48} className="rounded-full object-cover" unoptimized />
-                <div>
-                  <strong className="block font-semibold text-sm">{a.name}</strong>
-                  <span className="text-sm text-slate-500">{a.listings} listings</span>
-                </div>
-              </div>
-            ))}
-            {topAgents.length === 0 && <p className="text-sm text-slate-500">No agents yet.</p>}
-          </div>
-        </div>
-
-        {/* Map Panel */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <h3 className="font-serif text-xl font-semibold mb-4">Properties around you</h3>
-          <DashboardMap
-            listings={recentListings}
-            mode="interactive"
-            height="280px"
-            selectedId={selectedId}
-            onSelectPin={setSelectedId}
-          />
-        </div>
-
-        {/* Property Types */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <h3 className="font-serif text-xl font-semibold mb-6">Property type</h3>
-          <div className="space-y-4">
-            {typeCounts.map((t) => (
-              <div key={t.type} className="flex items-center gap-3">
-                <span className="w-24 text-sm font-medium shrink-0 truncate">{t.type}</span>
-                <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-amber-500 rounded-full"
-                    style={{ width: `${(t.count / maxCount) * 100}%` }}
-                  />
-                </div>
-                <span className="w-8 text-right text-sm font-semibold">{t.count}</span>
-              </div>
-            ))}
-            {typeCounts.length === 0 && <p className="text-sm text-slate-500">No types yet.</p>}
-          </div>
-        </div>
-      </div>
-
-      {/* Recent Listings */}
-      <p className="font-serif text-xl font-semibold mb-6">Recent listings</p>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {recentListings.map((listing) => (
-          <article
-            key={listing.id}
-            onClick={() => setSelectedId(listing.id)}
-            className={`group bg-white rounded-2xl border overflow-hidden cursor-pointer transition-all hover:-translate-y-1 hover:shadow-xl hover:border-blue-500 ${
-              selectedId === listing.id ? "border-blue-900 ring-2 ring-blue-900/10" : "border-slate-200"
+    <div className="font-sans text-slate-900 min-h-screen pb-10">
+      {/* Top Filter Bar */}
+      <div className="flex items-center gap-10 mb-8 border-b border-slate-200 px-2 w-full">
+        {["Buy", "Sell", "Rent", "Compare"].map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`py-4 text-lg font-bold border-b-[3px] -mb-[2px] transition-colors whitespace-nowrap ${
+              activeTab === tab
+                ? "border-[var(--theme-accent)] text-[var(--theme-accent)]"
+                : "border-transparent text-slate-500 hover:text-slate-800"
             }`}
           >
-            <div className="relative h-48 w-full">
-              <Image src={listing.image} alt={listing.title} fill className="object-cover" unoptimized />
-              <span className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm text-amber-600 font-bold text-sm px-3 py-1.5 rounded-lg shadow-sm">
-                {formatPrice(listing.price)}
-              </span>
-              {listing.agent && (
-                <Image
-                  src={listing.agent.image}
-                  alt={listing.agent.name}
-                  title={listing.agent.name}
-                  width={36}
-                  height={36}
-                  className="absolute top-3 right-3 rounded-full border-2 border-white shadow-md object-cover"
-                  unoptimized
-                />
-              )}
+            {tab}
+          </button>
+        ))}
+      </div>
+
+      <div className="flex flex-col lg:flex-row gap-8">
+        {/* Left Content (Grid) */}
+        <div className="flex-1">
+          {/* Header Row */}
+          <div className="flex flex-wrap items-center justify-between mb-8 gap-4">
+            <h1 className="text-2xl font-bold">
+              {stats.totalListings} Results <span className="text-slate-400 font-normal text-base">in System</span>
+            </h1>
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-bold text-slate-700">Map View</span>
+              <button
+                onClick={() => setMapView(!mapView)}
+                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors shadow-inner ${mapView ? "bg-[var(--theme-accent)]" : "bg-slate-300"}`}
+              >
+                <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${mapView ? "translate-x-6" : "translate-x-1"}`} />
+              </button>
             </div>
-            <div className="p-5">
-              <h3 className="font-serif font-semibold text-lg mb-1 truncate">{listing.title}</h3>
-              <p className="text-sm text-slate-500 mb-4 truncate">{listing.location}</p>
-              <div className="flex gap-2 text-xs font-medium text-slate-600 pt-3 border-t border-slate-100">
-                <span className="flex items-center gap-1.5 bg-slate-100 px-2.5 py-1.5 rounded-xl"><IconBed /> {listing.beds}</span>
-                <span className="flex items-center gap-1.5 bg-slate-100 px-2.5 py-1.5 rounded-xl"><IconBath /> {listing.baths}</span>
-                <span className="flex items-center gap-1.5 bg-slate-100 px-2.5 py-1.5 rounded-xl"><IconArea /> {listing.sqft} m²</span>
+          </div>
+
+          {/* Search and Filters */}
+          <div className="flex flex-wrap gap-4 mb-8">
+            <div className="flex-1 min-w-[250px] relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[var(--theme-accent)]" />
+              <input
+                type="text"
+                placeholder="Search Here..."
+                className="w-full pl-12 pr-4 py-3 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[var(--theme-accent)]/20 text-sm font-medium"
+              />
+            </div>
+            <button className="px-5 py-3 rounded-full border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-50 flex items-center gap-2 transition-colors">
+              Price <span className="text-[var(--theme-accent)] font-bold">$$</span>
+            </button>
+            <button className="px-5 py-3 rounded-full bg-[var(--theme-accent)] text-white text-sm font-semibold hover:opacity-90 flex items-center gap-2 shadow-md shadow-[var(--theme-accent)]/20 transition-opacity">
+              2-4 Beds <ChevronDown className="h-4 w-4" />
+            </button>
+            <button className="px-5 py-3 rounded-full border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-50 flex items-center gap-2 transition-colors">
+              Property Type <ChevronDown className="h-4 w-4 text-slate-400" />
+            </button>
+          </div>
+
+          {/* Sub-tabs */}
+          <div className="flex items-center gap-6 mb-6">
+            {["Recommended", "Popular", "Nearest"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setSubTab(tab)}
+                className={`text-sm font-semibold transition-colors ${
+                  subTab === tab ? "text-[var(--theme-accent)]" : "text-slate-500 hover:text-slate-800"
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          {/* Property Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {recentListings.map((listing) => (
+              <div key={listing.id} className="h-full">
+                <PropertyCard
+                  listing={listing}
+                  compact={false}
+                  selected={selectedId === listing.id}
+                  onSelect={setSelectedId}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right Content (Map & Analytics) */}
+        <div className="w-full lg:w-[380px] xl:w-[420px] flex flex-col gap-6 shrink-0">
+          
+          {/* Recent Activity / Analytics Chart */}
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-semibold text-lg flex items-center gap-2">
+                <Activity className="h-5 w-5 text-[var(--theme-accent)]" />
+                Weekly Activity
+              </h3>
+            </div>
+            <div className="h-[180px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData}>
+                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} />
+                  <Tooltip cursor={{ fill: 'rgba(0,0,0,0.05)' }} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                  <Bar dataKey="value" fill="var(--theme-accent)" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center text-sm">
+              <span className="text-slate-500">New Listings</span>
+              <span className="font-bold text-lg">+{stats.thisWeek}</span>
+            </div>
+          </div>
+
+          {/* Map View Panel */}
+          {mapView && (
+            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex-1 min-h-[400px] flex flex-col">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-semibold text-lg flex items-center gap-2">
+                  <MapIcon className="h-5 w-5 text-slate-400" />
+                  Map View
+                </h3>
+              </div>
+              <div className="flex-1 rounded-xl overflow-hidden min-h-[300px]">
+                <ListingsMap
+                  listings={recentListings}
+                  selectedId={selectedId}
+                  onSelectPin={setSelectedId}
+                />
               </div>
             </div>
-          </article>
-        ))}
+          )}
+
+        </div>
       </div>
     </div>
   );

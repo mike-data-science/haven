@@ -14,6 +14,14 @@ enum Role {
   MODERATOR
 }
 
+enum PropertyStatus {
+  DRAFT
+  PENDING
+  APPROVED
+  REJECTED
+  ARCHIVED
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   clerkId   String   @unique
@@ -23,6 +31,7 @@ model User {
   phone     String?
   title     String?
   role      Role     @default(USER)
+  themeColor String  @default("blue")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -34,6 +43,9 @@ model User {
   inquiries     Inquiry[]
   messages      Message[]
   reviews       Review[]
+
+  approvedProperties Property[] @relation("PropertyApprovedBy")
+  moderationActions PropertyModerationHistory[]
 }
 
 model Category {
@@ -55,7 +67,17 @@ model Property {
   area        Float
   floor       Int
   yearBuilt   Int
-  isPublished Boolean  @default(true)
+  
+  status      PropertyStatus @default(DRAFT)
+  isDeleted   Boolean  @default(false)
+  submittedAt DateTime?
+  publishedAt DateTime?
+  approvedAt  DateTime?
+  approvedById Int?
+  approvedBy  User?    @relation("PropertyApprovedBy", fields: [approvedById], references: [id])
+  rejectionReason String?
+  adminNotes  String?
+
   latitude    Float?
   longitude   Float?
   pinTop      String?
@@ -76,6 +98,7 @@ model Property {
   favorites     Favorite[]
   inquiries     Inquiry[]
   reviews       Review[]
+  moderationHistory PropertyModerationHistory[]
 }
 
 model Image {
@@ -170,4 +193,19 @@ model Review {
   property   Property @relation(fields: [propertyId], references: [id])
   
   createdAt  DateTime @default(now())
+}
+
+model PropertyModerationHistory {
+  id          Int      @id @default(autoincrement())
+  
+  propertyId  Int
+  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  
+  oldStatus   PropertyStatus?
+  newStatus   PropertyStatus
+  
+  changedById Int?
+  changedBy   User?    @relation(fields: [changedById], references: [id])
+  
+  createdAt   DateTime @default(now())
 }

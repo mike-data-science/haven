@@ -2,7 +2,9 @@ import prisma from "@/lib/db";
 import DashboardPage from "@/components/admin/DashboardPage";
 
 export default async function AdminContentPage() {
-  const totalListings = await prisma.property.count();
+  const totalListings = await prisma.property.count({
+    where: { status: 'APPROVED', isDeleted: false }
+  });
   
   const activeAgents = await prisma.user.count({
     where: { role: "AGENT" }
@@ -11,7 +13,7 @@ export default async function AdminContentPage() {
   const sevenDaysAgo = new Date();
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
   const thisWeek = await prisma.property.count({
-    where: { createdAt: { gte: sevenDaysAgo } }
+    where: { createdAt: { gte: sevenDaysAgo }, status: 'APPROVED', isDeleted: false }
   });
 
   // Top Agents
@@ -19,7 +21,7 @@ export default async function AdminContentPage() {
     where: { role: "AGENT" },
     include: {
       _count: {
-        select: { properties: true }
+        select: { properties: { where: { status: 'APPROVED', isDeleted: false } } }
       }
     },
     orderBy: {
@@ -41,7 +43,7 @@ export default async function AdminContentPage() {
   const categories = await prisma.category.findMany({
     include: {
       _count: {
-        select: { properties: true }
+        select: { properties: { where: { status: 'APPROVED', isDeleted: false } } }
       }
     }
   });
@@ -53,6 +55,7 @@ export default async function AdminContentPage() {
 
   // Recent Listings
   const rawRecentListings = await prisma.property.findMany({
+    where: { status: 'APPROVED', isDeleted: false },
     orderBy: { createdAt: "desc" },
     take: 6,
     include: {
@@ -72,6 +75,10 @@ export default async function AdminContentPage() {
     sqft: p.area,
     type: p.category?.name || "Other",
     image: p.images[0]?.url || "https://images.unsplash.com/photo-1605146769289-440113cc3d00?q=80&w=800&auto=format&fit=crop",
+    gallery: p.images?.length > 0 ? p.images.map(i => i.url) : ["https://images.unsplash.com/photo-1605146769289-440113cc3d00?q=80&w=800&auto=format&fit=crop"],
+    status: p.status,
+    latitude: p.latitude,
+    longitude: p.longitude,
     agent: {
       name: p.user.name,
       image: p.user.avatarUrl || "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=200&auto=format&fit=crop"

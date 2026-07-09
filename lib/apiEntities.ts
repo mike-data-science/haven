@@ -98,8 +98,35 @@ export const propertyHandlers = createCrudHandlers({
   include: { user: true, category: true, images: true },
   allowedRoles: ['ADMIN', 'AGENT', 'USER'],
   ownershipField: 'userId',
-  buildData: (body) =>
-    pickDefined({
+  buildData: (body, user, existing) => {
+    const isAdmin = user?.role === 'ADMIN' || user?.role === 'MODERATOR';
+    const isNew = !existing;
+    
+    let status = body.status;
+    let approvedAt = existing?.approvedAt;
+    let publishedAt = existing?.publishedAt;
+    let approvedById = existing?.approvedById;
+
+    if (isAdmin) {
+      if (isNew) {
+        status = 'APPROVED';
+        approvedAt = new Date();
+        publishedAt = new Date();
+        approvedById = user?.id;
+      }
+    } else {
+      if (isNew) {
+        status = 'DRAFT';
+      } else {
+        if (existing.status === 'APPROVED') {
+          status = 'PENDING';
+        } else {
+          status = existing.status;
+        }
+      }
+    }
+
+    return pickDefined({
       title: body.title,
       description: body.description,
       price: numberValue(body.price),
@@ -110,13 +137,17 @@ export const propertyHandlers = createCrudHandlers({
       area: numberValue(body.area),
       floor: numberValue(body.floor),
       yearBuilt: numberValue(body.yearBuilt),
-      isPublished: booleanValue(body.isPublished),
+      status,
+      approvedAt,
+      publishedAt,
+      approvedById,
       categoryId: numberValue(body.categoryId) ?? null,
       latitude: numberValue(body.latitude),
       longitude: numberValue(body.longitude),
       pinTop: body.pinTop,
       pinLeft: body.pinLeft,
-    }),
+    });
+  },
 });
 
 export const reviewHandlers = createCrudHandlers({

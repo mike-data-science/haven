@@ -7,8 +7,8 @@ export const revalidate = 0;
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   
-  const rawProperty = await prisma.property.findUnique({
-    where: { id: parseInt(id, 10) },
+  const rawProperty = await prisma.property.findFirst({
+    where: { id: parseInt(id, 10), status: 'APPROVED', isDeleted: false },
     include: { user: true, images: true, category: true },
   });
 
@@ -26,7 +26,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     sqft: rawProperty.area,
     yearBuilt: rawProperty.yearBuilt,
     type: rawProperty.category?.name || "House",
-    tag: rawProperty.isPublished ? "For Sale" : "Off Market",
+    tag: rawProperty.status === 'APPROVED' ? "For Sale" : "Off Market",
     description: rawProperty.description,
     image: rawProperty.images?.[0]?.url || "",
     gallery: rawProperty.images?.map(i => i.url) || [],
@@ -43,7 +43,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   };
 
   const similarRaw = await prisma.property.findMany({
-    where: { city: rawProperty.city },
+    where: { city: rawProperty.city, status: 'APPROVED', isDeleted: false },
     include: { user: true, images: true, category: true },
     take: 5, // We take 5 in case we need to filter out the current one
   });

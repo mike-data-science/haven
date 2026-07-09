@@ -230,20 +230,30 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
           </div>
         </section>
 
-        <section className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
+        <section className={`grid gap-6 ${entity.slug === 'properties' ? 'xl:grid-cols-1' : 'xl:grid-cols-[1.05fr_0.95fr]'}`}>
           <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm uppercase tracking-[0.35em] text-slate-500">Data list</p>
                 <h2 className="mt-2 text-2xl font-semibold text-slate-900">{entity.label}</h2>
               </div>
-              <button
-                type="button"
-                onClick={loadItems}
-                className="rounded-3xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
-              >
-                Refresh
-              </button>
+              <div className="flex gap-3">
+                {entity.slug === 'properties' && (
+                  <Link
+                    href="/dashboard/properties/new"
+                    className="rounded-3xl bg-cyan-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-cyan-700"
+                  >
+                    + New Property
+                  </Link>
+                )}
+                <button
+                  type="button"
+                  onClick={loadItems}
+                  className="rounded-3xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+                >
+                  Refresh
+                </button>
+              </div>
             </div>
 
             <div className="mt-6 overflow-hidden rounded-3xl border border-slate-200 bg-slate-50">
@@ -256,19 +266,57 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
                   {items.map((item) => (
                     <div key={`item-${item.id ?? JSON.stringify(item)}`} className="grid grid-cols-[1fr_auto] gap-4 bg-white px-4 py-4 sm:px-6">
                       <div>
-                        <p className="font-medium text-slate-900">{String(item[entity.fields[0].name] ?? `Record ${item.id ?? ""}`)}</p>
+                        <p className="font-medium text-slate-900 flex items-center gap-2">
+                          {String(item[entity.fields[0].name] ?? `Record ${item.id ?? ""}`)}
+                          {entity.slug === "properties" && item.status && (
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                              item.status === 'APPROVED' ? 'bg-green-100 text-green-700' :
+                              item.status === 'PENDING' ? 'bg-amber-100 text-amber-700' :
+                              item.status === 'REJECTED' ? 'bg-red-100 text-red-700' :
+                              'bg-slate-100 text-slate-700'
+                            }`}>
+                              {String(item.status)}
+                            </span>
+                          )}
+                        </p>
                         <p className="mt-1 text-sm text-slate-600">
                           {entity.fields.slice(1, 4).map((field) => `${formatFieldLabel(field.name)}: ${String(item[field.name] ?? "—")}`).join(" • ")}
                         </p>
+                        {entity.slug === "properties" && item.status === "REJECTED" && item.rejectionReason && (
+                          <p className="mt-1 text-xs font-semibold text-red-600 flex items-center gap-1">
+                            Rejected: {String(item.rejectionReason)}
+                          </p>
+                        )}
                       </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => handleEdit(item)}
-                          className="rounded-3xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
-                        >
-                          Edit
-                        </button>
+                      <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2">
+                        {entity.slug === "properties" && (item.status === "DRAFT" || item.status === "REJECTED") && (
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              try {
+                                const res = await fetch(`/api/properties/${item.id}/submit`, { method: 'POST' });
+                                if (res.ok) {
+                                  setMessage("Property submitted for review.");
+                                  loadItems();
+                                }
+                              } catch (e) {
+                                setMessage("Failed to submit property.");
+                              }
+                            }}
+                            className="rounded-3xl border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-semibold text-blue-700 transition hover:bg-blue-100"
+                          >
+                            Submit for Review
+                          </button>
+                        )}
+                        {entity.slug === 'properties' ? null : (
+                          <button
+                            type="button"
+                            onClick={() => handleEdit(item)}
+                            className="rounded-3xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+                          >
+                            Edit
+                          </button>
+                        )}
                         <button
                           type="button"
                           onClick={() => handleDelete(item.id)}
@@ -284,7 +332,8 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
             </div>
           </div>
 
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+          {entity.slug !== 'properties' && (
+            <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm uppercase tracking-[0.35em] text-slate-500">Form</p>
@@ -467,6 +516,7 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
               ) : null}
             </form>
           </div>
+          )}
         </section>
       </div>
     </main>

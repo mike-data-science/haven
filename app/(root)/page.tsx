@@ -5,6 +5,7 @@ export const revalidate = 0; // Ensures fresh data is fetched
 
 async function getHomeData() {
   const rawProperties = await prisma.property.findMany({
+    where: { status: 'APPROVED', isDeleted: false },
     include: { user: true, images: true, category: true },
     orderBy: { id: 'desc' },
     take: 6,
@@ -25,7 +26,7 @@ async function getHomeData() {
     sqft: p.area,
     yearBuilt: p.yearBuilt,
     type: p.category?.name || "House",
-    tag: p.isPublished ? "For Sale" : "Off Market",
+    tag: p.status === 'APPROVED' ? "For Sale" : "Off Market",
     description: p.description,
     image: p.images?.[0]?.url || "https://placehold.co/600x400?text=No+Image",
     gallery: p.images?.length ? p.images.map(i => i.url) : ["https://placehold.co/600x400?text=No+Image"],

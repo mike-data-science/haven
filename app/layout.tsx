@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Demo",
-  description: "In Production",
+  title: "Haven | Find your perfect home",
+  description: "Browse curated houses, condos, and apartments from agents who actually answer the phone.",
 };
 
 export default function RootLayout({

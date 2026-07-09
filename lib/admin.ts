@@ -67,7 +67,7 @@ export const adminEntities: AdminEntity[] = [
       { name: "area", label: "Area (sqm)", type: "number", placeholder: "115" },
       { name: "floor", label: "Floor", type: "number", placeholder: "2" },
       { name: "yearBuilt", label: "Year Built", type: "number", placeholder: "2021" },
-      { name: "isPublished", label: "Published", type: "checkbox" },
+      { name: "status", label: "Status", type: "select", options: ["DRAFT", "PENDING", "APPROVED", "REJECTED", "ARCHIVED"] },
       { name: "userId", label: "User ID", type: "text", placeholder: "3" },
       { name: "categoryId", label: "Category ID", type: "text", placeholder: "1" },
       { name: "location", label: "Map Location", type: "map" },
@@ -76,7 +76,7 @@ export const adminEntities: AdminEntity[] = [
       { name: "title", example: "Modern 3BR Condo" },
       { name: "price", example: "120000" },
       { name: "city", example: "Chisinau" },
-      { name: "isPublished", example: "true" },
+      { name: "status", example: "PENDING" },
     ],
   },
   {
