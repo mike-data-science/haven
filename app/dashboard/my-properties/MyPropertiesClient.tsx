@@ -23,9 +23,9 @@ export default function MyPropertiesClient({ initialProperties }: { initialPrope
           </div>
         )}
         
-        {properties.map((prop) => (
+        {properties.slice(0, 30).map((prop) => (
           <div key={prop.id} className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm flex flex-col transition-shadow hover:shadow-md">
-            <div className="relative h-48 bg-slate-100">
+            <div className="relative aspect-[4/3] w-full bg-slate-100">
               <ImageCarousel 
                 images={prop.images?.length > 0 ? prop.images.map((i: any) => i.url) : []} 
                 alt={prop.title} 

@@ -82,7 +82,7 @@ export function PropertyCard({ listing, compact = false, selected = false, onSel
 
   const cardContent = (
     <>
-      <div className={`relative ${compact ? "h-[124px]" : "h-[200px]"} shrink-0 w-full`}>
+      <div className={`relative ${compact ? "h-[124px] w-[150px]" : "aspect-[4/3] w-full"} shrink-0`}>
         <ImageCarousel images={images} alt={listing.title} />
         
         {/* Price Tag Overlay */}
@@ -131,7 +131,7 @@ export function PropertyCard({ listing, compact = false, selected = false, onSel
     >
       {compact ? (
          <>
-           <div className="w-[110px] shrink-0 h-full relative">
+           <div className="w-[140px] shrink-0 h-full relative">
              <ImageCarousel images={images} alt={listing.title} />
              <span className="absolute top-2 left-2 bg-white/95 backdrop-blur-sm text-gold font-bold text-[11px] px-2 py-1 rounded-[6px] font-sans z-30">
                {formatPrice(listing.price)}

@@ -31,7 +31,7 @@ function ModernSelect({ id, label, options, defaultValue, isLast, className }) {
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex items-center gap-2 truncate">
-          <span className="font-sans text-[16px] text-slate-500 whitespace-nowrap">{label}:</span>
+          {label && <span className="font-sans text-[16px] text-slate-500 whitespace-nowrap">{label}:</span>}
           <span className="font-sans text-[17px] font-semibold text-[#1A1A18] whitespace-nowrap">
             {selectedOption.label}
           </span>
@@ -69,7 +69,7 @@ function ModernSelect({ id, label, options, defaultValue, isLast, className }) {
 
 function HeroGradient() {
   return (
-    <section className="relative w-full min-h-[700px] h-auto flex flex-col items-center justify-center text-center px-5 pt-[140px] pb-16 bg-gradient-to-b from-[#EAF2FF] from-40% to-[#FAFAF8] overflow-hidden">
+    <section className="relative z-30 w-full min-h-[700px] h-auto flex flex-col items-center justify-center text-center px-5 pt-[140px] pb-16 bg-gradient-to-b from-[#EAF2FF] from-40% to-[#FAFAF8]">
       <div className="relative z-10 w-full max-w-[1200px] flex flex-col items-center mt-[40px]">
         <p className="font-sans text-[12px] font-bold uppercase tracking-[1.5px] text-[#2B7FFF] mb-4 bg-white/60 px-3 py-1 rounded-full border border-[#2B7FFF]/20 backdrop-blur-sm">
           142 new listings this week
@@ -84,24 +84,21 @@ function HeroGradient() {
           actually answer the phone.
         </p>
 
-        <form className="flex flex-col bg-white p-2 rounded-[20px] lg:rounded-full shadow-2xl border border-[#E8E5DF] w-full max-w-[1250px] relative z-20" onSubmit={(e) => e.preventDefault()}>
+        <form action="/listings" method="GET" className="flex flex-col bg-white p-2 rounded-[20px] lg:rounded-full shadow-2xl border border-[#E8E5DF] w-full max-w-[1250px] relative z-20">
           <div className="grid grid-cols-2 lg:flex lg:flex-row w-full items-stretch">
             <ModernSelect 
               id="transaction" 
-              label="Action" 
               defaultValue="buy" 
-              options={[{ value: 'buy', label: 'Buy' }, { value: 'rent', label: 'Rent' }, { value: 'sell', label: 'Sell' }]} 
+              options={[{ value: 'buy', label: 'Buy' }, { value: 'sell', label: 'Sell' }, { value: 'rent', label: 'Rent' }]} 
               className="border-b border-r lg:border-b-0 lg:border-r"
             />
             
             <ModernSelect 
               id="type" 
-              label="Type" 
-              defaultValue="any" 
+              defaultValue="apartment" 
               options={[
-                { value: 'any', label: 'Any type' }, 
-                { value: 'house', label: 'House' }, 
                 { value: 'apartment', label: 'Apartment' }, 
+                { value: 'house', label: 'House' }, 
                 { value: 'land', label: 'Land' }, 
                 { value: 'commercial', label: 'Commercial' }
               ]} 
@@ -110,31 +107,28 @@ function HeroGradient() {
 
             <ModernSelect 
               id="rooms" 
-              label="Rooms" 
-              defaultValue="any" 
+              defaultValue="1" 
               options={[
-                { value: 'any', label: 'Any' }, 
-                { value: '1', label: '1+' }, 
-                { value: '2', label: '2+' }, 
-                { value: '3', label: '3+' }, 
-                { value: '4', label: '4+' }
+                { value: '1', label: '1+ Rooms' }, 
+                { value: '2', label: '2+ Rooms' }, 
+                { value: '3', label: '3+ Rooms' }, 
+                { value: '4', label: '4+ Rooms' }
               ]} 
               className="border-b border-r lg:border-b-0 lg:border-r"
             />
 
             <ModernSelect 
               id="region" 
-              label="Sector" 
               defaultValue="any" 
               options={[
-                { value: 'any', label: 'All' }, 
-                { value: 'centru', label: 'Centru' }, 
-                { value: 'botanica', label: 'Botanica' }, 
-                { value: 'buiucani', label: 'Buiucani' }, 
-                { value: 'ciocana', label: 'Ciocana' }, 
-                { value: 'riscani', label: 'Rîșcani' }, 
-                { value: 'telecentru', label: 'Telecentru' }, 
-                { value: 'posta-veche', label: 'Poșta Veche' }
+                { value: 'any', label: 'Chișinău (All)' }, 
+                { value: 'centru', label: 'Chișinău, Centru' }, 
+                { value: 'botanica', label: 'Chișinău, Botanica' }, 
+                { value: 'buiucani', label: 'Chișinău, Buiucani' }, 
+                { value: 'ciocana', label: 'Chișinău, Ciocana' }, 
+                { value: 'riscani', label: 'Chișinău, Rîșcani' }, 
+                { value: 'telecentru', label: 'Chișinău, Telecentru' }, 
+                { value: 'posta-veche', label: 'Chișinău, Poșta Veche' }
               ]} 
               className="border-b lg:border-b-0 lg:border-r"
             />
@@ -142,10 +136,10 @@ function HeroGradient() {
             {/* Price From-To */}
             <div className="col-span-2 lg:col-span-1 flex-[1.4] px-4 py-3 flex items-center border-b lg:border-b-0 lg:border-r border-[#E8E5DF]">
               <div className="flex items-center gap-2 w-full">
-                <span className="font-sans text-[16px] text-slate-500 whitespace-nowrap">Price (€):</span>
-                <input type="number" placeholder="Min" className="w-full border-none bg-transparent font-sans text-[17px] font-semibold text-[#1A1A18] outline-none placeholder:text-slate-400 placeholder:font-normal min-w-0" />
+                <input type="number" name="minPrice" placeholder="Price from" className="w-full border-none bg-transparent font-sans text-[17px] font-semibold text-[#1A1A18] outline-none placeholder:text-slate-400 placeholder:font-normal min-w-0" />
                 <span className="text-slate-400">-</span>
-                <input type="number" placeholder="Max" className="w-full border-none bg-transparent font-sans text-[17px] font-semibold text-[#1A1A18] outline-none placeholder:text-slate-400 placeholder:font-normal min-w-0" />
+                <input type="number" name="maxPrice" placeholder="Price to" className="w-full border-none bg-transparent font-sans text-[17px] font-semibold text-[#1A1A18] outline-none placeholder:text-slate-400 placeholder:font-normal min-w-0" />
+                <span className="font-sans text-[17px] font-semibold text-[#1A1A18] ml-1">€</span>
               </div>
             </div>
 
@@ -178,7 +172,7 @@ function PopularProperties({ properties }) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {properties.map((p) => (
           <a href={`/property/${p.id}`} key={p.id} className="group flex flex-col bg-white rounded-3xl overflow-hidden border border-[#E8E5DF] shadow-[0_4px_24px_rgba(0,0,0,0.02)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_48px_rgba(0,0,0,0.06)] no-underline text-[#1A1A18]">
-            <div className="relative h-[240px] overflow-hidden">
+            <div className="relative aspect-[4/3] w-full overflow-hidden">
               <ImageCarousel 
                 images={p.gallery && p.gallery.length > 0 ? p.gallery : [p.image].filter(Boolean)} 
                 alt={p.title} 

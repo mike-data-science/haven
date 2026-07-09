@@ -8,7 +8,7 @@ import dynamic from "next/dynamic";
 
 const MultiMapDisplay = dynamic(() => import('./ListingsMap'), { ssr: false });
 
-export default function ListingsPage({ properties, agents, categories }) {
+export default function ListingsPage({ properties, agents, categories, searchParams = {} }) {
   const [selectedId, setSelectedId] = useState(null);
   const [layoutMode, setLayoutMode] = useState('list'); // 'list' | 'grid'
   
@@ -16,10 +16,16 @@ export default function ListingsPage({ properties, agents, categories }) {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   // Filter States
+  const initType = searchParams.type && searchParams.type !== 'any' ? searchParams.type.charAt(0).toUpperCase() + searchParams.type.slice(1) : "All";
+  const initRegion = searchParams.region && searchParams.region !== 'any' ? searchParams.region : "all";
+  const initRooms = searchParams.rooms && searchParams.rooms !== 'any' ? searchParams.rooms : "all";
+  
   const [sortBy, setSortBy] = useState("Recommended");
-  const [location, setLocation] = useState("all");
-  const [selectedTypes, setSelectedTypes] = useState(new Set(["All"]));
-  const [maxPrice, setMaxPrice] = useState(5000000);
+  const [location, setLocation] = useState(initRegion);
+  const [selectedTypes, setSelectedTypes] = useState(new Set([initType]));
+  const [rooms, setRooms] = useState(initRooms);
+  const [minPrice, setMinPrice] = useState(searchParams.minPrice || "");
+  const [maxPrice, setMaxPrice] = useState(searchParams.maxPrice || "5000000");
   const [minSize, setMinSize] = useState("");
   const [maxSize, setMaxSize] = useState("");
 
@@ -41,14 +47,24 @@ export default function ListingsPage({ properties, agents, categories }) {
     }
 
     // Filter by Price
-    result = result.filter(p => p.price <= maxPrice);
+    if (minPrice) {
+      result = result.filter(p => p.price >= Number(minPrice));
+    }
+    if (maxPrice) {
+      result = result.filter(p => p.price <= Number(maxPrice));
+    }
+
+    // Filter by Rooms
+    if (rooms !== "all") {
+      result = result.filter(p => p.beds >= Number(rooms));
+    }
 
     // Filter by Size
     if (minSize) {
-      result = result.filter(p => p.sqft >= parseInt(minSize));
+      result = result.filter(p => p.sqft >= Number(minSize));
     }
     if (maxSize) {
-      result = result.filter(p => p.sqft <= parseInt(maxSize));
+      result = result.filter(p => p.sqft <= Number(maxSize));
     }
 
     // Sort
@@ -92,19 +108,22 @@ export default function ListingsPage({ properties, agents, categories }) {
         </select>
       </div>
       <div className="flex flex-col gap-3">
-        <label className="text-[12px] font-bold text-slate uppercase tracking-[1px]">Location</label>
+        <label className="text-[12px] font-bold text-slate uppercase tracking-[1px]">City / Sector</label>
         <select value={location} onChange={(e) => setLocation(e.target.value)} className="w-full border border-line rounded-[8px] px-3 py-2.5 text-[14px] bg-white outline-none focus:border-navy text-ink">
-          <option value="all">All Locations</option>
-          <option value="seattle">Seattle</option>
-          <option value="austin">Austin</option>
-          <option value="chicago">Chicago</option>
-          <option value="new york">New York</option>
+          <option value="all">Chișinău (All)</option>
+          <option value="centru">Chișinău, Centru</option>
+          <option value="botanica">Chișinău, Botanica</option>
+          <option value="buiucani">Chișinău, Buiucani</option>
+          <option value="ciocana">Chișinău, Ciocana</option>
+          <option value="riscani">Chișinău, Rîșcani</option>
+          <option value="telecentru">Chișinău, Telecentru</option>
+          <option value="posta-veche">Chișinău, Poșta Veche</option>
         </select>
       </div>
 
       <div className="flex flex-col gap-3">
         <label className="text-[12px] font-bold text-slate uppercase tracking-[1px]">Type of place</label>
-        {["All", "House", "Apartment", "Condo"].map(t => (
+        {["All", "Apartment", "House", "Land", "Commercial"].map(t => (
           <label key={t} className="flex items-center gap-2.5 text-[14px] text-ink cursor-pointer">
             <input 
               type="checkbox" 
@@ -117,19 +136,33 @@ export default function ListingsPage({ properties, agents, categories }) {
       </div>
 
       <div className="flex flex-col gap-3">
-        <label className="text-[12px] font-bold text-slate uppercase tracking-[1px]">Max Price</label>
-        <input 
-          type="range" 
-          min="100000" 
-          max="5000000" 
-          step="50000"
-          value={maxPrice} 
-          onChange={(e) => setMaxPrice(Number(e.target.value))}
-          className="w-full accent-navy" 
-        />
-        <div className="flex justify-between text-[13px] text-slate font-medium">
-          <span>$100K</span>
-          <span>${(maxPrice / 1000000).toFixed(1)}M+</span>
+        <label className="text-[12px] font-bold text-slate uppercase tracking-[1px]">Rooms</label>
+        <select value={rooms} onChange={(e) => setRooms(e.target.value)} className="w-full border border-line rounded-[8px] px-3 py-2.5 text-[14px] bg-white outline-none focus:border-navy text-ink cursor-pointer">
+          <option value="all">Any</option>
+          <option value="1">1+ Rooms</option>
+          <option value="2">2+ Rooms</option>
+          <option value="3">3+ Rooms</option>
+          <option value="4">4+ Rooms</option>
+        </select>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <label className="text-[12px] font-bold text-slate uppercase tracking-[1px]">Price Range (€)</label>
+        <div className="grid grid-cols-2 gap-3">
+          <input 
+            placeholder="Min" 
+            type="number"
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
+            className="w-full border border-line rounded-[8px] px-3 py-2 text-[14px] outline-none focus:border-navy text-ink placeholder:text-slate/60" 
+          />
+          <input 
+            placeholder="Max" 
+            type="number"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
+            className="w-full border border-line rounded-[8px] px-3 py-2 text-[14px] outline-none focus:border-navy text-ink placeholder:text-slate/60" 
+          />
         </div>
       </div>
 
@@ -156,7 +189,7 @@ export default function ListingsPage({ properties, agents, categories }) {
   );
 
   return (
-    <div className="font-sans text-[#1A1A18] bg-[#FAFAF8] min-h-screen flex flex-col h-screen overflow-hidden">
+    <div className="font-sans text-[#1A1A18] bg-[#FAFAF8] min-h-[133.33vh] flex flex-col h-[133.33vh] overflow-hidden">
       <div className="shrink-0 h-[60px] md:h-[120px]">
         <Navbar />
       </div>
@@ -222,10 +255,10 @@ export default function ListingsPage({ properties, agents, categories }) {
 
             <div className="flex-1 overflow-y-auto px-4 md:px-6 py-4 md:py-6 pb-24">
               <div className={`grid gap-6 ${layoutMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-1'}`}>
-                {filteredListings.map(l => (
+                {filteredListings.slice(0, 30).map(l => (
                   <div 
                     key={l.id} 
-                    className="bg-white rounded-[16px] overflow-hidden shadow-sm"
+                    className="bg-white rounded-[16px] overflow-hidden shadow-sm h-full"
                     onMouseEnter={() => setSelectedId(l.id)} 
                     onMouseLeave={() => setSelectedId(null)}
                   >
@@ -237,6 +270,11 @@ export default function ListingsPage({ properties, agents, categories }) {
                     />
                   </div>
                 ))}
+                {filteredListings.length > 30 && (
+                  <div className="col-span-full py-8 text-center">
+                    <p className="text-slate-500 font-sans">Showing 30 of {filteredListings.length} properties. Try refining your search.</p>
+                  </div>
+                )}
                 {filteredListings.length === 0 && (
                   <div className="col-span-full py-12 text-center text-slate-500 font-bold font-serif text-xl">
                     No properties match your filters.
@@ -252,7 +290,7 @@ export default function ListingsPage({ properties, agents, categories }) {
             ${layoutMode === 'grid' ? 'md:w-[40%] lg:w-[35%]' : 'md:flex-1 md:min-w-[300px]'}
           `}>
              <MultiMapDisplay 
-               listings={filteredListings} 
+               listings={filteredListings.slice(0, 30)} 
                selectedId={selectedId} 
                onSelectPin={setSelectedId} 
              />

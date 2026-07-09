@@ -38,7 +38,7 @@ export default function ImageCarousel({ images, alt }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <img src={images[currentIndex]} alt={alt} loading="lazy" className="w-full h-full object-cover transition-transform duration-300 group-hover/carousel:scale-105 block" />
+      <img src={images[currentIndex]} alt={alt} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover/carousel:scale-105 block" />
       
       {images.length > 1 && isHovered && (
         <>

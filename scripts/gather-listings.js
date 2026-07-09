@@ -16,7 +16,7 @@ const User_1 = require("../entities/User");
 const AppDataSource = new typeorm_1.DataSource({
     type: "postgres",
     host: "localhost",
-    port: 6000,
+    port: 5432,
     username: "postgres",
     password: "15432",
     database: "real_estate",

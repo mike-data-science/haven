@@ -59,7 +59,8 @@ async function getListingsData() {
   return { properties, agents, categories };
 }
 
-export default async function Page() {
+export default async function Page({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const { properties, agents, categories } = await getListingsData();
-  return <ListingsPage properties={properties} agents={agents} categories={categories} />;
+  const params = await searchParams;
+  return <ListingsPage properties={properties} agents={agents} categories={categories} searchParams={params} />;
 }
