@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { CheckCircle2, XCircle, Clock, Eye, X, ShieldAlert, CheckSquare } from "lucide-react";
+import { CheckCircle2, XCircle, Clock, Eye, X, ShieldAlert, CheckSquare, Check } from "lucide-react";
 
 export default function QueueClient({ initialProperties, adminId }: { initialProperties: any[], adminId: number }) {
   const [properties, setProperties] = useState(initialProperties);
