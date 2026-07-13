@@ -18,18 +18,18 @@ export default async function InboxPage() {
 
   return (
     <div className="max-w-5xl mx-auto h-[calc(100vh-8rem)] flex flex-col">
-      <h1 className="text-2xl font-bold font-serif mb-6 shrink-0">Inbox</h1>
+      <h1 className="text-lg font-bold font-serif mb-[14px] shrink-0">Inbox</h1>
       
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm flex-1 flex overflow-hidden">
         {/* Sidebar */}
-        <div className="w-1/3 border-r border-slate-200 overflow-y-auto">
+        <div className="w-[2px]/3 border-r border-slate-200 overflow-y-auto">
           {conversations.length === 0 ? (
-            <div className="p-6 text-center text-slate-500 text-sm">No messages yet.</div>
+            <div className="p-[14px] text-center text-slate-500 text-xs">No messages yet.</div>
           ) : (
             conversations.map(conv => (
-              <div key={conv.id} className="p-4 border-b border-slate-100 hover:bg-slate-50 cursor-pointer">
-                <h3 className="font-semibold text-sm truncate">{conv.property?.title || "General Inquiry"}</h3>
-                <p className="text-xs text-slate-500 truncate mt-1">
+              <div key={conv.id} className="p-[9px] border-b border-slate-100 hover:bg-slate-50 cursor-pointer">
+                <h3 className="font-semibold text-xs truncate">{conv.property?.title || "General Inquiry"}</h3>
+                <p className="text-xs text-slate-500 truncate mt-[2px]">
                   {conv.messages[0]?.content || "No messages"}
                 </p>
               </div>
@@ -37,7 +37,7 @@ export default async function InboxPage() {
           )}
         </div>
         {/* Main Content Area */}
-        <div className="w-2/3 flex items-center justify-center bg-slate-50">
+        <div className="w-[3px].5/3 flex items-center justify-center bg-slate-50">
           <p className="text-slate-400">Select a conversation to view messages</p>
         </div>
       </div>

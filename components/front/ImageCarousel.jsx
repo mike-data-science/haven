@@ -44,13 +44,13 @@ export default function ImageCarousel({ images, alt }) {
         <>
           <button 
             onClick={prevImage}
-            className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full shadow-md transition-all opacity-0 group-hover/carousel:opacity-100 z-20"
+            className="absolute left-1.5 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-1.5 rounded-full shadow-md transition-all opacity-0 group-hover/carousel:opacity-100 z-20"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           </button>
           <button 
             onClick={nextImage}
-            className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full shadow-md transition-all opacity-0 group-hover/carousel:opacity-100 z-20"
+            className="absolute right-1.5 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-1.5 rounded-full shadow-md transition-all opacity-0 group-hover/carousel:opacity-100 z-20"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
           </button>
@@ -58,11 +58,11 @@ export default function ImageCarousel({ images, alt }) {
       )}
 
       {images.length > 1 && (
-        <div className="absolute bottom-2.5 left-0 right-0 flex justify-center gap-1.5 z-20">
+        <div className="absolute bottom-1.5 left-0 right-0 flex justify-center gap-1.5 z-20">
           {visibleDots.map((dotIndex) => (
             <div 
               key={dotIndex} 
-              className={`h-[3px] rounded-full transition-all duration-300 ${dotIndex === currentIndex ? 'w-5 bg-white shadow-sm' : 'w-5 bg-white/50 shadow-sm'}`} 
+              className={`h-1 rounded-full transition-all duration-300 ${dotIndex === currentIndex ? 'w-4 bg-white shadow-sm' : 'w-4 bg-white/50 shadow-sm'}`} 
             />
           ))}
         </div>

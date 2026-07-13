@@ -13,7 +13,7 @@ if (typeof window !== "undefined") {
   });
 }
 
-export default function ListingsMap({ listings, selectedId, onSelectPin }) {
+export default function ListingsMap({ listings, selectedId, onSelectPin, zoomedId }) {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const markersRef = useRef({});
@@ -54,30 +54,11 @@ export default function ListingsMap({ listings, selectedId, onSelectPin }) {
       const isSelected = selectedId === l.id;
       const priceText = `$${(l.price / 1000).toFixed(0)}k`;
       
-      const popupHtml = isSelected ? `
-        <div class="absolute -translate-x-1/2 mt-3 w-[260px] bg-white rounded-[16px] shadow-[0_12px_32px_rgba(26,26,24,0.15)] overflow-hidden z-30 transition-all duration-200" style="pointer-events: auto;" onclick="event.stopPropagation()">
-          <div class="relative h-[120px] w-full bg-slate-200">
-            ${l.image ? `<img src="${l.image}" alt="${l.title}" class="w-full h-full object-cover block" />` : ''}
-          </div>
-          <div class="p-3 bg-white text-left">
-            <span class="font-sans text-[15px] font-bold text-[#0B3D91] block mb-1">$${l.price.toLocaleString()}</span>
-            <div class="flex gap-2 text-[11px] text-[#6B7280] mb-2 font-semibold">
-              <span>${l.beds} bed</span> • 
-              <span>${l.baths} bath</span> • 
-              <span>${l.sqft.toLocaleString()} sqft</span>
-            </div>
-            <p class="font-serif text-[14px] font-semibold text-[#1A1A18] mb-0.5 truncate">${l.title}</p>
-            <p class="text-[11px] text-[#6B7280] truncate">${l.location}</p>
-          </div>
-        </div>
-      ` : '';
-
       const iconHtml = `
         <div class="relative" style="pointer-events: none;">
-          <div class="bg-[#0B3D91] text-white font-sans text-[12px] font-bold py-1 px-2.5 rounded-full shadow-md border-2 ${isSelected ? 'border-[#C49A3C] scale-110 z-40 bg-[#1A1A18]' : 'border-white z-10'} transition-all duration-200 whitespace-nowrap -translate-x-1/2 -translate-y-full hover:bg-[#2B7FFF] cursor-pointer" style="pointer-events: auto;">
+          <div class="bg-[#0B3D91] text-white font-sans text-[7px] font-bold py-1 px-1.5 rounded-full shadow-md border-2 ${isSelected ? 'border-white scale-110 z-40 bg-red-600' : 'border-white z-10'} transition-all duration-200 whitespace-nowrap -translate-x-1/2 -translate-y-full hover:bg-[#2B7FFF] cursor-pointer" style="pointer-events: auto;">
             ${priceText}
           </div>
-          ${popupHtml}
         </div>
       `;
       
@@ -96,10 +77,12 @@ export default function ListingsMap({ listings, selectedId, onSelectPin }) {
       markersRef.current[l.id] = marker;
     });
 
+    const currentListingIds = listings.map(l => l.id).join(',');
+    const isNewListings = mapInstance.current._lastListingIds !== currentListingIds;
+    mapInstance.current._lastListingIds = currentListingIds;
+
     if (hasPoints) {
-      if (selectedId && markersRef.current[selectedId]) {
-        map.setView(markersRef.current[selectedId].getLatLng(), map.getZoom(), { animate: true });
-      } else {
+      if (isNewListings) {
         map.fitBounds(bounds, { padding: [50, 50] });
       }
     }
@@ -111,12 +94,18 @@ export default function ListingsMap({ listings, selectedId, onSelectPin }) {
         mapInstance.current.invalidateSize();
       }, 100);
     }
-  });
+  }, [listings]);
+
+  useEffect(() => {
+    if (zoomedId && mapInstance.current && markersRef.current[zoomedId]) {
+      mapInstance.current.flyTo(markersRef.current[zoomedId].getLatLng(), 16, { animate: true, duration: 1.5 });
+    }
+  }, [zoomedId]);
 
   return (
     <div className="w-full h-full relative rounded-2xl overflow-hidden shadow-sm border border-[#E8E5DF]">
       <div ref={mapRef} className="absolute inset-0 z-0" />
-      <span className="absolute left-4 top-4 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-[6px] text-[11px] font-bold text-[#0B3D91] shadow-sm uppercase tracking-[0.5px] z-[400] pointer-events-none">
+      <span className="absolute left-3 top-3 bg-white/90 backdrop-blur-sm px-1.5 py-1 rounded-[4px] text-[6px] font-bold text-[#0B3D91] shadow-sm uppercase tracking-[0px] z-[400] pointer-events-none">
         Interactive map
       </span>
     </div>

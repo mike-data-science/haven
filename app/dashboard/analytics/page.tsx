@@ -20,19 +20,19 @@ export default async function AnalyticsPage() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <h1 className="text-2xl font-bold font-serif mb-6">Analytics Dashboard</h1>
+      <h1 className="text-lg font-bold font-serif mb-[14px]">Analytics Dashboard</h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <h2 className="text-lg font-semibold mb-2">Total System Properties</h2>
-          <p className="text-3xl font-bold text-[var(--theme-accent)]">{totalProperties}</p>
-          <p className="text-sm text-slate-500 mt-2">Across all categories</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-[14px] mb-[18px]">
+        <div className="bg-white p-[14px] rounded-2xl border border-slate-200 shadow-sm">
+          <h2 className="text-sm font-semibold mb-[3px].5">Total System Properties</h2>
+          <p className="text-xl font-bold text-[var(--theme-accent)]">{totalProperties}</p>
+          <p className="text-xs text-slate-500 mt-[3px].5">Across all categories</p>
         </div>
       </div>
       
-      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-        <h2 className="text-lg font-semibold mb-6">Properties by Category</h2>
-        <div className="h-[400px] w-full">
+      <div className="bg-white p-[14px] rounded-2xl border border-slate-200 shadow-sm">
+        <h2 className="text-sm font-semibold mb-[14px]">Properties by Category</h2>
+        <div className="h-[225px] w-full">
           <AnalyticsClient data={propertyData} />
         </div>
       </div>

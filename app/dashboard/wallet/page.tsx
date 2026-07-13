@@ -20,56 +20,56 @@ export default async function WalletPage() {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold font-serif mb-6">My Wallet</h1>
+      <h1 className="text-lg font-bold font-serif mb-[14px]">My Wallet</h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-4">
-          <div className="p-3 bg-blue-50 text-[var(--theme-accent)] rounded-xl">
-            <Wallet className="h-6 w-6" />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-[14px] mb-[18px]">
+        <div className="bg-white p-[14px] rounded-2xl border border-slate-200 shadow-sm flex items-start gap-[9px]">
+          <div className="p-[7px] bg-blue-50 text-[var(--theme-accent)] rounded-xl">
+            <Wallet className="h-[14px] w-[14px]" />
           </div>
           <div>
-            <p className="text-sm text-slate-500 font-medium">Total Portfolio Value</p>
-            <h2 className="text-2xl font-bold mt-1">{formatPrice(totalValue)}</h2>
+            <p className="text-xs text-slate-500 font-medium">Total Portfolio Value</p>
+            <h2 className="text-lg font-bold mt-[2px]">{formatPrice(totalValue)}</h2>
           </div>
         </div>
         
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-4">
-          <div className="p-3 bg-green-50 text-green-600 rounded-xl">
-            <TrendingUp className="h-6 w-6" />
+        <div className="bg-white p-[14px] rounded-2xl border border-slate-200 shadow-sm flex items-start gap-[9px]">
+          <div className="p-[7px] bg-green-50 text-green-600 rounded-xl">
+            <TrendingUp className="h-[14px] w-[14px]" />
           </div>
           <div>
-            <p className="text-sm text-slate-500 font-medium">Average Property Value</p>
-            <h2 className="text-2xl font-bold mt-1">{formatPrice(avgValue)}</h2>
+            <p className="text-xs text-slate-500 font-medium">Average Property Value</p>
+            <h2 className="text-lg font-bold mt-[2px]">{formatPrice(avgValue)}</h2>
           </div>
         </div>
         
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-4">
-          <div className="p-3 bg-purple-50 text-purple-600 rounded-xl">
-            <Home className="h-6 w-6" />
+        <div className="bg-white p-[14px] rounded-2xl border border-slate-200 shadow-sm flex items-start gap-[9px]">
+          <div className="p-[7px] bg-purple-50 text-purple-600 rounded-xl">
+            <Home className="h-[14px] w-[14px]" />
           </div>
           <div>
-            <p className="text-sm text-slate-500 font-medium">Owned Properties</p>
-            <h2 className="text-2xl font-bold mt-1">{userProperties.length}</h2>
+            <p className="text-xs text-slate-500 font-medium">Owned Properties</p>
+            <h2 className="text-lg font-bold mt-[2px]">{userProperties.length}</h2>
           </div>
         </div>
       </div>
       
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm">
-        <div className="px-6 py-4 border-b border-slate-100">
-          <h3 className="font-semibold text-lg">Portfolio Assets</h3>
+        <div className="px-[14px] py-[9px] border-b border-slate-100">
+          <h3 className="font-semibold text-sm">Portfolio Assets</h3>
         </div>
-        <div className="p-6">
+        <div className="p-[14px]">
           {userProperties.length === 0 ? (
-            <div className="text-center py-8 text-slate-500">
+            <div className="text-center py-[18px] text-slate-500">
               No assets in your portfolio yet.
             </div>
           ) : (
             <div className="space-y-4">
               {userProperties.map(p => (
-                <div key={p.id} className="flex justify-between items-center py-3 border-b border-slate-50 last:border-0">
+                <div key={p.id} className="flex justify-between items-center py-[7px] border-b border-slate-50 last:border-0">
                   <div>
                     <h4 className="font-medium text-slate-900">{p.title}</h4>
-                    <p className="text-xs text-slate-500 mt-1">Added {new Date(p.createdAt).toLocaleDateString()}</p>
+                    <p className="text-xs text-slate-500 mt-[2px]">Added {new Date(p.createdAt).toLocaleDateString()}</p>
                   </div>
                   <div className="font-semibold">{formatPrice(p.price)}</div>
                 </div>

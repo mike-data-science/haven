@@ -11,11 +11,11 @@ interface AdminProductListProps {
 
 export function AdminProductList({ products, loading, onDelete, onEdit }: AdminProductListProps) {
   if (loading) {
-    return <p className="text-center text-slate-500 py-4">Se încarcă proprietățile...</p>;
+    return <p className="text-center text-slate-500 py-3">Se încarcă proprietățile...</p>;
   }
 
   if (!products || products.length === 0) {
-    return <p className="text-center text-slate-500 py-4">Nu există proprietăți disponibile.</p>;
+    return <p className="text-center text-slate-500 py-3">Nu există proprietăți disponibile.</p>;
   }
   
   return (

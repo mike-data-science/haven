@@ -51,11 +51,11 @@ export default async function NotificationsPage() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold font-serif mb-6">Notifications</h1>
+      <h1 className="text-lg font-bold font-serif mb-[14px]">Notifications</h1>
       
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         {notifications.length === 0 ? (
-          <div className="p-12 text-center text-slate-500">
+          <div className="p-[27px] text-center text-slate-500">
             You have no new notifications.
           </div>
         ) : (
@@ -63,14 +63,14 @@ export default async function NotificationsPage() {
             {notifications.map(notification => {
               const Icon = notification.icon;
               return (
-                <div key={notification.id} className="p-4 flex gap-4 hover:bg-slate-50 transition-colors">
-                  <div className={`p-3 rounded-full shrink-0 h-12 w-12 flex items-center justify-center ${notification.bg} ${notification.color}`}>
-                    <Icon className="h-5 w-5" />
+                <div key={notification.id} className="p-[9px] flex gap-[9px] hover:bg-slate-50 transition-colors">
+                  <div className={`p-[7px] rounded-full shrink-0 h-[27px] w-[27px] flex items-center justify-center ${notification.bg} ${notification.color}`}>
+                    <Icon className="h-[11px] w-[11px]" />
                   </div>
                   <div>
                     <h4 className="font-medium text-slate-900">{notification.title}</h4>
-                    <p className="text-sm text-slate-600 mt-1">{notification.message}</p>
-                    <p className="text-xs text-slate-400 mt-2">{new Date(notification.date).toLocaleString()}</p>
+                    <p className="text-xs text-slate-600 mt-[2px]">{notification.message}</p>
+                    <p className="text-xs text-slate-400 mt-[3px].5">{new Date(notification.date).toLocaleString()}</p>
                   </div>
                 </div>
               );

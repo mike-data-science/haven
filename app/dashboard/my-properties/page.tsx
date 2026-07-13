@@ -19,10 +19,10 @@ export default async function MyPropertiesPage() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-[9px]">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">My Properties</h1>
-          <p className="text-slate-500 mt-2">Manage your listings and track their verification status.</p>
+          <h1 className="text-xl font-bold text-slate-900 tracking-tight">My Properties</h1>
+          <p className="text-slate-500 mt-[3px].5">Manage your listings and track their verification status.</p>
         </div>
       </div>
       

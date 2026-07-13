@@ -34,7 +34,7 @@ export default function SettingsClient({ initialColor, userId }: { initialColor:
 
   return (
     <div>
-      <div className="flex flex-wrap gap-4 mb-6">
+      <div className="flex flex-wrap gap-[9px] mb-[14px]">
         {PRESET_COLORS.map((preset) => (
           <button
             key={preset.value}
@@ -42,7 +42,7 @@ export default function SettingsClient({ initialColor, userId }: { initialColor:
               setCustomColor("");
               handleColorChange(preset.value);
             }}
-            className={`w-12 h-12 rounded-full border-4 transition-all ${
+            className={`w-[27px] h-[27px] rounded-full border-4 transition-all ${
               themeColor === preset.value && !customColor
                 ? "border-slate-800 scale-110"
                 : "border-transparent hover:scale-105"
@@ -61,17 +61,17 @@ export default function SettingsClient({ initialColor, userId }: { initialColor:
               setCustomColor(e.target.value);
               handleColorChange(e.target.value);
             }}
-            className={`w-12 h-12 p-0 border-0 rounded-full cursor-pointer overflow-hidden transition-all ${
+            className={`w-[27px] h-[27px] p-[0px] border-0 rounded-full cursor-pointer overflow-hidden transition-all ${
               customColor ? "ring-4 ring-slate-800 scale-110" : ""
             }`}
             title="Custom Color"
           />
-          <span className="ml-3 text-sm text-slate-500 font-medium">Custom Hex</span>
+          <span className="ml-[7px] text-xs text-slate-500 font-medium">Custom Hex</span>
         </div>
       </div>
       
-      {isSaving && <p className="text-sm text-slate-400">Saving preference...</p>}
-      {!isSaving && <p className="text-sm text-green-600 opacity-0 transition-opacity" style={{ opacity: themeColor !== initialColor ? 1 : 0 }}>Preference saved.</p>}
+      {isSaving && <p className="text-xs text-slate-400">Saving preference...</p>}
+      {!isSaving && <p className="text-xs text-green-600 opacity-0 transition-opacity" style={{ opacity: themeColor !== initialColor ? 1 : 0 }}>Preference saved.</p>}
     </div>
   );
 }

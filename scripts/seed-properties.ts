@@ -66,13 +66,28 @@ async function main() {
       const rooms = parseInt(details.rooms) || 1;
       const area = parseFloat(details.area_sqm?.replace(/[^\d.]/g, '')) || 0;
       const floor = parseInt(details.floor) || 1;
-      const city = details.city || 'Chișinău';
-      const address = details.location_text || details.district || 'Unknown Location';
+      const CHISINAU_SECTORS = [
+        { name: 'Centru', lat: 47.0245, lng: 28.8322 },
+        { name: 'Botanica', lat: 46.9749, lng: 28.8617 },
+        { name: 'Buiucani', lat: 47.0278, lng: 28.7906 },
+        { name: 'Rîșcani', lat: 47.0450, lng: 28.8575 },
+        { name: 'Ciocana', lat: 47.0506, lng: 28.8839 },
+        { name: 'Telecentru', lat: 46.9930, lng: 28.8055 },
+        { name: 'Poșta Veche', lat: 47.0550, lng: 28.8350 }
+      ];
+      
+      const randomSector = CHISINAU_SECTORS[Math.floor(Math.random() * CHISINAU_SECTORS.length)];
+      // Add random jitter to spread pins around the sector (~1km radius)
+      const latOffset = (Math.random() - 0.5) * 0.02;
+      const lngOffset = (Math.random() - 0.5) * 0.02;
+
+      const city = 'Chișinău';
+      const address = randomSector.name;
       const title = details.title || 'Untitled Property';
       const description = details.description || '';
       
-      const latitude = details.latitude ? parseFloat(details.latitude) : null;
-      const longitude = details.longitude ? parseFloat(details.longitude) : null;
+      const latitude = randomSector.lat + latOffset;
+      const longitude = randomSector.lng + lngOffset;
 
       // Create property
       const property = await prisma.property.create({

@@ -49,7 +49,7 @@ export default function MapPicker({ latitude, longitude, onChange }: MapPickerPr
   };
 
   return (
-    <div className="h-[400px] w-full rounded-xl border border-slate-200 overflow-hidden relative z-0">
+    <div className="h-75 w-full rounded-xl border border-slate-200 overflow-hidden relative z-0">
       <MapContainer
         center={position || [47.0105, 28.8638]} // Default to Chisinau
         zoom={12}

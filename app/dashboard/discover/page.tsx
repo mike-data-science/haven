@@ -30,15 +30,15 @@ export default async function DiscoverPage() {
 
   return (
     <div className="max-w-7xl mx-auto">
-      <h1 className="text-2xl font-bold font-serif mb-2">Discover Properties</h1>
-      <p className="text-slate-500 mb-8">Browse all available listings on the market.</p>
+      <h1 className="text-lg font-bold font-serif mb-[3px].5">Discover Properties</h1>
+      <p className="text-slate-500 mb-[18px]">Browse all available listings on the market.</p>
       
       {formattedProperties.length === 0 ? (
-        <div className="bg-white p-12 text-center rounded-2xl border border-slate-200">
+        <div className="bg-white p-[27px] text-center rounded-2xl border border-slate-200">
           <p className="text-slate-500">No properties available at the moment.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[14px]">
           {formattedProperties.map((listing: any) => (
             <PropertyCard key={listing.id} listing={listing} compact={false} selected={false} onSelect={undefined} />
           ))}

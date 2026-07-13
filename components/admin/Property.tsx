@@ -56,18 +56,18 @@ export default function AdminPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-slate-50 p-8">
+    <main className="min-h-screen bg-slate-50 p-6">
       <div className="mx-auto max-w-4xl">
-        <div className="mb-8 rounded-3xl border border-slate-200 bg-white p-10 shadow-sm">
-          <h1 className="text-4xl font-bold text-slate-900">Admin Proprietăți</h1>
-          <p className="mt-3 text-slate-600">
+        <div className="mb-6 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+          <h1 className="text-2xl font-bold text-slate-900">Admin Proprietăți</h1>
+          <p className="mt-2 text-slate-600">
             Adaugă o proprietate nouă în aplicație.
           </p>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-5 lg:grid-cols-3">
           <div className="lg:col-span-1">
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sticky top-8">
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sticky top-6">
               <ProductForm
                 title={title}
                 setTitle={setTitle}
@@ -82,8 +82,8 @@ export default function AdminPage() {
           </div>
 
           <div className="lg:col-span-2">
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <h2 className="text-xl font-semibold mb-3">Proprietăți existente</h2>
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <h2 className="text-base font-semibold mb-2">Proprietăți existente</h2>
               <AdminProductList
                 products={properties}
                 loading={loading}

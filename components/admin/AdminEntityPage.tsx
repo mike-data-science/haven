@@ -5,7 +5,7 @@ import Link from "next/link";
 import { getAdminEntity, type AdminField } from "@/lib/admin";
 import dynamic from "next/dynamic";
 
-const MapPicker = dynamic(() => import("./MapPicker"), { ssr: false });
+const UniversalMap = dynamic(() => import("../shared/UniversalMap"), { ssr: false });
 
 interface AdminEntityPageProps {
   table: string;
@@ -84,11 +84,11 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
 
   if (!entity) {
     return (
-      <div className="mx-auto max-w-3xl rounded-[2rem] border border-rose-200 bg-rose-50 p-10 text-center text-slate-900 shadow-sm">
-        <p className="text-sm uppercase tracking-[0.35em] text-rose-500">Not found</p>
-        <h1 className="mt-4 text-3xl font-semibold">Table not recognized</h1>
-        <p className="mt-3 text-sm leading-7 text-slate-600">The selected admin path does not match a known table. Please use the sidebar links.</p>
-        <Link href="/dashboard" className="mt-6 inline-flex rounded-2xl bg-slate-950 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800">
+      <div className="mx-auto max-w-3xl rounded-[18px] border border-rose-200 bg-rose-50 p-8 text-center text-slate-900 shadow-sm">
+        <p className="text-xs uppercase tracking-[0.35em] text-rose-500">Not found</p>
+        <h1 className="mt-3 text-xl font-semibold">Table not recognized</h1>
+        <p className="mt-2 text-xs leading-7 text-slate-600">The selected admin path does not match a known table. Please use the sidebar links.</p>
+        <Link href="/dashboard" className="mt-5 inline-flex rounded-2xl bg-slate-950 px-5 py-2 text-xs font-semibold text-white hover:bg-slate-800">
           Back to dashboard
         </Link>
       </div>
@@ -206,23 +206,23 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
   const apiBasePath = `/api/${entity.slug}`;
 
   return (
-    <main className="min-h-screen bg-slate-50 p-8">
+    <main className="min-h-screen bg-slate-50 p-6">
       <div className="mx-auto max-w-7xl space-y-6">
-        <section className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <section className="rounded-[18px] border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="text-sm uppercase tracking-[0.35em] text-cyan-600">{entity.label}</p>
-              <h1 className="mt-3 text-4xl font-semibold tracking-tight text-slate-900">Manage {entity.label}</h1>
-              <p className="mt-3 text-sm leading-7 text-slate-600">All CRUD operations are wired to <code className="rounded bg-slate-100 px-2 py-1 text-xs text-slate-700">{apiBasePath}</code>.</p>
+              <p className="text-xs uppercase tracking-[0.35em] text-cyan-600">{entity.label}</p>
+              <h1 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900">Manage {entity.label}</h1>
+              <p className="mt-2 text-xs leading-7 text-slate-600">All CRUD operations are wired to <code className="rounded bg-slate-100 px-1.5 py-1 text-xs text-slate-700">{apiBasePath}</code>.</p>
             </div>
-            <div className="flex flex-wrap gap-3">
-              <Link href="/dashboard" className="rounded-3xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">
+            <div className="flex flex-wrap gap-2">
+              <Link href="/dashboard" className="rounded-3xl bg-slate-950 px-4 py-2 text-xs font-semibold text-white transition hover:bg-slate-800">
                 Back to dashboard
               </Link>
               <button
                 type="button"
                 onClick={handleReset}
-                className="rounded-3xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+                className="rounded-3xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
               >
                 Reset form
               </button>
@@ -230,18 +230,18 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
           </div>
         </section>
 
-        <section className={`grid gap-6 ${entity.slug === 'properties' ? 'xl:grid-cols-1' : 'xl:grid-cols-[1.05fr_0.95fr]'}`}>
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <section className={`grid gap-5 ${entity.slug === 'properties' ? 'xl:grid-cols-1' : 'xl:grid-cols-[1.05fr_0.95fr]'}`}>
+          <div className="rounded-[18px] border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-sm uppercase tracking-[0.35em] text-slate-500">Data list</p>
-                <h2 className="mt-2 text-2xl font-semibold text-slate-900">{entity.label}</h2>
+                <p className="text-xs uppercase tracking-[0.35em] text-slate-500">Data list</p>
+                <h2 className="mt-1.5 text-lg font-semibold text-slate-900">{entity.label}</h2>
               </div>
-              <div className="flex gap-3">
+              <div className="flex gap-2">
                 {entity.slug === 'properties' && (
                   <Link
                     href="/dashboard/properties/new"
-                    className="rounded-3xl bg-cyan-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-cyan-700"
+                    className="rounded-3xl bg-cyan-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-cyan-700"
                   >
                     + New Property
                   </Link>
@@ -249,27 +249,27 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
                 <button
                   type="button"
                   onClick={loadItems}
-                  className="rounded-3xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+                  className="rounded-3xl bg-slate-950 px-4 py-2 text-xs font-semibold text-white transition hover:bg-slate-800"
                 >
                   Refresh
                 </button>
               </div>
             </div>
 
-            <div className="mt-6 overflow-hidden rounded-3xl border border-slate-200 bg-slate-50">
+            <div className="mt-5 overflow-hidden rounded-3xl border border-slate-200 bg-slate-50">
               {loading ? (
-                <div className="p-8 text-center text-slate-600">Loading...</div>
+                <div className="p-6 text-center text-slate-600">Loading...</div>
               ) : items.length === 0 ? (
-                <div className="p-8 text-center text-slate-600">No data available yet. Create a record above.</div>
+                <div className="p-6 text-center text-slate-600">No data available yet. Create a record above.</div>
               ) : (
                 <div className="divide-y divide-slate-200">
                   {items.map((item) => (
-                    <div key={`item-${item.id ?? JSON.stringify(item)}`} className="grid grid-cols-[1fr_auto] gap-4 bg-white px-4 py-4 sm:px-6">
+                    <div key={`item-${item.id ?? JSON.stringify(item)}`} className="grid grid-cols-[1fr_auto] gap-3 bg-white px-3 py-3 sm:px-5">
                       <div>
-                        <p className="font-medium text-slate-900 flex items-center gap-2">
+                        <p className="font-medium text-slate-900 flex items-center gap-1.5">
                           {String(item[entity.fields[0].name] ?? `Record ${item.id ?? ""}`)}
                           {entity.slug === "properties" && Boolean(item.status) && (
-                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                            <span className={`px-1.5 py-0.5 rounded text-[6px] font-bold ${
                               item.status === 'APPROVED' ? 'bg-green-100 text-green-700' :
                               item.status === 'PENDING' ? 'bg-amber-100 text-amber-700' :
                               item.status === 'REJECTED' ? 'bg-red-100 text-red-700' :
@@ -279,7 +279,7 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
                             </span>
                           )}
                         </p>
-                        <p className="mt-1 text-sm text-slate-600">
+                        <p className="mt-1 text-xs text-slate-600">
                           {entity.fields.slice(1, 4).map((field) => `${formatFieldLabel(field.name)}: ${String(item[field.name] ?? "—")}`).join(" • ")}
                         </p>
                         {entity.slug === "properties" && item.status === "REJECTED" && Boolean(item.rejectionReason) && (
@@ -288,7 +288,7 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
                           </p>
                         )}
                       </div>
-                      <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2">
+                      <div className="flex flex-col sm:flex-row items-end sm:items-center gap-1.5">
                         {entity.slug === "properties" && (item.status === "DRAFT" || item.status === "REJECTED") && (
                           <button
                             type="button"
@@ -303,7 +303,7 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
                                 setMessage("Failed to submit property.");
                               }
                             }}
-                            className="rounded-3xl border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-semibold text-blue-700 transition hover:bg-blue-100"
+                            className="rounded-3xl border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700 transition hover:bg-blue-100"
                           >
                             Submit for Review
                           </button>
@@ -312,7 +312,7 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
                           <button
                             type="button"
                             onClick={() => handleEdit(item)}
-                            className="rounded-3xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+                            className="rounded-3xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
                           >
                             Edit
                           </button>
@@ -320,7 +320,7 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
                         <button
                           type="button"
                           onClick={() => handleDelete(item.id)}
-                          className="rounded-3xl border border-rose-200 bg-rose-50 px-4 py-2 text-xs font-semibold text-rose-700 transition hover:bg-rose-100"
+                          className="rounded-3xl border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-700 transition hover:bg-rose-100"
                         >
                           {deletingId === item.id ? "Deleting..." : "Delete"}
                         </button>
@@ -333,18 +333,18 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
           </div>
 
           {entity.slug !== 'properties' && (
-            <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="rounded-[18px] border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-sm uppercase tracking-[0.35em] text-slate-500">Form</p>
-                <h2 className="mt-2 text-2xl font-semibold text-slate-900">Create or update a record</h2>
+                <p className="text-xs uppercase tracking-[0.35em] text-slate-500">Form</p>
+                <h2 className="mt-1.5 text-lg font-semibold text-slate-900">Create or update a record</h2>
               </div>
-              <span className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-cyan-700">
+              <span className="rounded-full bg-cyan-50 px-2 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-cyan-700">
                 API-ready
               </span>
             </div>
 
-            <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+            <form onSubmit={handleSubmit} className="mt-5 space-y-5">
               {fieldSpecs.map((field) => {
                 if (field.name === "latitude" || field.name === "longitude") return null;
                 // Automatically injected by the backend, so we hide it from the form
@@ -365,30 +365,30 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
                 };
 
                 return (
-                  <div key={field.name} className="grid gap-2">
-                    <label htmlFor={field.name} className="text-sm font-medium text-slate-700">
+                  <div key={field.name} className="grid gap-1.5">
+                    <label htmlFor={field.name} className="text-xs font-medium text-slate-700">
                       {field.name === "categoryId" ? "Category" : field.label}
                     </label>
                     {field.type === "textarea" ? (
                       <textarea
                         {...commonProps}
                         rows={3}
-                        className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-cyan-500"
+                        className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 outline-none transition focus:border-cyan-500"
                       />
                     ) : field.type === "checkbox" ? (
-                      <label className="inline-flex items-center gap-3 rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 transition hover:border-slate-300">
+                      <label className="inline-flex items-center gap-2 rounded-3xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 transition hover:border-slate-300">
                         <input
                           type="checkbox"
                           checked={Boolean(value)}
                           onChange={(event) => handleInputChange(field.name, event.target.checked)}
-                          className="h-4 w-4 rounded border-slate-300 text-cyan-600 focus:ring-cyan-500"
+                          className="h-3 w-3 rounded border-slate-300 text-cyan-600 focus:ring-cyan-500"
                         />
                         <span>{field.label}</span>
                       </label>
                     ) : field.name === "categoryId" ? (
                       <select
                         {...commonProps}
-                        className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-cyan-500"
+                        className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 outline-none transition focus:border-cyan-500"
                       >
                         <option value="">Select a category...</option>
                         {categories?.map((cat) => (
@@ -400,7 +400,7 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
                     ) : field.type === "select" ? (
                       <select
                         {...commonProps}
-                        className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-cyan-500"
+                        className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 outline-none transition focus:border-cyan-500"
                       >
                         {field.options?.map((option) => (
                           <option key={option} value={option}>
@@ -409,19 +409,21 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
                         ))}
                       </select>
                     ) : field.type === "map" ? (
-                      <MapPicker
+                      <UniversalMap
+                        mode="picker"
                         latitude={formData.latitude ? Number(formData.latitude) : undefined}
                         longitude={formData.longitude ? Number(formData.longitude) : undefined}
                         onChange={(lat, lng) => {
                           handleInputChange("latitude", String(lat));
                           handleInputChange("longitude", String(lng));
                         }}
+                        height="100%"
                       />
                     ) : (
                       <input
                         {...commonProps}
                         type={field.type}
-                        className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-cyan-500"
+                        className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 outline-none transition focus:border-cyan-500"
                       />
                     )}
                   </div>
@@ -430,25 +432,27 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
 
               {/* Render MapPicker explicitly if the entity has latitude/longitude fields */}
               {fieldSpecs.some((f) => f.name === "latitude") && fieldSpecs.some((f) => f.name === "longitude") && (
-                <div className="grid gap-2">
-                  <label className="text-sm font-medium text-slate-700">Location (Pin on map)</label>
-                  <MapPicker
+                <div className="grid gap-1.5">
+                  <label className="text-xs font-medium text-slate-700">Location (Pin on map)</label>
+                  <UniversalMap
+                    mode="picker"
                     latitude={formData.latitude ? Number(formData.latitude) : undefined}
                     longitude={formData.longitude ? Number(formData.longitude) : undefined}
                     onChange={(lat, lng) => {
                       handleInputChange("latitude", String(lat));
                       handleInputChange("longitude", String(lng));
                     }}
+                    height="300px"
                   />
                 </div>
               )}
 
               {/* Photos Uploader for Properties */}
               {entity.slug === "properties" && (
-                <div className="grid gap-4 mt-6 border-t border-slate-200 pt-6">
+                <div className="grid gap-3 mt-5 border-t border-slate-200 pt-5">
                   <div>
-                    <label className="text-sm font-medium text-slate-700">Property Photos</label>
-                    <p className="text-xs text-slate-500 mb-2">Upload multiple images. They will be saved when you submit the form.</p>
+                    <label className="text-xs font-medium text-slate-700">Property Photos</label>
+                    <p className="text-xs text-slate-500 mb-1.5">Upload multiple images. They will be saved when you submit the form.</p>
                     <input
                       type="file"
                       multiple
@@ -458,15 +462,15 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
                           setSelectedFiles(Array.from(e.target.files));
                         }
                       }}
-                      className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100"
+                      className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 outline-none transition file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100"
                     />
                   </div>
 
                   {/* Preview selected files */}
                   {selectedFiles.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mt-2">
+                    <div className="flex flex-wrap gap-1.5 mt-1.5">
                       {selectedFiles.map((f, i) => (
-                        <div key={i} className="text-xs bg-slate-100 rounded-md px-2 py-1 text-slate-600 truncate max-w-[150px]">
+                        <div key={i} className="text-xs bg-slate-100 rounded-md px-1.5 py-1 text-slate-600 truncate max-w-28">
                           {f.name}
                         </div>
                       ))}
@@ -475,11 +479,11 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
 
                   {/* Show existing images when editing */}
                   {existingImages.length > 0 && (
-                    <div className="mt-2">
-                      <p className="text-xs font-semibold text-slate-600 mb-2">Existing Photos:</p>
-                      <div className="flex flex-wrap gap-3">
+                    <div className="mt-1.5">
+                      <p className="text-xs font-semibold text-slate-600 mb-1.5">Existing Photos:</p>
+                      <div className="flex flex-wrap gap-2">
                         {existingImages.map((img) => (
-                          <div key={img.id} className="relative w-16 h-16 rounded-md overflow-hidden border border-slate-200">
+                          <div key={img.id} className="relative w-9 h-9 rounded-md overflow-hidden border border-slate-200">
                             <img src={img.url} alt={img.alt || "Property"} className="w-full h-full object-cover" />
                           </div>
                         ))}
@@ -489,20 +493,20 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
                 </div>
               )}
 
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-sm leading-6 text-slate-600">Submit the form to POST or PUT to your API. Use the row actions to load a record for update or delete.</p>
-                <div className="flex flex-wrap gap-3">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-xs leading-6 text-slate-600">Submit the form to POST or PUT to your API. Use the row actions to load a record for update or delete.</p>
+                <div className="flex flex-wrap gap-2">
                   <button
                     type="button"
                     onClick={handleReset}
-                    className="rounded-3xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+                    className="rounded-3xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
                   >
                     Reset
                   </button>
                   <button
                     type="submit"
                     disabled={saving}
-                    className="rounded-3xl bg-cyan-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-70"
+                    className="rounded-3xl bg-cyan-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-70"
                   >
                     {selectedId ? "Update record" : "Create record"}
                   </button>
@@ -510,7 +514,7 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
               </div>
 
               {message ? (
-                <div className="rounded-3xl border border-cyan-100 bg-cyan-50 px-4 py-3 text-sm text-cyan-900">
+                <div className="rounded-3xl border border-cyan-100 bg-cyan-50 px-3 py-2 text-xs text-cyan-900">
                   {message}
                 </div>
               ) : null}

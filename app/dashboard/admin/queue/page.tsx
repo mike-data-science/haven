@@ -21,8 +21,8 @@ export default async function VerificationQueuePage() {
   return (
     <div className="max-w-7xl mx-auto space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Verification Queue</h1>
-        <p className="text-slate-500 mt-2">Review and moderate pending property submissions.</p>
+        <h1 className="text-xl font-bold text-slate-900 tracking-tight">Verification Queue</h1>
+        <p className="text-slate-500 mt-[3px].5">Review and moderate pending property submissions.</p>
       </div>
       
       <QueueClient initialProperties={properties as any} adminId={admin.id} />
