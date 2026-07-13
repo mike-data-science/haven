@@ -78,6 +78,14 @@ function ImageCarousel({ images, alt }) {
   );
 }
 
+/**
+ * @param {Object} props
+ * @param {Object} props.listing
+ * @param {boolean} [props.compact=false]
+ * @param {boolean} [props.selected=false]
+ * @param {Function} [props.onSelect]
+ * @param {Function} [props.onZoom]
+ */
 export function PropertyCard({ listing, compact = false, selected = false, onSelect, onZoom }) {
   const router = useRouter();
   const images = listing.gallery && listing.gallery.length > 0 ? listing.gallery : [listing.image].filter(Boolean);

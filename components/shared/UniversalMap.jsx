@@ -46,6 +46,20 @@ const createPriceBubbleIcon = (price, isSelected) => {
   });
 };
 
+/**
+ * @param {Object} props
+ * @param {string} [props.mode="display"]
+ * @param {Object|null} [props.property=null]
+ * @param {Array} [props.listings=[]]
+ * @param {string|number|null} [props.selectedId=null]
+ * @param {string|number|null} [props.zoomedId=null]
+ * @param {Function} [props.onSelectPin]
+ * @param {number|null} [props.latitude=null]
+ * @param {number|null} [props.longitude=null]
+ * @param {(lat: number, lng: number) => void} [props.onChange]
+ * @param {string} [props.height="300px"]
+ * @param {number[]} [props.defaultCenter=[47.0105, 28.8638]]
+ */
 export default function UniversalMap({ 
   mode = "display", // "display" | "listings" | "picker"
   

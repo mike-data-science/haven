@@ -413,7 +413,7 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
                         mode="picker"
                         latitude={formData.latitude ? Number(formData.latitude) : undefined}
                         longitude={formData.longitude ? Number(formData.longitude) : undefined}
-                        onChange={(lat, lng) => {
+                        onChange={(lat: number, lng: number) => {
                           handleInputChange("latitude", String(lat));
                           handleInputChange("longitude", String(lng));
                         }}
