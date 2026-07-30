@@ -31,9 +31,9 @@ function ModernSelect({ id, label, options, defaultValue, isLast, className }) {
         className="relative w-full cursor-pointer flex items-center justify-between"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <div className="flex items-center gap-1.5 truncate">
-          {label && <span className="font-sans text-[10px] font-medium text-slate-500 whitespace-nowrap">{label}:</span>}
-          <span className="font-sans text-[11px] font-bold text-[#1A1A18] whitespace-nowrap">
+        <div className="flex items-center gap-2 truncate">
+          {label && <span className="font-sans text-xs sm:text-sm font-medium text-slate-500 whitespace-nowrap">{label}:</span>}
+          <span className="font-sans text-sm sm:text-base font-bold text-[#1A1A18] whitespace-nowrap">
             {selectedOption.label}
           </span>
         </div>
@@ -47,7 +47,7 @@ function ModernSelect({ id, label, options, defaultValue, isLast, className }) {
           {options.map((o) => (
             <div 
               key={o.value} 
-              className={`px-3 py-1.5 text-[9px] cursor-pointer transition-colors select-none flex items-center justify-between ${o.value === value ? 'bg-blue-50/50 text-blue-700 font-semibold' : 'text-slate-700 hover:bg-slate-50'}`}
+              className={`px-3 py-2 text-xs sm:text-sm cursor-pointer transition-colors select-none flex items-center justify-between ${o.value === value ? 'bg-blue-50/50 text-blue-700 font-semibold' : 'text-slate-700 hover:bg-slate-50'}`}
               onClick={() => { setValue(o.value); setIsOpen(false); }}
             >
               {o.label}
@@ -207,7 +207,7 @@ function HeroGradient() {
         <h1 className="font-serif text-[clamp(3rem,7vw,5.25rem)] font-bold text-[#1A1A18] leading-[1.05] tracking-[-1px] mb-5 drop-shadow-sm md:whitespace-nowrap">
           Find your <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#0B3D91] to-[#4388FF]">Haven.</span>
         </h1>
-        <p className={`font-sans text-[11px] text-[#4A5568] max-w-169 leading-[1.6] mb-6 md:whitespace-nowrap ${fontStyle === 'modern' ? 'font-normal' : 'font-medium'}`}>
+        <p className={`font-sans text-base sm:text-lg text-[#4A5568] max-w-2xl leading-[1.6] mb-6 md:whitespace-nowrap ${fontStyle === 'modern' ? 'font-normal' : 'font-medium'}`}>
           Browse curated houses, condos, and apartments from agents who actually answer the phone.
         </p>
 
@@ -274,10 +274,10 @@ function HeroGradient() {
                 {/* Price From-To */}
                 <div className="col-span-2 lg:col-span-1 flex-[1.4] px-3 py-2 flex items-center border-b lg:border-b-0 lg:border-r border-slate-300/50">
                   <div className="flex items-center gap-1.5 w-full">
-                    <input type="number" name="minPrice" placeholder="Price from" className="w-full border-none bg-transparent font-sans text-[10px] font-bold text-[#1A1A18] outline-none placeholder:text-slate-500 placeholder:font-medium min-w-0" />
+                    <input type="number" name="minPrice" placeholder="Price from" className="w-full border-none bg-transparent font-sans text-xs sm:text-sm font-bold text-[#1A1A18] outline-none placeholder:text-slate-500 placeholder:font-medium min-w-0" />
                     <span className="text-slate-400 font-bold">-</span>
-                    <input type="number" name="maxPrice" placeholder="Price to" className="w-full border-none bg-transparent font-sans text-[10px] font-bold text-[#1A1A18] outline-none placeholder:text-slate-500 placeholder:font-medium min-w-0" />
-                    <span className="font-sans text-[10px] font-bold text-[#1A1A18] ml-1">€</span>
+                    <input type="number" name="maxPrice" placeholder="Price to" className="w-full border-none bg-transparent font-sans text-xs sm:text-sm font-bold text-[#1A1A18] outline-none placeholder:text-slate-500 placeholder:font-medium min-w-0" />
+                    <span className="font-sans text-xs sm:text-sm font-bold text-[#1A1A18] ml-1">€</span>
                   </div>
                 </div>
 
@@ -300,7 +300,7 @@ function HeroGradient() {
             </div>
 
             {/* Search Button */}
-            <button type="submit" className="w-full lg:w-34 bg-gradient-to-r from-[#0B3D91] to-[#1e58bd] text-white font-sans text-[11px] font-bold py-3 lg:py-0 px-5 rounded-[14px] lg:rounded-[9px] cursor-pointer transition-all duration-300 hover:scale-[1.03] lg:h-auto shrink-0 shadow-[0_8px_24px_rgba(11,61,145,0.4)]">
+            <button type="submit" className="w-full lg:w-36 bg-gradient-to-r from-[#0B3D91] to-[#1e58bd] text-white font-sans text-sm sm:text-base font-bold py-3.5 lg:py-0 px-6 rounded-[14px] lg:rounded-[9px] cursor-pointer transition-all duration-300 hover:scale-[1.03] lg:h-auto shrink-0 shadow-[0_8px_24px_rgba(11,61,145,0.4)]">
               Search
             </button>
           </form>
@@ -358,16 +358,16 @@ function HeroGradient() {
               {/* Price From-To */}
               <div className="col-span-2 lg:col-span-1 flex-[1.4] px-3 py-2 flex items-center border-b lg:border-b-0 lg:border-r border-slate-300/50">
                 <div className="flex items-center gap-1.5 w-full">
-                  <input type="number" name="minPrice" placeholder="Price from" className="w-full border-none bg-transparent font-sans text-[11px] font-bold text-[#1A1A18] outline-none placeholder:text-slate-500 placeholder:font-medium min-w-0" />
+                  <input type="number" name="minPrice" placeholder="Price from" className="w-full border-none bg-transparent font-sans text-xs sm:text-sm font-bold text-[#1A1A18] outline-none placeholder:text-slate-500 placeholder:font-medium min-w-0" />
                   <span className="text-slate-400 font-bold">-</span>
-                  <input type="number" name="maxPrice" placeholder="Price to" className="w-full border-none bg-transparent font-sans text-[11px] font-bold text-[#1A1A18] outline-none placeholder:text-slate-500 placeholder:font-medium min-w-0" />
-                  <span className="font-sans text-[11px] font-bold text-[#1A1A18] ml-1">€</span>
+                  <input type="number" name="maxPrice" placeholder="Price to" className="w-full border-none bg-transparent font-sans text-xs sm:text-sm font-bold text-[#1A1A18] outline-none placeholder:text-slate-500 placeholder:font-medium min-w-0" />
+                  <span className="font-sans text-xs sm:text-sm font-bold text-[#1A1A18] ml-1">€</span>
                 </div>
               </div>
 
               {/* Search Button */}
               <div className="col-span-2 lg:col-span-1 flex justify-center mt-2 lg:mt-0 p-1.5 lg:p-0">
-                <button type="submit" className="w-full lg:w-auto bg-gradient-to-r from-[#0B3D91] to-[#1e58bd] text-white font-sans text-[11px] font-bold py-0 px-8 rounded-[9px] lg:rounded-full cursor-pointer transition-all duration-300 hover:scale-[1.02] h-10 lg:h-full lg:ml-1.5 shrink-0 shadow-[0_8px_24px_rgba(11,61,145,0.4)]">
+                <button type="submit" className="w-full lg:w-auto bg-gradient-to-r from-[#0B3D91] to-[#1e58bd] text-white font-sans text-sm sm:text-base font-bold py-2.5 px-8 rounded-[9px] lg:rounded-full cursor-pointer transition-all duration-300 hover:scale-[1.02] h-11 lg:h-full lg:ml-1.5 shrink-0 shadow-[0_8px_24px_rgba(11,61,145,0.4)]">
                   Search
                 </button>
               </div>
@@ -386,11 +386,11 @@ function PopularProperties({ properties }) {
         <div>
           <div className="flex items-center gap-1.5 mb-3">
             <div className="w-6 h-1 bg-[#2B7FFF]"></div>
-            <p className="font-sans text-[8px] font-bold uppercase tracking-[1px] text-[#2B7FFF] m-0">Hand-picked</p>
+            <p className="font-sans text-xs font-bold uppercase tracking-[2px] text-[#2B7FFF] m-0">Hand-picked</p>
           </div>
           <h2 className="font-serif text-[clamp(36px,5vw,52px)] font-bold text-[#1A1A18] tracking-[-1px] leading-[1.1]">Popular properties</h2>
         </div>
-        <a href="#all-properties" className="group font-sans text-[9px] font-bold text-[#0B3D91] hover:text-[#2B7FFF] transition-colors flex items-center gap-1.5">
+        <a href="#all-properties" className="group font-sans text-sm font-bold text-[#0B3D91] hover:text-[#2B7FFF] transition-colors flex items-center gap-1.5">
           View all listings 
           <span className="transition-transform group-hover:translate-x-1">→</span>
         </a>
@@ -415,11 +415,11 @@ function Agents({ agents }) {
           <div className="w-full md:w-auto">
             <div className="flex items-center justify-center md:justify-start gap-1.5 mb-3">
               <div className="w-6 h-1 bg-[#2B7FFF]"></div>
-              <p className="font-sans text-[8px] font-bold uppercase tracking-[1px] text-[#2B7FFF] m-0">Expert Guidance</p>
+              <p className="font-sans text-xs font-bold uppercase tracking-[2px] text-[#2B7FFF] m-0">Expert Guidance</p>
             </div>
             <h2 className="font-serif text-[clamp(36px,5vw,52px)] font-bold text-[#1A1A18] tracking-[-1px] leading-[1.1]">Meet our top agents</h2>
           </div>
-          <a href="#all-agents" className="group font-sans text-[9px] font-bold text-[#0B3D91] hover:text-[#2B7FFF] transition-colors flex items-center gap-1.5 mx-auto md:mx-0">
+          <a href="#all-agents" className="group font-sans text-sm font-bold text-[#0B3D91] hover:text-[#2B7FFF] transition-colors flex items-center gap-1.5 mx-auto md:mx-0">
             See all agents
             <span className="transition-transform group-hover:translate-x-1">→</span>
           </a>
@@ -438,12 +438,12 @@ function Agents({ agents }) {
                    </div>
                 )}
               </div>
-              <h3 className="font-serif text-[13px] font-bold text-[#1A1A18] mb-1">{a.name}</h3>
-              <p className="font-sans text-[8px] font-medium text-[#6B7280] mb-3">{a.role}</p>
+              <h3 className="font-serif text-lg font-bold text-[#1A1A18] mb-1">{a.name}</h3>
+              <p className="font-sans text-sm font-medium text-[#6B7280] mb-3">{a.role}</p>
               <div className="bg-[#FAFAF8] py-1.5 px-3 rounded-xl inline-block mb-5 border border-[#E8E5DF]">
-                <p className="font-sans text-[8px] font-bold text-[#0B3D91] tracking-wide uppercase">{a.deals} deals closed</p>
+                <p className="font-sans text-xs font-bold text-[#0B3D91] tracking-wide uppercase">{a.deals} deals closed</p>
               </div>
-              <button className="w-full bg-transparent text-[#0B3D91] font-sans text-[9px] font-bold py-2 rounded-xl border-2 border-[#EAF2FF] cursor-pointer transition-all duration-300 group-hover:bg-[#0B3D91] group-hover:text-white group-hover:border-[#0B3D91] group-hover:shadow-lg">
+              <button className="w-full bg-transparent text-[#0B3D91] font-sans text-sm font-bold py-2.5 rounded-xl border-2 border-[#EAF2FF] cursor-pointer transition-all duration-300 group-hover:bg-[#0B3D91] group-hover:text-white group-hover:border-[#0B3D91] group-hover:shadow-lg">
                 Contact
               </button>
             </article>
@@ -464,20 +464,20 @@ function AboutSplit() {
           alt="Modern home exterior — Haven"
           className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
         />
-        <div className="absolute bottom-8 left-8 z-20 bg-white/90 backdrop-blur-md p-5 rounded-3xl shadow-2xl max-w-53 pointer-events-none transition-transform duration-500 group-hover:-translate-y-2">
-          <p className="font-serif text-[14px] font-bold text-[#1A1A18] leading-[1.2] mb-1.5">"The easiest way to find a home."</p>
-          <p className="font-sans text-[8px] font-medium text-[#6B7280]">— Architectural Digest</p>
+        <div className="absolute bottom-8 left-8 z-20 bg-white/90 backdrop-blur-md p-6 rounded-3xl shadow-2xl max-w-sm pointer-events-none transition-transform duration-500 group-hover:-translate-y-2">
+          <p className="font-serif text-lg font-bold text-[#1A1A18] leading-[1.2] mb-2">"The easiest way to find a home."</p>
+          <p className="font-sans text-sm font-medium text-[#6B7280]">— Architectural Digest</p>
         </div>
       </div>
       <div className="flex-1 w-full">
         <div className="flex items-center gap-1.5 mb-5">
           <div className="w-6 h-1 bg-[#2B7FFF]"></div>
-          <p className="font-sans text-[8px] font-bold uppercase tracking-[1px] text-[#2B7FFF] m-0">Why Haven</p>
+          <p className="font-sans text-xs font-bold uppercase tracking-[2px] text-[#2B7FFF] m-0">Why Haven</p>
         </div>
         <h2 className="font-serif text-[clamp(36px,5vw,56px)] font-bold text-[#1A1A18] tracking-[-1px] leading-[1.1] mb-6">
           We built the home search we always wanted.
         </h2>
-        <p className="font-sans text-[11px] text-[#4A5568] leading-[1.7] mb-9 font-medium">
+        <p className="font-sans text-base sm:text-lg text-[#4A5568] leading-[1.7] mb-9 font-medium">
           Haven started with three agents who were tired of clunky listing
           sites. Today we connect thousands of buyers and renters with
           verified agents, transparent pricing, and listings that are
@@ -485,16 +485,16 @@ function AboutSplit() {
         </p>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6 p-6 bg-white rounded-[18px] shadow-[0_8px_32px_rgba(0,0,0,0.03)] border border-[#E8E5DF]">
           <div>
-            <strong className="block font-serif text-[20px] font-bold text-[#0B3D91] tracking-[-1px] mb-1">2019</strong>
-            <span className="font-sans text-[8px] font-semibold text-[#6B7280] uppercase tracking-wider">Founded</span>
+            <strong className="block font-serif text-2xl sm:text-3xl font-bold text-[#0B3D91] tracking-[-1px] mb-1">2019</strong>
+            <span className="font-sans text-xs font-semibold text-[#6B7280] uppercase tracking-wider">Founded</span>
           </div>
           <div>
-            <strong className="block font-serif text-[20px] font-bold text-[#0B3D91] tracking-[-1px] mb-1">48</strong>
-            <span className="font-sans text-[8px] font-semibold text-[#6B7280] uppercase tracking-wider">States</span>
+            <strong className="block font-serif text-2xl sm:text-3xl font-bold text-[#0B3D91] tracking-[-1px] mb-1">48</strong>
+            <span className="font-sans text-xs font-semibold text-[#6B7280] uppercase tracking-wider">States</span>
           </div>
           <div>
-            <strong className="block font-serif text-[20px] font-bold text-[#0B3D91] tracking-[-1px] mb-1">10K+</strong>
-            <span className="font-sans text-[8px] font-semibold text-[#6B7280] uppercase tracking-wider">Clients</span>
+            <strong className="block font-serif text-2xl sm:text-3xl font-bold text-[#0B3D91] tracking-[-1px] mb-1">10K+</strong>
+            <span className="font-sans text-xs font-semibold text-[#6B7280] uppercase tracking-wider">Clients</span>
           </div>
         </div>
       </div>
@@ -511,17 +511,17 @@ function AdvancedSearchPromo() {
         <div className="absolute bottom-[-30%] left-[10%] w-75 h-75 bg-blue-300/20 rounded-full blur-3xl pointer-events-none"></div>
 
         <div className="relative z-10 w-full md:w-1.5/3 text-white">
-          <p className="font-sans text-[8px] font-bold uppercase tracking-[2px] text-blue-200 mb-3">Găsește exact ce cauți</p>
+          <p className="font-sans text-xs font-bold uppercase tracking-[2px] text-blue-200 mb-3">Găsește exact ce cauți</p>
           <h2 className="font-serif text-[clamp(32px,4vw,48px)] font-bold leading-[1.15] mb-5">
             Vă vom ajuta să găsiți cazare conform nevoilor dumneavoastră.
           </h2>
-          <p className="font-sans text-[11px] text-blue-100 font-medium max-w-94">
+          <p className="font-sans text-base sm:text-lg text-blue-100 font-medium max-w-2xl">
             Căutare avansată de proprietăți cu multe filtre. Găsiți locația perfectă, prețul corect și dotările pe care vi le doriți.
           </p>
         </div>
 
         <div className="relative z-10 w-full md:w-1/3 flex justify-end mt-8 md:mt-0">
-          <a href="/listings" className="group flex items-center justify-center gap-2 bg-white text-[#0B3D91] font-sans text-[11px] font-bold py-4 px-8 rounded-full shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl whitespace-nowrap">
+          <a href="/listings" className="group flex items-center justify-center gap-2 bg-white text-[#0B3D91] font-sans text-base font-bold py-4 px-8 rounded-full shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl whitespace-nowrap">
             Căutare avansată
             <span className="transition-transform group-hover:translate-x-1">→</span>
           </a>

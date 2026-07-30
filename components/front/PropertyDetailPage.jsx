@@ -36,7 +36,7 @@ function HeroGallery({ property }) {
                 />
                 {isLast && remaining > 0 && (
                   <div className="absolute inset-0 bg-black/60 flex items-center justify-center backdrop-blur-[2px]">
-                    <span className="text-white font-sans text-[14px] font-bold">+{remaining}</span>
+                    <span className="text-white font-sans text-lg font-bold">+{remaining}</span>
                   </div>
                 )}
               </div>
@@ -59,12 +59,12 @@ function HeroGallery({ property }) {
       
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-5">
         <div>
-          <p className="font-sans text-[8px] font-bold uppercase tracking-[1px] text-navy mb-1.5">{property.location}</p>
+          <p className="font-sans text-xs font-bold uppercase tracking-[2px] text-navy mb-1.5">{property.location}</p>
           <h1 className="font-serif text-[clamp(28px,4vw,42px)] font-bold text-ink leading-[1.1] mb-3">{property.title}</h1>
 
         </div>
         <div className="bg-paleBlue px-5 py-3 rounded-[7px]">
-          <span className="font-sans text-[16px] font-bold text-navy">{formatPrice(property.price)}</span>
+          <span className="font-sans text-2xl font-bold text-navy">{formatPrice(property.price)}</span>
         </div>
       </div>
     </section>
@@ -76,48 +76,48 @@ function PropertyFeatures({ property }) {
     <div className="bg-white rounded-[11px] p-5 md:p-6 border border-line shadow-sm flex flex-col gap-6">
       {/* Main Details */}
       <div>
-        <h2 className="font-serif text-[13px] font-semibold text-ink mb-5">Details & Features</h2>
+        <h2 className="font-serif text-xl font-semibold text-ink mb-5">Details & Features</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-paleBlue flex items-center justify-center text-navy shrink-0"><BedDouble size={20} strokeWidth={2.5} /></div>
+            <div className="w-11 h-11 rounded-full bg-paleBlue flex items-center justify-center text-navy shrink-0"><BedDouble size={22} strokeWidth={2.5} /></div>
             <div>
-              <p className="font-sans text-[7px] font-bold text-slate uppercase tracking-wider mb-0.5">Bedrooms</p>
-              <p className="font-sans text-[9px] font-semibold text-ink">{property.beds}</p>
+              <p className="font-sans text-xs font-bold text-slate uppercase tracking-wider mb-0.5">Bedrooms</p>
+              <p className="font-sans text-base font-semibold text-ink">{property.beds}</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-paleBlue flex items-center justify-center text-navy shrink-0"><Bath size={20} strokeWidth={2.5} /></div>
+            <div className="w-11 h-11 rounded-full bg-paleBlue flex items-center justify-center text-navy shrink-0"><Bath size={22} strokeWidth={2.5} /></div>
             <div>
-              <p className="font-sans text-[7px] font-bold text-slate uppercase tracking-wider mb-0.5">Bathrooms</p>
-              <p className="font-sans text-[9px] font-semibold text-ink">{property.baths}</p>
+              <p className="font-sans text-xs font-bold text-slate uppercase tracking-wider mb-0.5">Bathrooms</p>
+              <p className="font-sans text-base font-semibold text-ink">{property.baths}</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-paleBlue flex items-center justify-center text-navy shrink-0"><Maximize size={20} strokeWidth={2.5} /></div>
+            <div className="w-11 h-11 rounded-full bg-paleBlue flex items-center justify-center text-navy shrink-0"><Maximize size={22} strokeWidth={2.5} /></div>
             <div>
-              <p className="font-sans text-[7px] font-bold text-slate uppercase tracking-wider mb-0.5">Square Feet</p>
-              <p className="font-sans text-[9px] font-semibold text-ink">{property.sqft?.toLocaleString()} m²</p>
+              <p className="font-sans text-xs font-bold text-slate uppercase tracking-wider mb-0.5">Square Feet</p>
+              <p className="font-sans text-base font-semibold text-ink">{property.sqft?.toLocaleString()} m²</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-paleBlue flex items-center justify-center text-navy shrink-0"><Building size={20} strokeWidth={2.5} /></div>
+            <div className="w-11 h-11 rounded-full bg-paleBlue flex items-center justify-center text-navy shrink-0"><Building size={22} strokeWidth={2.5} /></div>
             <div>
-              <p className="font-sans text-[7px] font-bold text-slate uppercase tracking-wider mb-0.5">Property Type</p>
-              <p className="font-sans text-[9px] font-semibold text-ink">{property.type || 'House'}</p>
+              <p className="font-sans text-xs font-bold text-slate uppercase tracking-wider mb-0.5">Property Type</p>
+              <p className="font-sans text-base font-semibold text-ink">{property.type || 'House'}</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-paleBlue flex items-center justify-center text-navy shrink-0"><Calendar size={20} strokeWidth={2.5} /></div>
+            <div className="w-11 h-11 rounded-full bg-paleBlue flex items-center justify-center text-navy shrink-0"><Calendar size={22} strokeWidth={2.5} /></div>
             <div>
-              <p className="font-sans text-[7px] font-bold text-slate uppercase tracking-wider mb-0.5">Year Built</p>
-              <p className="font-sans text-[9px] font-semibold text-ink">{property.yearBuilt || 'N/A'}</p>
+              <p className="font-sans text-xs font-bold text-slate uppercase tracking-wider mb-0.5">Year Built</p>
+              <p className="font-sans text-base font-semibold text-ink">{property.yearBuilt || 'N/A'}</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-paleBlue flex items-center justify-center text-navy shrink-0"><Tag size={20} strokeWidth={2.5} /></div>
+            <div className="w-11 h-11 rounded-full bg-paleBlue flex items-center justify-center text-navy shrink-0"><Tag size={22} strokeWidth={2.5} /></div>
             <div>
-              <p className="font-sans text-[7px] font-bold text-slate uppercase tracking-wider mb-0.5">Status</p>
-              <p className="font-sans text-[9px] font-semibold text-ink">{property.tag || 'Active'}</p>
+              <p className="font-sans text-xs font-bold text-slate uppercase tracking-wider mb-0.5">Status</p>
+              <p className="font-sans text-base font-semibold text-ink">{property.tag || 'Active'}</p>
             </div>
           </div>
         </div>
@@ -125,39 +125,39 @@ function PropertyFeatures({ property }) {
       
       {/* Ce e inautru */}
       <div className="pt-6 border-t border-line">
-        <h3 className="font-serif text-[13px] font-semibold text-ink mb-4">Ce e înăuntru</h3>
+        <h3 className="font-serif text-xl font-semibold text-ink mb-4">Ce e înăuntru</h3>
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6 list-none p-0 m-0">
-          <li className="flex items-center gap-2 text-[8px] text-ink"><Tv size={18} className="text-slate" /> Televizor</li>
-          <li className="flex items-center gap-2 text-[8px] text-ink"><Refrigerator size={18} className="text-slate" /> Frigider</li>
-          <li className="flex items-center gap-2 text-[8px] text-ink"><Shirt size={18} className="text-slate" /> Mașină de spălat</li>
-          <li className="flex items-center gap-2 text-[8px] text-ink"><Bath size={18} className="text-slate" /> Toaletă</li>
-          <li className="flex items-center gap-2 text-[8px] text-ink"><Armchair size={18} className="text-slate" /> Mobilat</li>
-          <li className="flex items-center gap-2 text-[8px] text-ink"><Microwave size={18} className="text-slate" /> Cuptor cu microunde</li>
-          <li className="flex items-center gap-2 text-[8px] text-ink"><ShowerHead size={18} className="text-slate" /> Cabină de duș</li>
-          <li className="flex items-center gap-2 text-[8px] text-ink"><Droplets size={18} className="text-slate" /> Bideu</li>
-          <li className="flex items-center gap-2 text-[8px] text-ink"><Wind size={18} className="text-slate" /> Aparat de aer condiționat</li>
-          <li className="flex items-center gap-2 text-[8px] text-ink"><Video size={18} className="text-slate" /> Interfon Video</li>
-          <li className="flex items-center gap-2 text-[8px] text-ink"><Wind size={18} className="text-slate" /> Uscător</li>
+          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Tv size={18} className="text-slate" /> Televizor</li>
+          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Refrigerator size={18} className="text-slate" /> Frigider</li>
+          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Shirt size={18} className="text-slate" /> Mașină de spălat</li>
+          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Bath size={18} className="text-slate" /> Toaletă</li>
+          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Armchair size={18} className="text-slate" /> Mobilat</li>
+          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Microwave size={18} className="text-slate" /> Cuptor cu microunde</li>
+          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><ShowerHead size={18} className="text-slate" /> Cabină de duș</li>
+          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Droplets size={18} className="text-slate" /> Bideu</li>
+          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Wind size={18} className="text-slate" /> Aparat de aer condiționat</li>
+          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Video size={18} className="text-slate" /> Interfon Video</li>
+          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Wind size={18} className="text-slate" /> Uscător</li>
         </ul>
       </div>
 
       {/* Informatii despre casa */}
       <div className="pt-6 border-t border-line">
-        <h3 className="font-serif text-[13px] font-semibold text-ink mb-4">Informații despre casă</h3>
+        <h3 className="font-serif text-xl font-semibold text-ink mb-4">Informații despre casă</h3>
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6 list-none p-0 m-0">
-          <li className="flex items-center gap-2 text-[8px] text-ink"><Activity size={18} className="text-slate" /> Rampă</li>
-          <li className="flex items-center gap-2 text-[8px] text-ink"><Lock size={18} className="text-slate" /> Zona închisă</li>
-          <li className="flex items-center gap-2 text-[8px] text-ink"><ArrowUpDown size={18} className="text-slate" /> Lift</li>
-          <li className="flex items-center gap-2 text-[8px] text-ink"><ShieldCheck size={18} className="text-slate" /> Securitate</li>
+          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Activity size={18} className="text-slate" /> Rampă</li>
+          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Lock size={18} className="text-slate" /> Zona închisă</li>
+          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><ArrowUpDown size={18} className="text-slate" /> Lift</li>
+          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><ShieldCheck size={18} className="text-slate" /> Securitate</li>
         </ul>
       </div>
 
       {/* Reguli in casa */}
       <div className="pt-6 border-t border-line">
-        <h3 className="font-serif text-[13px] font-semibold text-ink mb-4">Reguli în casă</h3>
+        <h3 className="font-serif text-xl font-semibold text-ink mb-4">Reguli în casă</h3>
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6 list-none p-0 m-0">
-          <li className="flex items-center gap-2 text-[8px] text-ink"><Ban size={18} className="text-slate" /> Interzis cu animale</li>
-          <li className="flex items-center gap-2 text-[8px] text-ink"><Ban size={18} className="text-slate" /> Fumatul interzis</li>
+          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Ban size={18} className="text-slate" /> Interzis cu animale</li>
+          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Ban size={18} className="text-slate" /> Fumatul interzis</li>
         </ul>
       </div>
     </div>
@@ -168,8 +168,8 @@ function SidebarDescription({ property }) {
   if (!property.description) return null;
   return (
     <div className="bg-white rounded-[11px] p-5 border border-line shadow-sm">
-      <h3 className="font-serif text-[11px] font-semibold text-ink mb-3">About this home</h3>
-      <p className="font-sans text-[8px] leading-[1.6] text-slate whitespace-pre-wrap">{property.description}</p>
+      <h3 className="font-serif text-lg font-semibold text-ink mb-3">About this home</h3>
+      <p className="font-sans text-sm sm:text-base leading-[1.7] text-slate whitespace-pre-wrap">{property.description}</p>
     </div>
   );
 }
@@ -177,7 +177,7 @@ function SidebarDescription({ property }) {
 function PropertyMap({ property }) {
   return (
     <div className="bg-white rounded-[11px] p-5 md:p-6 border border-line shadow-sm">
-      <h2 className="font-serif text-[13px] font-semibold text-ink mb-5">Locație</h2>
+      <h2 className="font-serif text-xl font-semibold text-ink mb-5">Locație</h2>
       <UniversalMap mode="display" property={property} />
     </div>
   );
@@ -186,13 +186,13 @@ function PropertyMap({ property }) {
 function UsefulNearby() {
   return (
     <div className="bg-white rounded-[11px] p-5 md:p-6 border border-line shadow-sm">
-      <h2 className="font-serif text-[13px] font-semibold text-ink mb-5">Util în apropiere</h2>
+      <h2 className="font-serif text-xl font-semibold text-ink mb-5">Util în apropiere</h2>
       <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6 list-none p-0 m-0">
-        <li className="flex items-center gap-2 text-[8px] text-ink"><ShoppingCart size={18} className="text-slate" /> Shoping</li>
-        <li className="flex items-center gap-2 text-[8px] text-ink"><Landmark size={18} className="text-slate" /> Bancă</li>
-        <li className="flex items-center gap-2 text-[8px] text-ink"><Cross size={18} className="text-slate" /> Farmacie</li>
-        <li className="flex items-center gap-2 text-[8px] text-ink"><Smile size={18} className="text-slate" /> Dentist</li>
-        <li className="flex items-center gap-2 text-[8px] text-ink"><Store size={18} className="text-slate" /> Supermarket</li>
+        <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><ShoppingCart size={18} className="text-slate" /> Shoping</li>
+        <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Landmark size={18} className="text-slate" /> Bancă</li>
+        <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Cross size={18} className="text-slate" /> Farmacie</li>
+        <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Smile size={18} className="text-slate" /> Dentist</li>
+        <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Store size={18} className="text-slate" /> Supermarket</li>
       </ul>
     </div>
   );
@@ -205,16 +205,16 @@ function ContactAgentForm({ agent }) {
       <div className="flex items-center gap-3 mb-5 pb-5 border-b border-line">
         <img src={agent.image} alt={agent.name} className="w-11 h-11 rounded-full object-cover" />
         <div>
-          <strong className="font-serif text-[11px] font-semibold text-ink block">{agent.name}</strong>
-          <span className="font-sans text-[8px] text-slate">{agent.role}</span>
+          <strong className="font-serif text-lg font-semibold text-ink block">{agent.name}</strong>
+          <span className="font-sans text-sm text-slate">{agent.role}</span>
         </div>
       </div>
       <form className="flex flex-col gap-3" onSubmit={e => e.preventDefault()}>
-        <input type="text" placeholder="Your name" className="w-full border border-line rounded-[6px] px-3 py-2 text-[8px] outline-none focus:border-navy bg-warm transition-colors" />
-        <input type="email" placeholder="Your email" className="w-full border border-line rounded-[6px] px-3 py-2 text-[8px] outline-none focus:border-navy bg-warm transition-colors" />
-        <input type="tel" placeholder="Phone number" className="w-full border border-line rounded-[6px] px-3 py-2 text-[8px] outline-none focus:border-navy bg-warm transition-colors" />
-        <textarea placeholder="I am interested in this property..." rows={3} className="w-full border border-line rounded-[6px] px-3 py-2 text-[8px] outline-none focus:border-navy bg-warm transition-colors resize-y"></textarea>
-        <button type="submit" className="w-full bg-navy text-white rounded-[6px] py-3 font-bold text-[8px] hover:bg-blue transition-colors cursor-pointer border-none mt-1.5">
+        <input type="text" placeholder="Your name" className="w-full border border-line rounded-[8px] px-3 py-2.5 text-sm outline-none focus:border-navy bg-warm transition-colors" />
+        <input type="email" placeholder="Your email" className="w-full border border-line rounded-[8px] px-3 py-2.5 text-sm outline-none focus:border-navy bg-warm transition-colors" />
+        <input type="tel" placeholder="Phone number" className="w-full border border-line rounded-[8px] px-3 py-2.5 text-sm outline-none focus:border-navy bg-warm transition-colors" />
+        <textarea placeholder="I am interested in this property..." rows={3} className="w-full border border-line rounded-[8px] px-3 py-2.5 text-sm outline-none focus:border-navy bg-warm transition-colors resize-y"></textarea>
+        <button type="submit" className="w-full bg-navy text-white rounded-[8px] py-3.5 font-bold text-base hover:bg-blue transition-colors cursor-pointer border-none mt-1.5">
           Contact Agent
         </button>
       </form>
@@ -230,8 +230,8 @@ function SimilarHomes({ homes }) {
     <section className="w-full max-w-263 mx-auto px-4 md:px-8 py-15">
       <div className="flex justify-between items-end mb-6">
         <div>
-          <p className="font-sans text-[6px] font-bold uppercase tracking-[1px] text-navy mb-1.5">Explore more</p>
-          <h2 className="font-serif text-[16px] font-semibold text-ink">Similar homes</h2>
+          <p className="font-sans text-xs font-bold uppercase tracking-[2px] text-navy mb-1.5">Explore more</p>
+          <h2 className="font-serif text-2xl font-semibold text-ink">Similar homes</h2>
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">

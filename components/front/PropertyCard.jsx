@@ -92,17 +92,17 @@ export function PropertyCard({ listing, compact = false, selected = false, onSel
 
   const cardContent = (
     <>
-      <div className={`relative ${compact ? "h-23 w-28" : "h-41 sm:h-47 w-full"} shrink-0 overflow-hidden`}>
+      <div className={`relative ${compact ? "h-28 w-36" : "h-48 sm:h-56 w-full"} shrink-0 overflow-hidden`}>
         <ImageCarousel images={images} alt={listing.title} />
         
         {/* Price Tag Overlay */}
-        <span className="absolute top-2 left-2 bg-white/95 backdrop-blur-md text-navy font-bold text-[8px] px-2 py-1.5 rounded-[5px] font-sans z-30 shadow-sm">
+        <span className="absolute top-2 left-2 bg-white/95 backdrop-blur-md text-navy font-bold text-xs px-2.5 py-1.5 rounded-[6px] font-sans z-30 shadow-sm">
           {formatPrice(listing.price)}
         </span>
         
         {/* Status Badge */}
         {listing.status && (
-          <span className={`absolute top-2 right-2 font-bold text-[6px] px-1.5 py-1.5 rounded-[5px] font-sans text-white z-30 shadow-sm ${
+          <span className={`absolute top-2 right-2 font-bold text-xs px-2 py-1 rounded-[6px] font-sans text-white z-30 shadow-sm ${
             listing.status === 'APPROVED' ? 'bg-green-500' :
             listing.status === 'PENDING' ? 'bg-amber-500' :
             listing.status === 'REJECTED' ? 'bg-red-500' :
@@ -112,21 +112,21 @@ export function PropertyCard({ listing, compact = false, selected = false, onSel
           </span>
         )}
       </div>
-      <div className="p-3 flex flex-col justify-between flex-grow bg-white min-w-0">
+      <div className="p-4 flex flex-col justify-between flex-grow bg-white min-w-0">
         <div>
-          <h3 className="font-serif text-[11px] font-semibold mb-1 text-ink truncate">{listing.title}</h3>
-          <p className="font-sans text-slate text-[8px] font-medium mb-1.5 truncate">{listing.location}</p>
+          <h3 className="font-serif text-lg font-semibold mb-1 text-ink truncate">{listing.title}</h3>
+          <p className="font-sans text-slate text-sm font-medium mb-2 truncate">{listing.location}</p>
         </div>
-        <div className="flex justify-between items-center pt-2 border-t border-line mt-1.5">
-          <div className="flex gap-3 text-[7px] text-slate-600">
-            <span className="flex items-center gap-1.5 shrink-0 bg-slate-100 px-1.5 py-1.5 rounded-xl"><span className="text-navy flex-shrink-0"><IconBed /></span> {listing.beds}</span>
-            <span className="flex items-center gap-1.5 shrink-0 bg-slate-100 px-1.5 py-1.5 rounded-xl"><span className="text-navy flex-shrink-0"><IconBath /></span> {listing.baths}</span>
-            <span className="flex items-center gap-1.5 shrink-0 bg-slate-100 px-1.5 py-1.5 rounded-xl"><span className="text-navy flex-shrink-0"><IconArea /></span> {listing.sqft?.toLocaleString()} m²</span>
+        <div className="flex justify-between items-center pt-2.5 border-t border-line mt-2">
+          <div className="flex gap-3 text-xs text-slate-600">
+            <span className="flex items-center gap-1.5 shrink-0 bg-slate-100 px-2 py-1.5 rounded-xl"><span className="text-navy flex-shrink-0"><IconBed /></span> {listing.beds}</span>
+            <span className="flex items-center gap-1.5 shrink-0 bg-slate-100 px-2 py-1.5 rounded-xl"><span className="text-navy flex-shrink-0"><IconBath /></span> {listing.baths}</span>
+            <span className="flex items-center gap-1.5 shrink-0 bg-slate-100 px-2 py-1.5 rounded-xl"><span className="text-navy flex-shrink-0"><IconArea /></span> {listing.sqft?.toLocaleString()} m²</span>
           </div>
           <Link 
             href={`/property/${listing.id}`}
             onClick={(e) => e.stopPropagation()}
-            className="text-[7px] font-bold text-[#0B3D91] hover:text-[#2B7FFF] bg-[#EAF2FF] px-2 py-1.5 rounded-[5px] transition-colors"
+            className="text-xs font-bold text-[#0B3D91] hover:text-[#2B7FFF] bg-[#EAF2FF] px-3 py-1.5 rounded-[6px] transition-colors"
           >
             Details
           </Link>
@@ -137,8 +137,8 @@ export function PropertyCard({ listing, compact = false, selected = false, onSel
 
   return (
     <div
-      className={`flex bg-white rounded-[11px] overflow-hidden border transition-all duration-300 cursor-pointer text-ink
-        ${compact ? "flex-row h-23 items-stretch w-full" : "flex-col h-full w-full"}
+        className={`flex bg-white rounded-[11px] overflow-hidden border transition-all duration-300 cursor-pointer text-ink
+        ${compact ? "flex-row h-28 items-stretch w-full" : "flex-col h-full w-full"}
         ${selected ? "border-navy ring-2 ring-navy shadow-md" : "border-line hover:-translate-y-1 hover:shadow-xl hover:border-slate-300"}`}
       onClick={(e) => {
         if (onZoom) {
@@ -151,27 +151,27 @@ export function PropertyCard({ listing, compact = false, selected = false, onSel
     >
       {compact ? (
          <>
-           <div className="w-26 shrink-0 h-full relative overflow-hidden">
+           <div className="w-36 shrink-0 h-full relative overflow-hidden">
              <ImageCarousel images={images} alt={listing.title} />
-             <span className="absolute top-1.5 left-1.5 bg-white/95 backdrop-blur-md text-navy font-bold text-[6px] px-1.5 py-1 rounded-[4px] font-sans z-30 shadow-sm">
+             <span className="absolute top-2 left-2 bg-white/95 backdrop-blur-md text-navy font-bold text-xs px-2 py-1 rounded-[4px] font-sans z-30 shadow-sm">
                {formatPrice(listing.price)}
              </span>
            </div>
-           <div className="p-2 flex flex-col justify-between flex-grow min-w-0 bg-white">
+           <div className="p-3 flex flex-col justify-between flex-grow min-w-0 bg-white">
              <div>
-               <h3 className="font-serif text-[9px] font-semibold text-ink mb-1 truncate">{listing.title}</h3>
-               <p className="font-sans text-[8px] font-medium text-slate mb-1.5 truncate">{listing.location}</p>
+               <h3 className="font-serif text-base font-semibold text-ink mb-1 truncate">{listing.title}</h3>
+               <p className="font-sans text-xs font-medium text-slate mb-1.5 truncate">{listing.location}</p>
              </div>
-             <div className="flex justify-between items-center pt-1.5 border-t border-line mt-1.5">
-               <div className="flex gap-3 text-[6px] text-slate-600">
-                 <span className="flex items-center gap-1 shrink-0 bg-slate-100 px-1.5 py-1 rounded-lg"><span className="w-2 h-2 text-navy"><IconBed /></span> {listing.beds}</span>
-                 <span className="flex items-center gap-1 shrink-0 bg-slate-100 px-1.5 py-1 rounded-lg"><span className="w-2 h-2 text-navy"><IconBath /></span> {listing.baths}</span>
-                 <span className="flex items-center gap-1 shrink-0 bg-slate-100 px-1.5 py-1 rounded-lg"><span className="w-2 h-2 text-navy"><IconArea /></span> {listing.sqft?.toLocaleString()}</span>
+             <div className="flex justify-between items-center pt-2 border-t border-line mt-1.5">
+               <div className="flex gap-3 text-xs text-slate-600">
+                 <span className="flex items-center gap-1 shrink-0 bg-slate-100 px-2 py-1 rounded-lg"><span className="w-3 h-3 text-navy"><IconBed /></span> {listing.beds}</span>
+                 <span className="flex items-center gap-1 shrink-0 bg-slate-100 px-2 py-1 rounded-lg"><span className="w-3 h-3 text-navy"><IconBath /></span> {listing.baths}</span>
+                 <span className="flex items-center gap-1 shrink-0 bg-slate-100 px-2 py-1 rounded-lg"><span className="w-3 h-3 text-navy"><IconArea /></span> {listing.sqft?.toLocaleString()}</span>
                </div>
                <Link 
                  href={`/property/${listing.id}`}
                  onClick={(e) => e.stopPropagation()}
-                 className="text-[6px] font-bold text-[#0B3D91] hover:text-[#2B7FFF] bg-[#EAF2FF] px-1.5 py-1 rounded-lg transition-colors"
+                 className="text-xs font-bold text-[#0B3D91] hover:text-[#2B7FFF] bg-[#EAF2FF] px-2.5 py-1 rounded-lg transition-colors"
                >
                  Details
                </Link>

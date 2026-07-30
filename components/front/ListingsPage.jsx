@@ -101,8 +101,8 @@ export default function ListingsPage({ properties, agents, categories, searchPar
   const FiltersContent = () => (
     <div className="flex flex-col gap-6 h-full overflow-y-auto">
       <div className="flex flex-col gap-2">
-        <label className="text-[7px] font-bold text-slate uppercase tracking-[1px]">Sort By</label>
-        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="w-full border border-line rounded-[5px] px-2 py-1.5 text-[8px] bg-white outline-none focus:border-navy text-ink cursor-pointer">
+        <label className="text-xs font-bold text-slate uppercase tracking-[1px]">Sort By</label>
+        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="w-full border border-line rounded-[8px] px-3 py-2 text-sm bg-white outline-none focus:border-navy text-ink cursor-pointer">
           <option>Recommended</option>
           <option>Price: Low to High</option>
           <option>Price: High to Low</option>
@@ -110,8 +110,8 @@ export default function ListingsPage({ properties, agents, categories, searchPar
         </select>
       </div>
       <div className="flex flex-col gap-2">
-        <label className="text-[7px] font-bold text-slate uppercase tracking-[1px]">City / Sector</label>
-        <select value={location} onChange={(e) => setLocation(e.target.value)} className="w-full border border-line rounded-[5px] px-2 py-1.5 text-[8px] bg-white outline-none focus:border-navy text-ink">
+        <label className="text-xs font-bold text-slate uppercase tracking-[1px]">City / Sector</label>
+        <select value={location} onChange={(e) => setLocation(e.target.value)} className="w-full border border-line rounded-[8px] px-3 py-2 text-sm bg-white outline-none focus:border-navy text-ink">
           <option value="all">Chișinău (All)</option>
           <option value="centru">Chișinău, Centru</option>
           <option value="botanica">Chișinău, Botanica</option>
@@ -124,9 +124,9 @@ export default function ListingsPage({ properties, agents, categories, searchPar
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-[7px] font-bold text-slate uppercase tracking-[1px]">Type of place</label>
+        <label className="text-xs font-bold text-slate uppercase tracking-[1px]">Type of place</label>
         {["All", "Apartment", "House", "Land", "Commercial"].map(t => (
-          <label key={t} className="flex items-center gap-1.5 text-[8px] text-ink cursor-pointer">
+          <label key={t} className="flex items-center gap-2 text-sm text-ink cursor-pointer">
             <input 
               type="checkbox" 
               checked={selectedTypes.has(t)} 
@@ -138,8 +138,8 @@ export default function ListingsPage({ properties, agents, categories, searchPar
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-[7px] font-bold text-slate uppercase tracking-[1px]">Rooms</label>
-        <select value={rooms} onChange={(e) => setRooms(e.target.value)} className="w-full border border-line rounded-[5px] px-2 py-1.5 text-[8px] bg-white outline-none focus:border-navy text-ink cursor-pointer">
+        <label className="text-xs font-bold text-slate uppercase tracking-[1px]">Rooms</label>
+        <select value={rooms} onChange={(e) => setRooms(e.target.value)} className="w-full border border-line rounded-[8px] px-3 py-2 text-sm bg-white outline-none focus:border-navy text-ink cursor-pointer">
           <option value="all">Any</option>
           <option value="1">1+ Rooms</option>
           <option value="2">2+ Rooms</option>
@@ -149,41 +149,41 @@ export default function ListingsPage({ properties, agents, categories, searchPar
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-[7px] font-bold text-slate uppercase tracking-[1px]">Price Range (€)</label>
+        <label className="text-xs font-bold text-slate uppercase tracking-[1px]">Price Range (€)</label>
         <div className="grid grid-cols-2 gap-2">
           <input 
             placeholder="Min" 
             type="number"
             value={minPrice}
             onChange={(e) => setMinPrice(e.target.value)}
-            className="w-full border border-line rounded-[5px] px-2 py-1.5 text-[8px] outline-none focus:border-navy text-ink placeholder:text-slate/60" 
+            className="w-full border border-line rounded-[8px] px-3 py-2 text-sm outline-none focus:border-navy text-ink placeholder:text-slate/60" 
           />
           <input 
             placeholder="Max" 
             type="number"
             value={maxPrice}
             onChange={(e) => setMaxPrice(e.target.value)}
-            className="w-full border border-line rounded-[5px] px-2 py-1.5 text-[8px] outline-none focus:border-navy text-ink placeholder:text-slate/60" 
+            className="w-full border border-line rounded-[8px] px-3 py-2 text-sm outline-none focus:border-navy text-ink placeholder:text-slate/60" 
           />
         </div>
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-[7px] font-bold text-slate uppercase tracking-[1px]">Size (sqft)</label>
+        <label className="text-xs font-bold text-slate uppercase tracking-[1px]">Size (sqft)</label>
         <div className="grid grid-cols-2 gap-2">
           <input 
             placeholder="Min" 
             type="number"
             value={minSize}
             onChange={(e) => setMinSize(e.target.value)}
-            className="w-full border border-line rounded-[5px] px-2 py-1.5 text-[8px] outline-none focus:border-navy text-ink placeholder:text-slate/60" 
+            className="w-full border border-line rounded-[8px] px-3 py-2 text-sm outline-none focus:border-navy text-ink placeholder:text-slate/60" 
           />
           <input 
             placeholder="Max" 
             type="number"
             value={maxSize}
             onChange={(e) => setMaxSize(e.target.value)}
-            className="w-full border border-line rounded-[5px] px-2 py-1.5 text-[8px] outline-none focus:border-navy text-ink placeholder:text-slate/60" 
+            className="w-full border border-line rounded-[8px] px-3 py-2 text-sm outline-none focus:border-navy text-ink placeholder:text-slate/60" 
           />
         </div>
       </div>
@@ -197,11 +197,11 @@ export default function ListingsPage({ properties, agents, categories, searchPar
       </div>
       
       {/* Mobile Top Bar with Filter Button */}
-      <div className="md:hidden flex items-center justify-between px-3 py-2 bg-white border-b border-line shrink-0">
-        <span className="font-serif font-bold">{filteredListings.length} homes</span>
+      <div className="md:hidden flex items-center justify-between px-4 py-2.5 bg-white border-b border-line shrink-0">
+        <span className="font-serif text-sm font-bold">{filteredListings.length} homes</span>
         <button 
           onClick={() => setShowMobileFilters(true)}
-          className="flex items-center gap-1.5 border border-line rounded-full px-3 py-1.5 text-[8px] font-bold shadow-sm"
+          className="flex items-center gap-1.5 border border-line rounded-full px-4 py-2 text-sm font-bold shadow-sm"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
           Filters
@@ -211,9 +211,9 @@ export default function ListingsPage({ properties, agents, categories, searchPar
       <main className="flex-1 flex overflow-hidden w-full max-w-300 mx-auto relative">
         
         {/* Desktop Sidebar Filters */}
-        <aside className={`w-53 shrink-0 border-r border-line bg-white flex-col h-full overflow-y-auto hidden md:flex ${layoutMode === 'grid' ? 'md:hidden lg:flex' : ''}`}>
+        <aside className={`w-64 sm:w-72 shrink-0 border-r border-line bg-white flex-col h-full overflow-y-auto hidden md:flex ${layoutMode === 'grid' ? 'md:hidden lg:flex' : ''}`}>
           <div className="p-5 border-b border-line flex justify-between items-center shrink-0">
-            <h2 className="font-serif text-[13px] font-semibold text-ink">Filter</h2>
+            <h2 className="font-serif text-lg font-semibold text-ink">Filter</h2>
             <button 
               onClick={() => setLayoutMode(prev => prev === 'list' ? 'grid' : 'list')}
               className="w-7 h-7 flex items-center justify-center rounded-full bg-white border border-[#E8E5DF] hover:border-[#0B3D91] text-[#1A1A18] transition-colors cursor-pointer"
@@ -242,11 +242,11 @@ export default function ListingsPage({ properties, agents, categories, searchPar
             
             {/* Desktop Top Bar (Layout Toggle) */}
             <div className={`hidden md:flex items-center justify-between gap-3 px-5 py-3 border-b border-[#E8E5DF] bg-white shrink-0`}>
-              <h1 className="font-serif text-[11px] font-bold text-[#1A1A18]">
+              <h1 className="font-serif text-base font-bold text-[#1A1A18]">
                 {filteredListings.length} results found
               </h1>
               <div className="flex items-center gap-2">
-                <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="bg-transparent border-none font-sans text-[8px] text-[#6B7280] outline-none cursor-pointer">
+                <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="bg-transparent border-none font-sans text-sm text-[#6B7280] outline-none cursor-pointer font-medium">
                   <option>Recommended</option>
                   <option>Price: Low to High</option>
                   <option>Price: High to Low</option>
@@ -312,7 +312,7 @@ export default function ListingsPage({ properties, agents, categories, searchPar
             <button onClick={() => setShowMobileFilters(false)} className="p-1.5 -ml-1.5 rounded-full hover:bg-slate-100">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
-            <h2 className="font-serif text-[11px] font-bold">Filters</h2>
+            <h2 className="font-serif text-lg font-bold">Filters</h2>
             <button 
               onClick={() => {
                 setSortBy("Recommended");
@@ -322,7 +322,7 @@ export default function ListingsPage({ properties, agents, categories, searchPar
                 setMinSize("");
                 setMaxSize("");
               }} 
-              className="text-[8px] font-bold text-slate-500 hover:text-black underline"
+              className="text-sm font-bold text-slate-500 hover:text-black underline"
             >
               Clear all
             </button>
@@ -333,7 +333,7 @@ export default function ListingsPage({ properties, agents, categories, searchPar
           <div className="absolute bottom-0 left-0 right-0 p-3 bg-white border-t border-line shadow-[0_-4px_24px_rgba(0,0,0,0.06)]">
             <button 
               onClick={() => setShowMobileFilters(false)}
-              className="w-full bg-[#1A1A18] text-white font-bold text-[9px] py-2.5 rounded-xl transition-transform active:scale-95"
+              className="w-full bg-[#1A1A18] text-white font-bold text-sm py-3.5 rounded-xl transition-transform active:scale-95"
             >
               Show {filteredListings.length} homes
             </button>

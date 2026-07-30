@@ -86,7 +86,7 @@ export function ImageLightbox({ images, initialIndex = 0, onClose }) {
       </div>
 
       {images.length > 1 && (
-        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 text-white/80 font-sans text-xs bg-black/50 px-3 py-1.5 rounded-full font-medium tracking-wide">
+        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 text-white/90 font-sans text-sm sm:text-base bg-black/60 px-4 py-2 rounded-full font-medium tracking-wide">
           {currentIndex + 1} / {images.length}
         </div>
       )}
