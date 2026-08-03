@@ -61,9 +61,9 @@ async function seed() {
     email: "alexandru.rusu@example.md",
     password: "password123", // Assuming hashed in a real app, plaintext here is fine for seeding
     role: "AGENT",
-    title: "Senior Real Estate Agent",
+    title: "Senior Real Estate Agent, Chișinău",
     phone: "+373 60 123 456",
-    avatarUrl: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80",
+    avatarUrl: "/agents/agent1.png",
   });
 
   const agent2 = await userRepo.save({
@@ -71,9 +71,29 @@ async function seed() {
     email: "maria.ceban@example.md",
     password: "password123",
     role: "AGENT",
-    title: "Luxury Property Specialist",
+    title: "Luxury Property Specialist, Chișinău",
     phone: "+373 69 987 654",
-    avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80",
+    avatarUrl: "/agents/agent2.png",
+  });
+
+  const agent3 = await userRepo.save({
+    name: "Victor Munteanu",
+    email: "victor.munteanu@example.md",
+    password: "password123",
+    role: "AGENT",
+    title: "Investment Consultant, Chișinău",
+    phone: "+373 68 234 567",
+    avatarUrl: "/agents/agent3.png",
+  });
+
+  const agent4 = await userRepo.save({
+    name: "Elena Rotaru",
+    email: "elena.rotaru@example.md",
+    password: "password123",
+    role: "AGENT",
+    title: "Residential Sales Director, Chișinău",
+    phone: "+373 67 345 678",
+    avatarUrl: "/agents/agent4.png",
   });
 
   // 3. Create Properties in Chisinau

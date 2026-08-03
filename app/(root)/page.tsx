@@ -1,19 +1,20 @@
 import HomePage from '@/components/front/HomePage';
 import prisma from '@/lib/db';
+import { cache } from 'react';
 
-export const revalidate = 0; // Ensures fresh data is fetched
+export const revalidate = 300; // 5 minutes
 
-async function getHomeData() {
+const getHomeData = cache(async () => {
   const rawProperties = await prisma.property.findMany({
     where: { status: 'APPROVED', isDeleted: false },
     include: { user: true, images: true, category: true },
     orderBy: { id: 'desc' },
-    take: 6,
+    take: 8,
   });
 
   const rawAgents = await prisma.user.findMany({
     where: { role: 'AGENT' },
-    take: 3,
+    take: 4,
   });
 
   const properties = rawProperties.map(p => ({
@@ -40,17 +41,17 @@ async function getHomeData() {
     pin: { top: p.pinTop || "50%", left: p.pinLeft || "50%" }
   }));
 
-  const agents = rawAgents.map(a => ({
+  const agents = rawAgents.map((a, idx) => ({
     id: a.id,
     name: a.name,
     role: a.title || "Agent",
-    deals: 0,
-    listings: 0,
-    image: a.avatarUrl || "https://placehold.co/100x100?text=Agent"
+    deals: 80 + idx * 24,
+    listings: 8 + idx * 3,
+    image: a.avatarUrl || "/agents/agent1.png"
   }));
 
   return { properties, agents };
-}
+});
 
 export default async function Page() {
   const { properties, agents } = await getHomeData();

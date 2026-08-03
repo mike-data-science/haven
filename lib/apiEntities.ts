@@ -5,6 +5,7 @@ import {
   numberValue,
   pickDefined,
 } from "@/lib/apiCrud";
+import prisma from "@/lib/db";
 
 export const appointmentHandlers = createCrudHandlers({
   modelName: "appointment",
@@ -28,6 +29,9 @@ export const categoryHandlers = createCrudHandlers({
       name: body.name,
       slug: body.slug,
     }),
+  beforeDelete: async (id: number) => {
+    await prisma.property.updateMany({ where: { categoryId: id }, data: { categoryId: null } });
+  },
 });
 
 export const conversationHandlers = createCrudHandlers({
@@ -39,6 +43,9 @@ export const conversationHandlers = createCrudHandlers({
       userId: numberValue(body.userId),
       propertyId: numberValue(body.propertyId) ?? null,
     }),
+  beforeDelete: async (id: number) => {
+    await prisma.message.deleteMany({ where: { conversationId: id } });
+  },
 });
 
 export const favoriteHandlers = createCrudHandlers({
@@ -107,22 +114,25 @@ export const propertyHandlers = createCrudHandlers({
     let publishedAt = existing?.publishedAt;
     let approvedById = existing?.approvedById;
 
-    if (isAdmin) {
-      if (isNew) {
-        status = 'APPROVED';
+    if (isNew) {
+      if (isAdmin) {
+        status = body.status || 'APPROVED';
         approvedAt = new Date();
         publishedAt = new Date();
         approvedById = user?.id;
+      } else {
+        status = 'PENDING';
       }
     } else {
-      if (isNew) {
-        status = 'DRAFT';
-      } else {
-        if (existing.status === 'APPROVED') {
-          status = 'PENDING';
-        } else {
-          status = existing.status;
+      if (isAdmin) {
+        status = body.status || existing?.status || 'APPROVED';
+        if (status === 'APPROVED' && existing?.status !== 'APPROVED') {
+          approvedAt = new Date();
+          publishedAt = new Date();
+          approvedById = user?.id;
         }
+      } else {
+        status = existing?.status || 'PENDING';
       }
     }
 
@@ -147,6 +157,15 @@ export const propertyHandlers = createCrudHandlers({
       pinTop: body.pinTop,
       pinLeft: body.pinLeft,
     });
+  },
+  beforeDelete: async (id: number) => {
+    await prisma.image.deleteMany({ where: { propertyId: id } });
+    await prisma.appointment.deleteMany({ where: { propertyId: id } });
+    await prisma.favorite.deleteMany({ where: { propertyId: id } });
+    await prisma.inquiry.deleteMany({ where: { propertyId: id } });
+    await prisma.review.deleteMany({ where: { propertyId: id } });
+    await prisma.propertyModerationHistory.deleteMany({ where: { propertyId: id } });
+    await prisma.conversation.updateMany({ where: { propertyId: id }, data: { propertyId: null } });
   },
 });
 
@@ -176,4 +195,24 @@ export const userHandlers = createCrudHandlers({
       title: body.title,
       role: body.role, // Prisma enum matches strings nicely if valid
     }),
+  beforeDelete: async (id: number) => {
+    const properties = await prisma.property.findMany({ where: { userId: id }, select: { id: true } });
+    for (const prop of properties) {
+      await prisma.image.deleteMany({ where: { propertyId: prop.id } });
+      await prisma.appointment.deleteMany({ where: { propertyId: prop.id } });
+      await prisma.favorite.deleteMany({ where: { propertyId: prop.id } });
+      await prisma.inquiry.deleteMany({ where: { propertyId: prop.id } });
+      await prisma.review.deleteMany({ where: { propertyId: prop.id } });
+      await prisma.propertyModerationHistory.deleteMany({ where: { propertyId: prop.id } });
+      await prisma.conversation.updateMany({ where: { propertyId: prop.id }, data: { propertyId: null } });
+      await prisma.property.delete({ where: { id: prop.id } });
+    }
+    await prisma.appointment.deleteMany({ where: { userId: id } });
+    await prisma.favorite.deleteMany({ where: { userId: id } });
+    await prisma.inquiry.deleteMany({ where: { userId: id } });
+    await prisma.review.deleteMany({ where: { userId: id } });
+    await prisma.message.deleteMany({ where: { senderId: id } });
+    await prisma.conversation.deleteMany({ where: { userId: id } });
+    await prisma.propertyModerationHistory.deleteMany({ where: { changedById: id } });
+  },
 });

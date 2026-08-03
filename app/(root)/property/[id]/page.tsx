@@ -1,16 +1,29 @@
 import PropertyDetailPage from '@/components/front/PropertyDetailPage';
 import prisma from '@/lib/db';
 import { notFound } from 'next/navigation';
+import { cache } from 'react';
 
-export const revalidate = 0;
+export const revalidate = 300; // 5 minutes
+
+const getPropertyById = cache(async (id: number) => {
+  return prisma.property.findFirst({
+    where: { id, status: 'APPROVED', isDeleted: false },
+    include: { user: true, images: true, category: true },
+  });
+});
+
+const getSimilarProperties = cache(async (city: string) => {
+  return prisma.property.findMany({
+    where: { city, status: 'APPROVED', isDeleted: false },
+    include: { user: true, images: true, category: true },
+    take: 5,
+  });
+});
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   
-  const rawProperty = await prisma.property.findFirst({
-    where: { id: parseInt(id, 10), status: 'APPROVED', isDeleted: false },
-    include: { user: true, images: true, category: true },
-  });
+  const rawProperty = await getPropertyById(parseInt(id, 10));
 
   if (!rawProperty) {
     notFound();
@@ -42,11 +55,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     longitude: rawProperty.longitude
   };
 
-  const similarRaw = await prisma.property.findMany({
-    where: { city: rawProperty.city, status: 'APPROVED', isDeleted: false },
-    include: { user: true, images: true, category: true },
-    take: 5, // We take 5 in case we need to filter out the current one
-  });
+  const similarRaw = await getSimilarProperties(rawProperty.city);
 
   const similarProperties = similarRaw
     .filter(p => p.id !== rawProperty.id)

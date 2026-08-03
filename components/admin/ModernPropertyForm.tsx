@@ -53,7 +53,7 @@ export default function ModernPropertyForm({ categories }: ModernPropertyFormPro
     setError("");
 
     try {
-      // 1. Create property (Defaults to DRAFT status per apiEntities)
+      // 1. Create property (Backend assigns PENDING for simple users, APPROVED for admins)
       const res = await fetch("/api/properties", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -67,14 +67,17 @@ export default function ModernPropertyForm({ categories }: ModernPropertyFormPro
 
       const savedProp = await res.json();
 
-      // 2. Upload images in the background (Fire and forget)
+      // 2. Upload images and await completion so the request is not canceled on navigate
       if (files.length > 0) {
         const uploadData = new FormData();
         uploadData.append("propertyId", String(savedProp.id));
         files.forEach(f => uploadData.append("files", f));
 
-        // Don't await this, let it process in the background
-        fetch("/api/upload", { method: "POST", body: uploadData }).catch(console.error);
+        const uploadRes = await fetch("/api/upload", { method: "POST", body: uploadData });
+        if (!uploadRes.ok) {
+          const uploadErrData = await uploadRes.json().catch(() => ({}));
+          throw new Error(uploadErrData.error || "Failed to upload property images");
+        }
       }
 
       // 3. Redirect instantly to My Properties

@@ -4,11 +4,17 @@ import Link from 'next/link';
 import { SignInButton, UserButton, useAuth } from '@clerk/nextjs';
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
+import { useFontTheme } from '../shared/FontProvider';
 
 export function Navbar() {
   const { userId } = useAuth();
+  const { pillWidth = '1240px' } = useFontTheme() || {};
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  const pillMaxWidthClass = pillWidth === '1180px' ? '!max-w-[1180px]' : (pillWidth === '1240px' ? '!max-w-[1240px]' : '!max-w-[1400px]');
+  const baseMaxWidthClass = pillWidth === '1180px' ? 'max-w-[1180px]' : (pillWidth === '1240px' ? 'max-w-[1240px]' : 'max-w-[1400px]');
+  const pillPaddingClass = (isScrolled && pillWidth === '1240px') ? '!px-6 sm:!px-8 md:!px-8 lg:!px-8 xl:!px-8' : '';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,8 +27,8 @@ export function Navbar() {
   }, []);
   
   return (
-    <nav className={`fixed top-0 w-full z-[200] transition-all duration-500 ${isScrolled ? 'py-1.5 px-3' : 'py-3 px-3 md:py-5 md:px-6'}`}>
-      <div className={`max-w-263 mx-auto flex justify-between items-center px-4 py-2 md:px-5 md:py-2 relative transition-all duration-500 ${isScrolled ? 'bg-white/80 backdrop-blur-xl border border-white/80 shadow-[0_8px_32px_rgba(11,61,145,0.12)] rounded-full' : 'bg-transparent border border-transparent shadow-none rounded-none'}`}>
+    <nav className={`fixed top-0 w-full z-[200] transition-all duration-500 ${isScrolled ? 'py-1.5 px-3' : 'py-3 md:py-5'}`}>
+      <div className={`w-full ${baseMaxWidthClass} mx-auto flex justify-between items-center px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-2 md:py-2 relative transition-all duration-500 ${isScrolled ? `bg-white/80 backdrop-blur-xl border border-white/80 shadow-[0_8px_32px_rgba(11,61,145,0.12)] rounded-full ${pillMaxWidthClass}` : 'bg-transparent border border-transparent shadow-none rounded-none'} ${pillPaddingClass}`}>
         <div className="flex-1 flex justify-start">
           <Link href="/" className="font-serif text-xl font-bold tracking-[0px] text-[#1A1A18] flex items-center gap-1.5 no-underline group">
             <span className="text-[#2B7FFF] transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110">⌂</span> 
@@ -40,7 +46,7 @@ export function Navbar() {
         {/* Desktop Auth */}
         <div className="hidden md:flex flex-1 justify-end items-center gap-3">
           {!userId ? (
-            <SignInButton mode="modal">
+            <SignInButton mode="modal" fallbackRedirectUrl="/dashboard" forceRedirectUrl="/dashboard">
               <button className="bg-gradient-to-r from-[#0B3D91] to-[#1e58bd] text-white font-sans text-sm font-bold py-2 px-6 rounded-full cursor-pointer transition-all duration-300 hover:scale-[1.03] shadow-[0_4px_16px_rgba(11,61,145,0.3)] border-none">
                 Sign in
               </button>
@@ -86,7 +92,7 @@ export function Navbar() {
           
           <div className="border-t border-slate-200/60 pt-5">
             {!userId ? (
-              <SignInButton mode="modal">
+              <SignInButton mode="modal" fallbackRedirectUrl="/dashboard" forceRedirectUrl="/dashboard">
                 <button className="w-full bg-gradient-to-r from-[#0B3D91] to-[#1e58bd] text-white font-sans text-sm font-bold py-2.5 px-6 rounded-[9px] cursor-pointer shadow-[0_8px_24px_rgba(11,61,145,0.2)] border-none">
                   Sign in
                 </button>

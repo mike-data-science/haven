@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Navbar } from "./Navbar";
 import { PropertyCard } from "./PropertyCard";
 import { IconBed, IconBath, IconArea } from "./Icons";
@@ -30,10 +30,8 @@ export default function ListingsPage({ properties, agents, categories, searchPar
   const [minSize, setMinSize] = useState("");
   const [maxSize, setMaxSize] = useState("");
 
-  const [filteredListings, setFilteredListings] = useState(properties || []);
-
-  useEffect(() => {
-    let result = [...properties];
+  const filteredListings = useMemo(() => {
+    let result = [...(properties || [])];
 
     // Filter by Location
     if (location !== "all") {
@@ -78,8 +76,8 @@ export default function ListingsPage({ properties, agents, categories, searchPar
       result.sort((a, b) => b.id - a.id);
     }
 
-    setFilteredListings(result);
-  }, [properties, sortBy, location, selectedTypes, maxPrice, minSize, maxSize]);
+    return result;
+  }, [properties, sortBy, location, selectedTypes, minPrice, maxPrice, minSize, maxSize, rooms]);
 
   const toggleType = (type) => {
     const newTypes = new Set(selectedTypes);
@@ -191,7 +189,7 @@ export default function ListingsPage({ properties, agents, categories, searchPar
   );
 
   return (
-    <div className="font-sans text-[#1A1A18] bg-[#FAFAF8] min-h-[133.33vh] flex flex-col h-[133.33vh] overflow-hidden">
+    <div className="font-sans text-[#1A1A18] bg-[#FAFAF8] h-screen max-h-screen min-h-screen flex flex-col overflow-hidden">
       <div className="shrink-0 h-11 md:h-23">
         <Navbar />
       </div>
@@ -208,7 +206,7 @@ export default function ListingsPage({ properties, agents, categories, searchPar
         </button>
       </div>
 
-      <main className="flex-1 flex overflow-hidden w-full max-w-300 mx-auto relative">
+      <main className="flex-1 flex overflow-hidden w-full max-w-[1400px] mx-auto relative">
         
         {/* Desktop Sidebar Filters */}
         <aside className={`w-64 sm:w-72 shrink-0 border-r border-line bg-white flex-col h-full overflow-y-auto hidden md:flex ${layoutMode === 'grid' ? 'md:hidden lg:flex' : ''}`}>
@@ -256,7 +254,7 @@ export default function ListingsPage({ properties, agents, categories, searchPar
             </div>
 
             <div className="flex-1 overflow-y-auto px-3 md:px-5 py-3 md:py-5 pb-18">
-              <div className={`grid gap-5 ${layoutMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-1'}`}>
+              <div className={`grid gap-5 ${layoutMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-1'}`}>
                 {filteredListings.slice(0, 30).map(l => (
                   <div 
                     key={l.id} 

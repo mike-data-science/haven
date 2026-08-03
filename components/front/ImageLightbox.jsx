@@ -8,22 +8,35 @@ export function ImageLightbox({ images, initialIndex = 0, onClose }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setCurrentIndex(initialIndex);
+  }, [initialIndex]);
+
+  useEffect(() => {
     setMounted(true);
     // Lock body scroll when lightbox is open
+    const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     
     const handleKeyDown = (e) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowRight") nextImage(e);
-      if (e.key === "ArrowLeft") prevImage(e);
+      if (e.key === "Escape") {
+        e.preventDefault();
+        e.stopPropagation();
+        onClose();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+      }
     };
     
     window.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [onClose]);
+  }, [onClose, images.length]);
 
   if (!images || images.length === 0) return null;
 
@@ -39,18 +52,23 @@ export function ImageLightbox({ images, initialIndex = 0, onClose }) {
 
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
+      e.stopPropagation();
       onClose();
     }
   };
 
   const lightboxContent = (
     <div 
-      className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-3 md:p-6 backdrop-blur-sm"
+      className="fixed inset-0 z-[9999] bg-black/95 flex items-center justify-center p-3 md:p-6 backdrop-blur-sm"
       onClick={handleBackdropClick}
     >
       <button 
-        onClick={onClose}
-        className="absolute top-3 right-3 md:top-5 md:right-5 text-white/70 hover:text-white p-1.5 z-50 bg-black/20 hover:bg-black/40 rounded-full transition-all cursor-pointer"
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
+        className="absolute top-3 right-3 md:top-5 md:right-5 text-white/80 hover:text-white p-2 z-[10000] bg-black/40 hover:bg-black/60 rounded-full transition-all cursor-pointer shadow-lg"
         aria-label="Close lightbox"
       >
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
@@ -68,6 +86,7 @@ export function ImageLightbox({ images, initialIndex = 0, onClose }) {
         {images.length > 1 && (
           <>
             <button 
+              type="button"
               onClick={prevImage}
               className="absolute left-1.5 md:-left-9 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-2 z-50 bg-black/40 hover:bg-black/60 rounded-full transition-all pointer-events-auto shadow-lg cursor-pointer"
               aria-label="Previous image"
@@ -75,6 +94,7 @@ export function ImageLightbox({ images, initialIndex = 0, onClose }) {
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
             </button>
             <button 
+              type="button"
               onClick={nextImage}
               className="absolute right-1.5 md:-right-9 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-2 z-50 bg-black/40 hover:bg-black/60 rounded-full transition-all pointer-events-auto shadow-lg cursor-pointer"
               aria-label="Next image"

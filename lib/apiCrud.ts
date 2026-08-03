@@ -14,6 +14,7 @@ type CrudConfig = {
   allowedRoles?: Role[];
   ownershipField?: string;
   buildData: (body: Body, user?: { id: number; role: Role }, existing?: any) => Body;
+  beforeDelete?: (id: number) => Promise<void>;
 };
 
 function toId(value: string) {
@@ -55,6 +56,7 @@ export function createCrudHandlers({
   allowedRoles = ['ADMIN'],
   ownershipField,
   buildData,
+  beforeDelete,
 }: CrudConfig) {
   const getModel = () => (prisma as any)[modelName as string] as any;
 
@@ -199,6 +201,10 @@ export function createCrudHandlers({
 
         if (ownershipField && user.role !== 'ADMIN' && existing[ownershipField] !== user.id) {
           return NextResponse.json({ error: "Access denied." }, { status: 403 });
+        }
+
+        if (beforeDelete) {
+          await beforeDelete(id);
         }
 
         await getModel().delete({ where: { id } });

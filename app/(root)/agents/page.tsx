@@ -1,13 +1,18 @@
 import { Navbar } from '@/components/front/Navbar';
 import { Footer } from '@/components/front/Footer';
 import prisma from '@/lib/db';
+import { cache } from 'react';
 
-export const revalidate = 0;
+export const revalidate = 300; // 5 minutes
 
-export default async function AgentsRoute() {
-  const rawAgents = await prisma.user.findMany({
+const getAgents = cache(async () => {
+  return prisma.user.findMany({
     where: { role: 'AGENT' }
   });
+});
+
+export default async function AgentsRoute() {
+  const rawAgents = await getAgents();
 
   const agents = rawAgents.map(a => ({
     id: a.id,

@@ -1,9 +1,10 @@
 import ListingsPage from '@/components/front/ListingsPage';
 import prisma from '@/lib/db';
+import { cache } from 'react';
 
-export const revalidate = 0;
+export const revalidate = 300; // 5 minutes
 
-async function getListingsData() {
+const getListingsData = cache(async () => {
   const rawProperties = await prisma.property.findMany({
     where: { status: 'APPROVED', isDeleted: false },
     include: { user: true, images: true, category: true },
@@ -57,7 +58,7 @@ async function getListingsData() {
   }));
 
   return { properties, agents, categories };
-}
+});
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const { properties, agents, categories } = await getListingsData();

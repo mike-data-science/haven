@@ -56,7 +56,7 @@ export default function AdminPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-slate-50 p-6">
+    <main className="min-h-full bg-slate-50 p-6">
       <div className="mx-auto max-w-4xl">
         <div className="mb-6 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
           <h1 className="text-2xl font-bold text-slate-900">Admin Proprietăți</h1>

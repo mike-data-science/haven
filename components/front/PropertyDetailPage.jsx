@@ -15,7 +15,7 @@ function HeroGallery({ property }) {
   const allImages = property.gallery?.length > 0 ? property.gallery : [property.image].filter(Boolean);
 
   return (
-    <section className="w-full max-w-263 mx-auto px-4 md:px-8 py-5 pt-23">
+    <section className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-5 pt-23">
       <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-1.5 mb-6">
         <img
           src={property.image}
@@ -73,126 +73,123 @@ function HeroGallery({ property }) {
 
 function PropertyFeatures({ property }) {
   return (
-    <div className="bg-white rounded-[11px] p-5 md:p-6 border border-line shadow-sm flex flex-col gap-6">
-      {/* Main Details */}
-      <div>
-        <h2 className="font-serif text-xl font-semibold text-ink mb-5">Details & Features</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full bg-paleBlue flex items-center justify-center text-navy shrink-0"><BedDouble size={22} strokeWidth={2.5} /></div>
-            <div>
-              <p className="font-sans text-xs font-bold text-slate uppercase tracking-wider mb-0.5">Bedrooms</p>
-              <p className="font-sans text-base font-semibold text-ink">{property.beds}</p>
-            </div>
+    <div className="flex flex-col">
+      {/* Top Stats Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-7 gap-x-8 pb-8 border-b border-line">
+        <div className="flex items-center gap-3.5">
+          <BedDouble size={26} strokeWidth={2} className="text-slate-700 shrink-0" />
+          <div>
+            <p className="font-sans text-xs font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Bedrooms</p>
+            <p className="font-sans text-base font-bold text-ink">{property.beds}</p>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full bg-paleBlue flex items-center justify-center text-navy shrink-0"><Bath size={22} strokeWidth={2.5} /></div>
-            <div>
-              <p className="font-sans text-xs font-bold text-slate uppercase tracking-wider mb-0.5">Bathrooms</p>
-              <p className="font-sans text-base font-semibold text-ink">{property.baths}</p>
-            </div>
+        </div>
+        <div className="flex items-center gap-3.5">
+          <Bath size={26} strokeWidth={2} className="text-slate-700 shrink-0" />
+          <div>
+            <p className="font-sans text-xs font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Bathrooms</p>
+            <p className="font-sans text-base font-bold text-ink">{property.baths}</p>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full bg-paleBlue flex items-center justify-center text-navy shrink-0"><Maximize size={22} strokeWidth={2.5} /></div>
-            <div>
-              <p className="font-sans text-xs font-bold text-slate uppercase tracking-wider mb-0.5">Square Feet</p>
-              <p className="font-sans text-base font-semibold text-ink">{property.sqft?.toLocaleString()} m²</p>
-            </div>
+        </div>
+        <div className="flex items-center gap-3.5">
+          <Maximize size={26} strokeWidth={2} className="text-slate-700 shrink-0" />
+          <div>
+            <p className="font-sans text-xs font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Square Feet</p>
+            <p className="font-sans text-base font-bold text-ink">{property.sqft?.toLocaleString()} m²</p>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full bg-paleBlue flex items-center justify-center text-navy shrink-0"><Building size={22} strokeWidth={2.5} /></div>
-            <div>
-              <p className="font-sans text-xs font-bold text-slate uppercase tracking-wider mb-0.5">Property Type</p>
-              <p className="font-sans text-base font-semibold text-ink">{property.type || 'House'}</p>
-            </div>
+        </div>
+        <div className="flex items-center gap-3.5">
+          <Building size={26} strokeWidth={2} className="text-slate-700 shrink-0" />
+          <div>
+            <p className="font-sans text-xs font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Property Type</p>
+            <p className="font-sans text-base font-bold text-ink">{property.type || 'House'}</p>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full bg-paleBlue flex items-center justify-center text-navy shrink-0"><Calendar size={22} strokeWidth={2.5} /></div>
-            <div>
-              <p className="font-sans text-xs font-bold text-slate uppercase tracking-wider mb-0.5">Year Built</p>
-              <p className="font-sans text-base font-semibold text-ink">{property.yearBuilt || 'N/A'}</p>
-            </div>
+        </div>
+        <div className="flex items-center gap-3.5">
+          <Calendar size={26} strokeWidth={2} className="text-slate-700 shrink-0" />
+          <div>
+            <p className="font-sans text-xs font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Year Built</p>
+            <p className="font-sans text-base font-bold text-ink">{property.yearBuilt || 'N/A'}</p>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full bg-paleBlue flex items-center justify-center text-navy shrink-0"><Tag size={22} strokeWidth={2.5} /></div>
-            <div>
-              <p className="font-sans text-xs font-bold text-slate uppercase tracking-wider mb-0.5">Status</p>
-              <p className="font-sans text-base font-semibold text-ink">{property.tag || 'Active'}</p>
-            </div>
+        </div>
+        <div className="flex items-center gap-3.5">
+          <Tag size={26} strokeWidth={2} className="text-slate-700 shrink-0" />
+          <div>
+            <p className="font-sans text-xs font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Status</p>
+            <p className="font-sans text-base font-bold text-ink">{property.tag || 'Active'}</p>
           </div>
         </div>
       </div>
+
+      {/* About this home (Moved to middle column for clean spacing) */}
+      {property.description && (
+        <div className="py-8 border-b border-line">
+          <h3 className="font-serif text-2xl font-bold text-ink mb-4">About this home</h3>
+          <p className="font-sans text-base sm:text-[17px] leading-[1.8] text-[#4A4A45] whitespace-pre-wrap">{property.description}</p>
+        </div>
+      )}
       
       {/* Ce e inautru */}
-      <div className="pt-6 border-t border-line">
-        <h3 className="font-serif text-xl font-semibold text-ink mb-4">Ce e înăuntru</h3>
-        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6 list-none p-0 m-0">
-          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Tv size={18} className="text-slate" /> Televizor</li>
-          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Refrigerator size={18} className="text-slate" /> Frigider</li>
-          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Shirt size={18} className="text-slate" /> Mașină de spălat</li>
-          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Bath size={18} className="text-slate" /> Toaletă</li>
-          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Armchair size={18} className="text-slate" /> Mobilat</li>
-          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Microwave size={18} className="text-slate" /> Cuptor cu microunde</li>
-          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><ShowerHead size={18} className="text-slate" /> Cabină de duș</li>
-          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Droplets size={18} className="text-slate" /> Bideu</li>
-          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Wind size={18} className="text-slate" /> Aparat de aer condiționat</li>
-          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Video size={18} className="text-slate" /> Interfon Video</li>
-          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Wind size={18} className="text-slate" /> Uscător</li>
+      <div className="py-8 border-b border-line">
+        <h3 className="font-serif text-2xl font-bold text-ink mb-6">Ce e înăuntru</h3>
+        <ul className="grid grid-cols-2 sm:grid-cols-3 gap-y-5 gap-x-8 list-none p-0 m-0">
+          <li className="flex items-center gap-3 text-base font-medium text-ink"><Tv size={20} className="text-slate-500 shrink-0" /> Televizor</li>
+          <li className="flex items-center gap-3 text-base font-medium text-ink"><Refrigerator size={20} className="text-slate-500 shrink-0" /> Frigider</li>
+          <li className="flex items-center gap-3 text-base font-medium text-ink"><Shirt size={20} className="text-slate-500 shrink-0" /> Mașină de spălat</li>
+          <li className="flex items-center gap-3 text-base font-medium text-ink"><Bath size={20} className="text-slate-500 shrink-0" /> Toaletă</li>
+          <li className="flex items-center gap-3 text-base font-medium text-ink"><Armchair size={20} className="text-slate-500 shrink-0" /> Mobilat</li>
+          <li className="flex items-center gap-3 text-base font-medium text-ink"><Microwave size={20} className="text-slate-500 shrink-0" /> Cuptor cu microunde</li>
+          <li className="flex items-center gap-3 text-base font-medium text-ink"><ShowerHead size={20} className="text-slate-500 shrink-0" /> Cabină de duș</li>
+          <li className="flex items-center gap-3 text-base font-medium text-ink"><Droplets size={20} className="text-slate-500 shrink-0" /> Bideu</li>
+          <li className="flex items-center gap-3 text-base font-medium text-ink"><Wind size={20} className="text-slate-500 shrink-0" /> Aparat de aer condiționat</li>
+          <li className="flex items-center gap-3 text-base font-medium text-ink"><Video size={20} className="text-slate-500 shrink-0" /> Interfon Video</li>
+          <li className="flex items-center gap-3 text-base font-medium text-ink"><Wind size={20} className="text-slate-500 shrink-0" /> Uscător</li>
         </ul>
       </div>
 
       {/* Informatii despre casa */}
-      <div className="pt-6 border-t border-line">
-        <h3 className="font-serif text-xl font-semibold text-ink mb-4">Informații despre casă</h3>
-        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6 list-none p-0 m-0">
-          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Activity size={18} className="text-slate" /> Rampă</li>
-          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Lock size={18} className="text-slate" /> Zona închisă</li>
-          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><ArrowUpDown size={18} className="text-slate" /> Lift</li>
-          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><ShieldCheck size={18} className="text-slate" /> Securitate</li>
+      <div className="py-8 border-b border-line">
+        <h3 className="font-serif text-2xl font-bold text-ink mb-6">Informații despre casă</h3>
+        <ul className="grid grid-cols-2 sm:grid-cols-3 gap-y-5 gap-x-8 list-none p-0 m-0">
+          <li className="flex items-center gap-3 text-base font-medium text-ink"><Activity size={20} className="text-slate-500 shrink-0" /> Rampă</li>
+          <li className="flex items-center gap-3 text-base font-medium text-ink"><Lock size={20} className="text-slate-500 shrink-0" /> Zona închisă</li>
+          <li className="flex items-center gap-3 text-base font-medium text-ink"><ArrowUpDown size={20} className="text-slate-500 shrink-0" /> Lift</li>
+          <li className="flex items-center gap-3 text-base font-medium text-ink"><ShieldCheck size={20} className="text-slate-500 shrink-0" /> Securitate</li>
         </ul>
       </div>
 
       {/* Reguli in casa */}
-      <div className="pt-6 border-t border-line">
-        <h3 className="font-serif text-xl font-semibold text-ink mb-4">Reguli în casă</h3>
-        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6 list-none p-0 m-0">
-          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Ban size={18} className="text-slate" /> Interzis cu animale</li>
-          <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Ban size={18} className="text-slate" /> Fumatul interzis</li>
+      <div className="py-8 border-b border-line">
+        <h3 className="font-serif text-2xl font-bold text-ink mb-6">Reguli în casă</h3>
+        <ul className="grid grid-cols-2 sm:grid-cols-3 gap-y-5 gap-x-8 list-none p-0 m-0">
+          <li className="flex items-center gap-3 text-base font-medium text-ink"><Ban size={20} className="text-slate-500 shrink-0" /> Interzis cu animale</li>
+          <li className="flex items-center gap-3 text-base font-medium text-ink"><Ban size={20} className="text-slate-500 shrink-0" /> Fumatul interzis</li>
         </ul>
       </div>
-    </div>
-  );
-}
-
-function SidebarDescription({ property }) {
-  if (!property.description) return null;
-  return (
-    <div className="bg-white rounded-[11px] p-5 border border-line shadow-sm">
-      <h3 className="font-serif text-lg font-semibold text-ink mb-3">About this home</h3>
-      <p className="font-sans text-sm sm:text-base leading-[1.7] text-slate whitespace-pre-wrap">{property.description}</p>
     </div>
   );
 }
 
 function PropertyMap({ property }) {
   return (
-    <div className="bg-white rounded-[11px] p-5 md:p-6 border border-line shadow-sm">
-      <h2 className="font-serif text-xl font-semibold text-ink mb-5">Locație</h2>
-      <UniversalMap mode="display" property={property} />
+    <div className="py-8 border-b border-line">
+      <h2 className="font-serif text-2xl font-bold text-ink mb-6">Locație</h2>
+      <div className="rounded-[16px] overflow-hidden border border-slate-200/80 shadow-sm">
+        <UniversalMap mode="display" property={property} />
+      </div>
     </div>
   );
 }
 
 function UsefulNearby() {
   return (
-    <div className="bg-white rounded-[11px] p-5 md:p-6 border border-line shadow-sm">
-      <h2 className="font-serif text-xl font-semibold text-ink mb-5">Util în apropiere</h2>
-      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6 list-none p-0 m-0">
-        <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><ShoppingCart size={18} className="text-slate" /> Shoping</li>
-        <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Landmark size={18} className="text-slate" /> Bancă</li>
-        <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Cross size={18} className="text-slate" /> Farmacie</li>
-        <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Smile size={18} className="text-slate" /> Dentist</li>
-        <li className="flex items-center gap-2 text-sm sm:text-base text-ink"><Store size={18} className="text-slate" /> Supermarket</li>
+    <div className="py-8">
+      <h2 className="font-serif text-2xl font-bold text-ink mb-6">Util în apropiere</h2>
+      <ul className="grid grid-cols-2 sm:grid-cols-3 gap-y-5 gap-x-8 list-none p-0 m-0">
+        <li className="flex items-center gap-3 text-base font-medium text-ink"><ShoppingCart size={20} className="text-slate-500 shrink-0" /> Shoping</li>
+        <li className="flex items-center gap-3 text-base font-medium text-ink"><Landmark size={20} className="text-slate-500 shrink-0" /> Bancă</li>
+        <li className="flex items-center gap-3 text-base font-medium text-ink"><Cross size={20} className="text-slate-500 shrink-0" /> Farmacie</li>
+        <li className="flex items-center gap-3 text-base font-medium text-ink"><Smile size={20} className="text-slate-500 shrink-0" /> Dentist</li>
+        <li className="flex items-center gap-3 text-base font-medium text-ink"><Store size={20} className="text-slate-500 shrink-0" /> Supermarket</li>
       </ul>
     </div>
   );
@@ -201,20 +198,20 @@ function UsefulNearby() {
 function ContactAgentForm({ agent }) {
   if (!agent) return null;
   return (
-    <div className="bg-white rounded-[11px] p-5 border border-line shadow-sm">
+    <div className="bg-white rounded-[16px] p-6 border border-line shadow-sm">
       <div className="flex items-center gap-3 mb-5 pb-5 border-b border-line">
-        <img src={agent.image} alt={agent.name} className="w-11 h-11 rounded-full object-cover" />
+        <img src={agent.image} alt={agent.name} className="w-12 h-12 rounded-full object-cover" />
         <div>
           <strong className="font-serif text-lg font-semibold text-ink block">{agent.name}</strong>
           <span className="font-sans text-sm text-slate">{agent.role}</span>
         </div>
       </div>
       <form className="flex flex-col gap-3" onSubmit={e => e.preventDefault()}>
-        <input type="text" placeholder="Your name" className="w-full border border-line rounded-[8px] px-3 py-2.5 text-sm outline-none focus:border-navy bg-warm transition-colors" />
-        <input type="email" placeholder="Your email" className="w-full border border-line rounded-[8px] px-3 py-2.5 text-sm outline-none focus:border-navy bg-warm transition-colors" />
-        <input type="tel" placeholder="Phone number" className="w-full border border-line rounded-[8px] px-3 py-2.5 text-sm outline-none focus:border-navy bg-warm transition-colors" />
-        <textarea placeholder="I am interested in this property..." rows={3} className="w-full border border-line rounded-[8px] px-3 py-2.5 text-sm outline-none focus:border-navy bg-warm transition-colors resize-y"></textarea>
-        <button type="submit" className="w-full bg-navy text-white rounded-[8px] py-3.5 font-bold text-base hover:bg-blue transition-colors cursor-pointer border-none mt-1.5">
+        <input type="text" placeholder="Your name" className="w-full border border-line rounded-[8px] px-3.5 py-2.5 text-sm outline-none focus:border-navy bg-warm transition-colors" />
+        <input type="email" placeholder="Your email" className="w-full border border-line rounded-[8px] px-3.5 py-2.5 text-sm outline-none focus:border-navy bg-warm transition-colors" />
+        <input type="tel" placeholder="Phone number" className="w-full border border-line rounded-[8px] px-3.5 py-2.5 text-sm outline-none focus:border-navy bg-warm transition-colors" />
+        <textarea placeholder="I am interested in this property..." rows={3} className="w-full border border-line rounded-[8px] px-3.5 py-2.5 text-sm outline-none focus:border-navy bg-warm transition-colors resize-y"></textarea>
+        <button type="submit" className="w-full bg-navy text-white rounded-[8px] py-3.5 font-bold text-base hover:bg-blue transition-colors cursor-pointer border-none mt-1.5 shadow-sm">
           Contact Agent
         </button>
       </form>
@@ -222,12 +219,10 @@ function ContactAgentForm({ agent }) {
   );
 }
 
-
-
 function SimilarHomes({ homes }) {
   if (!homes || homes.length === 0) return null;
   return (
-    <section className="w-full max-w-263 mx-auto px-4 md:px-8 py-15">
+    <section className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-15 border-t border-line">
       <div className="flex justify-between items-end mb-6">
         <div>
           <p className="font-sans text-xs font-bold uppercase tracking-[2px] text-navy mb-1.5">Explore more</p>
@@ -251,18 +246,16 @@ export default function PropertyDetailPage({ property, similarProperties = [] })
       <Navbar />
       <HeroGallery property={property} />
       
-      <main className="w-full max-w-263 mx-auto px-4 md:px-8 py-8 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6">
-        <div className="flex flex-col gap-6">
+      <main className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-8 grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-12">
+        <div className="flex flex-col">
           <PropertyFeatures property={property} />
           <PropertyMap property={property} />
           <UsefulNearby />
         </div>
-        <aside className="flex flex-col gap-5">
-          <SidebarDescription property={property} />
+        <aside className="flex flex-col gap-6 lg:sticky lg:top-28 h-fit">
           <ContactAgentForm agent={property.agent} />
         </aside>
       </main>
-
       <SimilarHomes homes={similarProperties} />
     </div>
   );

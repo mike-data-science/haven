@@ -34,7 +34,7 @@ export default function DashboardPage({
   const [mapView, setMapView] = useState(true);
 
   return (
-    <div className="font-sans text-slate-900 min-h-screen pb-8">
+    <div className="font-sans text-slate-900 min-h-full pb-8">
       {/* Top Filter Bar */}
       <div className="flex items-center gap-8 mb-6 border-b border-slate-200 px-1.5 w-full">
         {["Buy", "Sell", "Rent", "Compare"].map((tab) => (

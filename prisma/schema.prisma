@@ -68,7 +68,7 @@ model Property {
   floor       Int
   yearBuilt   Int
   
-  status      PropertyStatus @default(DRAFT)
+  status      PropertyStatus @default(PENDING)
   isDeleted   Boolean  @default(false)
   submittedAt DateTime?
   publishedAt DateTime?

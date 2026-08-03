@@ -69,12 +69,12 @@ function ModernSelect({ id, label, options, defaultValue, isLast, className }) {
 }
 
 function HeroGradient() {
-  const [layoutType, setLayoutType] = useState('modern'); // 'modern' or 'classic'
+  const [layoutType, setLayoutType] = useState('classic'); // 'modern' or 'classic'
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
 
-  const { fontStyle, setFontStyle } = useFontTheme();
+  const { fontStyle, setFontStyle, pillWidth, setPillWidth } = useFontTheme();
 
   useEffect(() => {
     setIsMounted(true);
@@ -88,14 +88,14 @@ function HeroGradient() {
   }, []);
 
   return (
-    <section className="relative z-[100] w-full min-h-94 h-auto flex flex-col items-center justify-center text-center px-4 pt-21 pb-9">
+    <section className="relative z-[100] w-full min-h-94 h-auto flex flex-col items-center justify-center text-center pt-21 pb-9">
       {/* Dynamic Animated Background */}
       <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#EAF2FF] via-[#FAFAF8] to-[#E6F0FF] overflow-hidden">
         <div className="absolute top-[0%] left-[-10%] w-[40%] h-[50%] bg-blue-300/30 rounded-full blur-[68px] mix-blend-multiply animate-pulse"></div>
         <div className="absolute bottom-[0%] right-[-10%] w-[50%] h-[50%] bg-indigo-200/20 rounded-full blur-[68px] mix-blend-multiply"></div>
       </div>
       
-      <div className="relative z-10 w-full max-w-235 flex flex-col items-center mt-0 animate-in fade-in slide-in-from-bottom-6 duration-1000">
+      <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 flex flex-col items-center mt-0 animate-in fade-in slide-in-from-bottom-6 duration-1000">
         
         {/* Layout Toggle Menu */}
         <div className="w-full flex justify-end mb-3 relative" ref={menuRef}>
@@ -129,27 +129,38 @@ function HeroGradient() {
 
               <div className="h-px bg-slate-100 my-1.5 mx-1"></div>
               
-              <p className="font-sans text-[7px] font-bold text-slate-400 uppercase tracking-wider px-2 py-1.5">Font Style</p>
+              <p className="font-sans text-[7px] font-bold text-slate-400 uppercase tracking-wider px-2 py-1.5">Navbar Pill Width</p>
               <button 
-                onClick={() => { setFontStyle('default'); setMenuOpen(false); }}
-                className={`w-full text-left px-2 py-1.5 rounded-xl font-sans text-[8px] font-medium transition-colors flex items-center justify-between ${fontStyle === 'default' ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50'}`}
+                onClick={() => { setPillWidth('1400px'); setMenuOpen(false); }}
+                className={`w-full text-left px-2 py-1.5 rounded-xl font-sans text-[8px] font-medium transition-colors flex items-center justify-between ${pillWidth === '1400px' ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50'}`}
               >
-                Default Fonts
-                {fontStyle === 'default' && <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>}
+                1400px (Current)
+                {pillWidth === '1400px' && <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>}
               </button>
+              <button 
+                onClick={() => { setPillWidth('1240px'); setMenuOpen(false); }}
+                className={`w-full text-left px-2 py-1.5 rounded-xl font-sans text-[8px] font-medium transition-colors flex items-center justify-between ${pillWidth === '1240px' ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50'}`}
+              >
+                1240px (1400px w/o 80px padding)
+                {pillWidth === '1240px' && <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>}
+              </button>
+              <button 
+                onClick={() => { setPillWidth('1180px'); setMenuOpen(false); }}
+                className={`w-full text-left px-2 py-1.5 rounded-xl font-sans text-[8px] font-medium transition-colors flex items-center justify-between ${pillWidth === '1180px' ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50'}`}
+              >
+                1180px (Previous Option)
+                {pillWidth === '1180px' && <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>}
+              </button>
+
+              <div className="h-px bg-slate-100 my-1.5 mx-1"></div>
+              
+              <p className="font-sans text-[7px] font-bold text-slate-400 uppercase tracking-wider px-2 py-1.5">Font Style</p>
               <button 
                 onClick={() => { setFontStyle('modern'); setMenuOpen(false); }}
                 className={`w-full text-left px-2 py-1.5 rounded-xl font-sans text-[8px] font-medium transition-colors flex items-center justify-between ${fontStyle === 'modern' ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50'}`}
               >
                 Modern (Jakarta/Inter)
                 {fontStyle === 'modern' && <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>}
-              </button>
-              <button 
-                onClick={() => { setFontStyle('classic'); setMenuOpen(false); }}
-                className={`w-full text-left px-2 py-1.5 rounded-xl font-sans text-[8px] font-medium transition-colors flex items-center justify-between ${fontStyle === 'classic' ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50'}`}
-              >
-                Classic Elegance
-                {fontStyle === 'classic' && <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>}
               </button>
               <button 
                 onClick={() => { setFontStyle('minimalist'); setMenuOpen(false); }}
@@ -381,7 +392,7 @@ function HeroGradient() {
 
 function PopularProperties({ properties }) {
   return (
-    <section id="properties" className="max-w-263 mx-auto px-5 pt-9 pb-24">
+    <section id="properties" className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 pt-9 pb-24">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-9 gap-3">
         <div>
           <div className="flex items-center gap-1.5 mb-3">
@@ -396,7 +407,7 @@ function PopularProperties({ properties }) {
         </a>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 xl:gap-6">
         {properties.map((p) => (
           <PropertyCard key={p.id} listing={p} />
         ))}
@@ -407,45 +418,68 @@ function PopularProperties({ properties }) {
 
 function Agents({ agents }) {
   return (
-    <section id="agents" className="relative bg-gradient-to-b from-[#FAFAF8] via-[#EAF2FF]/60 to-[#FAFAF8] py-24 overflow-hidden">
+    <section id="agents" className="relative bg-gradient-to-b from-[#FAFAF8] via-[#F3F7FF]/50 to-[#FAFAF8] py-24 overflow-hidden">
       <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-[#EAF2FF] to-transparent opacity-50 pointer-events-none"></div>
       
-      <div className="max-w-263 mx-auto px-5 relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-9 gap-3 text-center md:text-left">
+      <div className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 relative z-10">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4 text-center md:text-left">
           <div className="w-full md:w-auto">
-            <div className="flex items-center justify-center md:justify-start gap-1.5 mb-3">
-              <div className="w-6 h-1 bg-[#2B7FFF]"></div>
+            <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
+              <div className="w-6 h-1 bg-[#2B7FFF] rounded-full"></div>
               <p className="font-sans text-xs font-bold uppercase tracking-[2px] text-[#2B7FFF] m-0">Expert Guidance</p>
             </div>
-            <h2 className="font-serif text-[clamp(36px,5vw,52px)] font-bold text-[#1A1A18] tracking-[-1px] leading-[1.1]">Meet our top agents</h2>
+            <h2 className="font-serif text-[clamp(36px,5vw,52px)] font-bold text-[#1A1A18] tracking-[-1px] leading-[1.1]">
+              Meet our top agents
+            </h2>
           </div>
-          <a href="#all-agents" className="group font-sans text-sm font-bold text-[#0B3D91] hover:text-[#2B7FFF] transition-colors flex items-center gap-1.5 mx-auto md:mx-0">
+          <a href="/agents" className="group font-sans text-sm font-bold text-[#0B3D91] hover:text-[#2B7FFF] transition-colors flex items-center gap-2 mx-auto md:mx-0 py-2.5 px-5 rounded-full bg-blue-50/70 border border-blue-100/50">
             See all agents
             <span className="transition-transform group-hover:translate-x-1">→</span>
           </a>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
           {agents.map((a) => (
-            <article key={a.id} className="group bg-white/80 backdrop-blur-md rounded-[18px] p-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.04)] border border-white transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_24px_64px_rgba(11,61,145,0.12)]">
-              <div className="relative w-21 h-21 mx-auto mb-5">
-                <div className="absolute inset-0 bg-gradient-to-tr from-[#0B3D91] to-[#4388FF] rounded-full opacity-0 group-hover:opacity-100 scale-110 transition-all duration-500 blur-md"></div>
-                {a.image ? (
-                   <img src={a.image} alt={a.name} className="relative w-full h-full rounded-full object-cover border-[2px] border-white shadow-md z-10 transition-transform duration-500 group-hover:scale-105" />
-                ) : (
-                   <div className="relative w-full h-full rounded-full bg-slate-100 border-[2px] border-white shadow-md flex items-center justify-center text-slate-500 font-bold text-lg z-10 transition-transform duration-500 group-hover:scale-105">
+            <article
+              key={a.id}
+              className="group bg-white rounded-3xl overflow-hidden shadow-[0_10px_35px_rgba(0,0,0,0.04)] border border-[#E8E5DF]/80 hover:border-[#2B7FFF]/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_24px_60px_rgba(11,61,145,0.12)] flex flex-col justify-between"
+            >
+              <div>
+                {/* Full-bleed Tall Image Container with Verified Badge on Right */}
+                <div className="relative w-full h-72 overflow-hidden bg-gradient-to-b from-[#F2F6FE] to-white border-b border-[#F0F2F7]">
+                  <div className="absolute top-3 right-3 z-10 bg-white/95 backdrop-blur-md text-[#0B3D91] font-sans text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full shadow-sm border border-blue-100 flex items-center gap-1">
+                    <span className="text-[#2B7FFF]">★</span> Verified
+                  </div>
+                  {a.image ? (
+                    <img
+                      src={a.image}
+                      alt={a.name}
+                      className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-[#EAF2FF] flex items-center justify-center text-[#0B3D91] font-serif font-bold text-3xl">
                       {a.name?.charAt(0) || "A"}
-                   </div>
-                )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Minimal Elegant Agent Header */}
+                <div className="p-6 text-left">
+                  <h3 className="font-serif text-xl font-bold text-[#1A1A18] mb-1 group-hover:text-[#0B3D91] transition-colors">
+                    {a.name}
+                  </h3>
+                  <p className="font-sans text-xs font-semibold text-[#6B7280] uppercase tracking-wider line-clamp-1">
+                    {a.role}
+                  </p>
+                </div>
               </div>
-              <h3 className="font-serif text-lg font-bold text-[#1A1A18] mb-1">{a.name}</h3>
-              <p className="font-sans text-sm font-medium text-[#6B7280] mb-3">{a.role}</p>
-              <div className="bg-[#FAFAF8] py-1.5 px-3 rounded-xl inline-block mb-5 border border-[#E8E5DF]">
-                <p className="font-sans text-xs font-bold text-[#0B3D91] tracking-wide uppercase">{a.deals} deals closed</p>
+
+              {/* Single Minimal Contact CTA */}
+              <div className="px-6 pb-6 pt-0">
+                <button className="w-full bg-[#FAFAF8] group-hover:bg-[#0B3D91] text-[#0B3D91] group-hover:text-white border border-[#E8E5DF] group-hover:border-[#0B3D91] font-sans text-sm font-bold py-3 rounded-xl transition-all duration-300 cursor-pointer">
+                  Contact Agent
+                </button>
               </div>
-              <button className="w-full bg-transparent text-[#0B3D91] font-sans text-sm font-bold py-2.5 rounded-xl border-2 border-[#EAF2FF] cursor-pointer transition-all duration-300 group-hover:bg-[#0B3D91] group-hover:text-white group-hover:border-[#0B3D91] group-hover:shadow-lg">
-                Contact
-              </button>
             </article>
           ))}
         </div>
@@ -454,77 +488,36 @@ function Agents({ agents }) {
   );
 }
 
-function AboutSplit() {
-  return (
-    <section id="about" className="max-w-263 mx-auto px-5 py-24 flex flex-col lg:flex-row gap-9 xl:gap-18 items-center">
-      <div className="flex-1 w-full relative h-85 lg:h-131 rounded-[23px] overflow-hidden shadow-[0_32px_64px_rgba(0,0,0,0.1)] group">
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10 opacity-60 pointer-events-none"></div>
-        <img
-          src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=900&auto=format&fit=crop"
-          alt="Modern home exterior — Haven"
-          className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-        />
-        <div className="absolute bottom-8 left-8 z-20 bg-white/90 backdrop-blur-md p-6 rounded-3xl shadow-2xl max-w-sm pointer-events-none transition-transform duration-500 group-hover:-translate-y-2">
-          <p className="font-serif text-lg font-bold text-[#1A1A18] leading-[1.2] mb-2">"The easiest way to find a home."</p>
-          <p className="font-sans text-sm font-medium text-[#6B7280]">— Architectural Digest</p>
-        </div>
-      </div>
-      <div className="flex-1 w-full">
-        <div className="flex items-center gap-1.5 mb-5">
-          <div className="w-6 h-1 bg-[#2B7FFF]"></div>
-          <p className="font-sans text-xs font-bold uppercase tracking-[2px] text-[#2B7FFF] m-0">Why Haven</p>
-        </div>
-        <h2 className="font-serif text-[clamp(36px,5vw,56px)] font-bold text-[#1A1A18] tracking-[-1px] leading-[1.1] mb-6">
-          We built the home search we always wanted.
-        </h2>
-        <p className="font-sans text-base sm:text-lg text-[#4A5568] leading-[1.7] mb-9 font-medium">
-          Haven started with three agents who were tired of clunky listing
-          sites. Today we connect thousands of buyers and renters with
-          verified agents, transparent pricing, and listings that are
-          actually kept up to date.
-        </p>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 p-6 bg-white rounded-[18px] shadow-[0_8px_32px_rgba(0,0,0,0.03)] border border-[#E8E5DF]">
-          <div>
-            <strong className="block font-serif text-2xl sm:text-3xl font-bold text-[#0B3D91] tracking-[-1px] mb-1">2019</strong>
-            <span className="font-sans text-xs font-semibold text-[#6B7280] uppercase tracking-wider">Founded</span>
-          </div>
-          <div>
-            <strong className="block font-serif text-2xl sm:text-3xl font-bold text-[#0B3D91] tracking-[-1px] mb-1">48</strong>
-            <span className="font-sans text-xs font-semibold text-[#6B7280] uppercase tracking-wider">States</span>
-          </div>
-          <div>
-            <strong className="block font-serif text-2xl sm:text-3xl font-bold text-[#0B3D91] tracking-[-1px] mb-1">10K+</strong>
-            <span className="font-sans text-xs font-semibold text-[#6B7280] uppercase tracking-wider">Clients</span>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function AdvancedSearchPromo() {
+  useEffect(() => {
+    // Ensure the new promo photo is copied into the public folder
+    fetch('/api/copy-promo').catch(() => {});
+  }, []);
+
   return (
-    <section className="max-w-263 mx-auto px-5 py-9 mb-9">
-      <div className="relative w-full rounded-[23px] overflow-hidden bg-gradient-to-r from-[#0B3D91] to-[#2B7FFF] flex flex-col md:flex-row items-center justify-between p-9 md:p-9 lg:px-18 shadow-[0_24px_64px_rgba(11,61,145,0.3)]">
-        {/* Abstract shapes for background */}
-        <div className="absolute top-[-20%] right-[-10%] w-56 h-56 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute bottom-[-30%] left-[10%] w-75 h-75 bg-blue-300/20 rounded-full blur-3xl pointer-events-none"></div>
+    <section className="w-full bg-[#082d6b] relative overflow-hidden py-16 md:py-20 my-12 shadow-lg">
+      <div className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 relative z-10 text-white flex flex-col items-center text-center">
+        <p className="font-sans text-xs font-bold uppercase tracking-[2px] text-blue-200 mb-3">Găsește exact ce cauți</p>
+        <h2 className="font-serif text-[clamp(32px,4vw,48px)] font-bold leading-[1.15] mb-5 max-w-4xl mx-auto">
+          Vă vom ajuta să găsiți cazare conform nevoilor dumneavoastră.
+        </h2>
+        <p className="font-sans text-base sm:text-lg text-blue-100 font-medium max-w-3xl mx-auto leading-relaxed mb-8">
+          Căutare avansată de proprietăți cu multe filtre. Găsiți locația perfectă, prețul corect și dotările pe care vi le doriți.
+        </p>
 
-        <div className="relative z-10 w-full md:w-1.5/3 text-white">
-          <p className="font-sans text-xs font-bold uppercase tracking-[2px] text-blue-200 mb-3">Găsește exact ce cauți</p>
-          <h2 className="font-serif text-[clamp(32px,4vw,48px)] font-bold leading-[1.15] mb-5">
-            Vă vom ajuta să găsiți cazare conform nevoilor dumneavoastră.
-          </h2>
-          <p className="font-sans text-base sm:text-lg text-blue-100 font-medium max-w-2xl">
-            Căutare avansată de proprietăți cu multe filtre. Găsiți locația perfectă, prețul corect și dotările pe care vi le doriți.
-          </p>
-        </div>
+        {/* Seamlessly Merged 3D Illustration Container */}
+        <div className="w-full mt-4 relative flex items-center justify-center overflow-hidden">
+          {/* Feathering overlays to merge image edges seamlessly with the section background */}
+          <div className="absolute top-0 left-0 right-0 h-16 sm:h-24 bg-gradient-to-b from-[#082d6b] to-transparent z-10 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 right-0 h-16 sm:h-24 bg-gradient-to-t from-[#082d6b] to-transparent z-10 pointer-events-none" />
+          <div className="absolute top-0 bottom-0 left-0 w-12 sm:w-24 bg-gradient-to-r from-[#082d6b] to-transparent z-10 pointer-events-none" />
+          <div className="absolute top-0 bottom-0 right-0 w-12 sm:w-24 bg-gradient-to-l from-[#082d6b] to-transparent z-10 pointer-events-none" />
 
-        <div className="relative z-10 w-full md:w-1/3 flex justify-end mt-8 md:mt-0">
-          <a href="/listings" className="group flex items-center justify-center gap-2 bg-white text-[#0B3D91] font-sans text-base font-bold py-4 px-8 rounded-full shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl whitespace-nowrap">
-            Căutare avansată
-            <span className="transition-transform group-hover:translate-x-1">→</span>
-          </a>
+          <img
+            src="/promo-3d-new.jpg"
+            alt="Haven 3D Interactive Real Estate Concept"
+            className="w-full max-w-6xl h-auto max-h-[620px] object-contain object-center relative z-0 transition-transform duration-700 hover:scale-[1.01]"
+          />
         </div>
       </div>
     </section>
@@ -539,7 +532,6 @@ export default function HomePage({ properties, agents }) {
       <PopularProperties properties={properties} />
       <AdvancedSearchPromo />
       <Agents agents={agents} />
-      <AboutSplit />
       <Footer />
     </div>
   );
