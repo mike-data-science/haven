@@ -165,7 +165,7 @@ export default function ModernPropertyForm({ categories }: ModernPropertyFormPro
                 mode="picker"
                 latitude={formData.latitude ? Number(formData.latitude) : undefined}
                 longitude={formData.longitude ? Number(formData.longitude) : undefined}
-                onChange={(lat, lng) => setFormData(prev => ({ ...prev, latitude: String(lat), longitude: String(lng) }))}
+                onChange={(lat: any, lng: any) => setFormData(prev => ({ ...prev, latitude: String(lat), longitude: String(lng) }))}
                 height="100%"
               />
             </div>
