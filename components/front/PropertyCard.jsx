@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { IconBed, IconBath, IconArea } from './Icons';
-import { formatPrice } from '../../lib/data';
+import { formatPrice } from "@/lib/data";
 
 function ImageCarousel({ images, alt }) {
   const [currentIndex, setCurrentIndex] = useState(0);

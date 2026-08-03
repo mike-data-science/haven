@@ -108,6 +108,7 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
 
     try {
       const url = selectedId ? `/api/${entity.slug}/${selectedId}` : `/api/${entity.slug}`;
+      const method = selectedId ? "PUT" : "POST";
       const response = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },

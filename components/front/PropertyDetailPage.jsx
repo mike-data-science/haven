@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Navbar } from "./Navbar";
 import { PropertyCard } from "./PropertyCard";
-import { COLORS, TOUR_DATES, TOUR_TIMES, formatPrice } from "../../lib/data";
+import { COLORS, TOUR_DATES, TOUR_TIMES, formatPrice } from "@/lib/data";
 import dynamic from "next/dynamic";
 import { ImageLightbox } from "./ImageLightbox";
 import { Home, BedDouble, Bath, Maximize, Calendar, Tag, Building, PhoneCall, Tv, Refrigerator, Shirt, Armchair, Microwave, ShowerHead, Droplets, Wind, Video, Activity, Lock, ArrowUpDown, ShieldCheck, Ban, ShoppingCart, Landmark, Cross, Smile, Store } from "lucide-react";

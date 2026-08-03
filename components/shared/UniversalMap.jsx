@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { CHISINAU_SECTORS_GEOJSON, MOLDOVA_RAIONS_GEOJSON } from "../../lib/geojson-contours";
+import { CHISINAU_SECTORS_GEOJSON, MOLDOVA_RAIONS_GEOJSON } from "@/lib/geojson-contours";
 
 // Fix Leaflet's default icon paths
 if (typeof window !== "undefined") {

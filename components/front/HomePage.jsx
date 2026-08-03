@@ -5,7 +5,7 @@ import { useFontTheme } from "@/components/shared/FontProvider";
 import Link from 'next/link';
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
-import { formatPrice } from "../../lib/data";
+import { formatPrice } from "@/lib/data";
 import { PropertyCard } from "./PropertyCard";
 
 function ModernSelect({ id, label, options, defaultValue, isLast, className }) {
