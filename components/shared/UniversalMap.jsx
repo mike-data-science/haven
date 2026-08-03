@@ -36,16 +36,29 @@ const createPinIcon = (color, isHighlighted = false) => {
  * Universal Interactive Map for Real Estate
  * Features seamless drill-down from Moldova national raions/municipii directly into Chișinău Sectors,
  * custom glassmorphic tooltips, and dynamic tile themes.
+ * 
+ * @param {Object} props
+ * @param {string} [props.mode="display"]
+ * @param {any} [props.property]
+ * @param {Array} [props.listings=[]]
+ * @param {any} [props.selectedId]
+ * @param {any} [props.zoomedId]
+ * @param {Function} [props.onSelectPin]
+ * @param {number} [props.latitude]
+ * @param {number} [props.longitude]
+ * @param {Function} [props.onChange]
+ * @param {string} [props.height="300px"]
+ * @param {Array<number>} [props.defaultCenter=[47.0245, 28.8322]]
  */
 export default function UniversalMap({ 
   mode = "display", 
-  property = null,
+  property = undefined,
   listings = [],
-  selectedId = null,
-  zoomedId = null,
+  selectedId = undefined,
+  zoomedId = undefined,
   onSelectPin,
-  latitude = null,
-  longitude = null,
+  latitude = undefined,
+  longitude = undefined,
   onChange,
   height = "300px",
   defaultCenter = [47.0245, 28.8322] // Chișinău Center
