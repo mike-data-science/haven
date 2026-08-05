@@ -3,6 +3,9 @@ import prisma from "@/lib/db";
 import { requireRole } from "@/lib/auth/roles";
 import { UnauthorizedError } from "@/lib/auth/session";
 import { Role } from "@prisma/client";
+import { checkRateLimit } from "@/lib/rateLimit";
+import { auditLog } from "@/lib/auditLog";
+import { z } from "zod";
 
 type Body = Record<string, unknown>;
 type ParamsContext = { params: Promise<{ id: string }> };
@@ -13,6 +16,7 @@ type CrudConfig = {
   include?: Record<string, boolean>;
   allowedRoles?: Role[];
   ownershipField?: string;
+  schema?: z.ZodSchema;
   buildData: (body: Body, user?: { id: number; role: Role }, existing?: any) => Body;
   beforeDelete?: (id: number) => Promise<void>;
 };
@@ -55,6 +59,7 @@ export function createCrudHandlers({
   include,
   allowedRoles = ['ADMIN'],
   ownershipField,
+  schema,
   buildData,
   beforeDelete,
 }: CrudConfig) {
@@ -68,7 +73,10 @@ export function createCrudHandlers({
   }
 
   return {
-    async GET() {
+    async GET(request: Request) {
+      const rl = checkRateLimit(request);
+      if (rl) return rl;
+
       try {
         const user = await requireRole(allowedRoles);
         
@@ -85,16 +93,33 @@ export function createCrudHandlers({
         return NextResponse.json(rows);
       } catch (error) {
         return NextResponse.json(
-          { error: `Failed to load ${entityName}.`, detail: getErrorMessage(error) },
+          { 
+            error: `Failed to load ${entityName}.`, 
+            ...(process.env.NODE_ENV !== 'production' && { detail: getErrorMessage(error) }) 
+          },
           { status: error instanceof UnauthorizedError ? 401 : 500 }
         );
       }
     },
 
     async POST(request: Request) {
+      const rl = checkRateLimit(request);
+      if (rl) return rl;
+
       try {
         const user = await requireRole(allowedRoles);
         const body = (await request.json()) as Body;
+        
+        if (schema) {
+          const result = schema.safeParse(body);
+          if (!result.success) {
+            return NextResponse.json(
+              { error: "Validation failed", issues: result.error.errors },
+              { status: 400 }
+            );
+          }
+        }
+
         let data = buildData(body, user);
         
         // Auto-inject ownership for both ADMIN and normal users if field exists
@@ -106,16 +131,31 @@ export function createCrudHandlers({
           data,
           include,
         });
+
+        auditLog({
+          action: `${modelName as string}.create`,
+          actorId: user.id,
+          actorRole: user.role,
+          targetType: modelName as string,
+          targetId: saved.id,
+        });
+
         return NextResponse.json(saved, { status: 201 });
       } catch (error) {
         return NextResponse.json(
-          { error: `Failed to create ${entityName}.`, detail: getErrorMessage(error) },
+          { 
+            error: `Failed to create ${entityName}.`, 
+            ...(process.env.NODE_ENV !== 'production' && { detail: getErrorMessage(error) }) 
+          },
           { status: error instanceof UnauthorizedError ? 401 : 400 }
         );
       }
     },
 
-    async GET_BY_ID(_request: Request, { params }: ParamsContext) {
+    async GET_BY_ID(request: Request, { params }: ParamsContext) {
+      const rl = checkRateLimit(request);
+      if (rl) return rl;
+
       try {
         const user = await requireRole(allowedRoles);
         const { id: rawId } = await params;
@@ -137,20 +177,36 @@ export function createCrudHandlers({
         return NextResponse.json(row);
       } catch (error) {
         return NextResponse.json(
-          { error: `Failed to load ${entityName}.`, detail: getErrorMessage(error) },
+          { 
+            error: `Failed to load ${entityName}.`, 
+            ...(process.env.NODE_ENV !== 'production' && { detail: getErrorMessage(error) }) 
+          },
           { status: error instanceof UnauthorizedError ? 401 : 500 }
         );
       }
     },
 
-    async PUT(_request: Request, { params }: ParamsContext) {
+    async PUT(request: Request, { params }: ParamsContext) {
+      const rl = checkRateLimit(request);
+      if (rl) return rl;
+
       try {
         const user = await requireRole(allowedRoles);
         const { id: rawId } = await params;
         const id = toId(rawId);
         if (!id) return NextResponse.json({ error: "Invalid id." }, { status: 400 });
 
-        const body = (await _request.json()) as Body;
+        const body = (await request.json()) as Body;
+        
+        if (schema) {
+          const result = schema.safeParse(body);
+          if (!result.success) {
+            return NextResponse.json(
+              { error: "Validation failed", issues: result.error.errors },
+              { status: 400 }
+            );
+          }
+        }
         
         const existing = await findById(id);
         if (!existing) {
@@ -175,16 +231,30 @@ export function createCrudHandlers({
           include,
         });
 
+        auditLog({
+          action: `${modelName as string}.update`,
+          actorId: user.id,
+          actorRole: user.role,
+          targetType: modelName as string,
+          targetId: id,
+        });
+
         return NextResponse.json(saved);
       } catch (error) {
         return NextResponse.json(
-          { error: `Failed to update ${entityName}.`, detail: getErrorMessage(error) },
+          { 
+            error: `Failed to update ${entityName}.`, 
+            ...(process.env.NODE_ENV !== 'production' && { detail: getErrorMessage(error) }) 
+          },
           { status: error instanceof UnauthorizedError ? 401 : 400 }
         );
       }
     },
 
-    async DELETE(_request: Request, { params }: ParamsContext) {
+    async DELETE(request: Request, { params }: ParamsContext) {
+      const rl = checkRateLimit(request);
+      if (rl) return rl;
+
       try {
         const user = await requireRole(allowedRoles);
         const { id: rawId } = await params;
@@ -209,10 +279,21 @@ export function createCrudHandlers({
 
         await getModel().delete({ where: { id } });
 
+        auditLog({
+          action: `${modelName as string}.delete`,
+          actorId: user.id,
+          actorRole: user.role,
+          targetType: modelName as string,
+          targetId: id,
+        });
+
         return NextResponse.json({ message: `${entityName} deleted successfully.` });
       } catch (error) {
         return NextResponse.json(
-          { error: `Failed to delete ${entityName}.`, detail: getErrorMessage(error) },
+          { 
+            error: `Failed to delete ${entityName}.`, 
+            ...(process.env.NODE_ENV !== 'production' && { detail: getErrorMessage(error) }) 
+          },
           { status: error instanceof UnauthorizedError ? 401 : 500 }
         );
       }

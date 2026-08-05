@@ -1,8 +1,17 @@
 import { NextResponse } from "next/server";
+import { requireRole } from "@/lib/auth/roles";
 import prisma from "@/lib/db";
 
 export async function GET() {
+  // Block seeding entirely in production
+  if (process.env.NODE_ENV === "production") {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   try {
+    // Require ADMIN role to seed the database
+    await requireRole(["ADMIN"]);
+
     // 1. Delete all existing data in proper dependency order using raw SQL
     // so we can use CASCADE safely. (PostgreSQL syntax)
     await prisma.$executeRawUnsafe('TRUNCATE TABLE "Appointment" CASCADE');
@@ -191,7 +200,10 @@ export async function GET() {
     }
 
     return NextResponse.json({ message: "Database seeded successfully with Chisinau properties!" });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Seed operation failed", ...(process.env.NODE_ENV !== 'production' && { detail: error instanceof Error ? error.message : 'Unknown error' }) },
+      { status: 500 }
+    );
   }
 }

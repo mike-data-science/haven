@@ -87,7 +87,6 @@ export const adminEntities: AdminEntity[] = [
     fields: [
       { name: "name", label: "Name", type: "text", placeholder: "Olga Pop" },
       { name: "email", label: "Email", type: "email", placeholder: "olga@example.com" },
-      { name: "password", label: "Password", type: "text", placeholder: "••••••••" },
       { name: "role", label: "Role", type: "select", options: ["USER", "ADMIN", "AGENT"] },
     ],
     exampleFields: [
