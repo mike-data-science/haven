@@ -202,7 +202,7 @@ export async function GET() {
     return NextResponse.json({ message: "Database seeded successfully with Chisinau properties!" });
   } catch (error) {
     return NextResponse.json(
-      { error: "Seed operation failed", ...(process.env.NODE_ENV !== 'production' && { detail: error instanceof Error ? error.message : 'Unknown error' }) },
+      { error: "Seed operation failed", detail: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }
