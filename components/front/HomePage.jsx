@@ -7,6 +7,7 @@ import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { formatPrice } from "@/lib/data";
 import { PropertyCard } from "./PropertyCard";
+import { ContactAgentButton } from "./ContactAgentModal";
 
 function ModernSelect({ id, label, options, defaultValue, isLast, className }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,8 +33,8 @@ function ModernSelect({ id, label, options, defaultValue, isLast, className }) {
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex items-center gap-2 truncate">
-          {label && <span className="font-sans text-xs sm:text-sm font-medium text-slate-500 whitespace-nowrap">{label}:</span>}
-          <span className="font-sans text-sm sm:text-base font-bold text-[#1A1A18] whitespace-nowrap">
+          {label && <span className="font-sans text-xs sm:text-sm font-normal text-slate-500 whitespace-nowrap">{label}:</span>}
+          <span className="font-sans text-sm sm:text-base font-normal text-[#1A1A18] whitespace-nowrap">
             {selectedOption.label}
           </span>
         </div>
@@ -47,7 +48,7 @@ function ModernSelect({ id, label, options, defaultValue, isLast, className }) {
           {options.map((o) => (
             <div 
               key={o.value} 
-              className={`px-3 py-2 text-xs sm:text-sm cursor-pointer transition-colors select-none flex items-center justify-between ${o.value === value ? 'bg-blue-50/50 text-blue-700 font-semibold' : 'text-slate-700 hover:bg-slate-50'}`}
+              className={`px-3 py-2 text-xs sm:text-sm cursor-pointer transition-colors select-none flex items-center justify-between ${o.value === value ? 'bg-blue-50/50 text-blue-700 font-normal' : 'text-slate-700 hover:bg-slate-50'}`}
               onClick={() => { setValue(o.value); setIsOpen(false); }}
             >
               {o.label}
@@ -93,6 +94,8 @@ function HeroGradient() {
       <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#EAF2FF] via-[#FAFAF8] to-[#E6F0FF] overflow-hidden">
         <div className="absolute top-[0%] left-[-10%] w-[40%] h-[50%] bg-blue-300/30 rounded-full blur-[68px] mix-blend-multiply animate-pulse"></div>
         <div className="absolute bottom-[0%] right-[-10%] w-[50%] h-[50%] bg-indigo-200/20 rounded-full blur-[68px] mix-blend-multiply"></div>
+        {/* Seamless bottom transition overlay so the bottom right blends smoothly into the page without any straight line */}
+        <div className="absolute bottom-0 left-0 right-0 h-36 sm:h-48 bg-gradient-to-t from-[#FAFAF8] via-[#FAFAF8]/80 to-transparent pointer-events-none"></div>
       </div>
       
       <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 flex flex-col items-center mt-0 animate-in fade-in slide-in-from-bottom-6 duration-1000">
@@ -215,8 +218,8 @@ function HeroGradient() {
           )}
         </div>
 
-        <h1 className="font-serif text-[clamp(3rem,7vw,5.25rem)] font-bold text-[#1A1A18] leading-[1.05] tracking-[-1px] mb-5 drop-shadow-sm md:whitespace-nowrap">
-          Find your <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#0B3D91] to-[#4388FF]">Haven.</span>
+        <h1 className="font-serif text-[clamp(2.25rem,5vw,3.75rem)] font-bold text-[#1A1A18] leading-[1.1] tracking-[-0.5px] mb-5 drop-shadow-sm md:whitespace-nowrap">
+          Find your Haven.
         </h1>
         <p className={`font-sans text-base sm:text-lg text-[#4A5568] max-w-2xl leading-[1.6] mb-6 md:whitespace-nowrap ${fontStyle === 'modern' ? 'font-normal' : 'font-medium'}`}>
           Browse curated houses, condos, and apartments from agents who actually answer the phone.
@@ -285,10 +288,10 @@ function HeroGradient() {
                 {/* Price From-To */}
                 <div className="col-span-2 lg:col-span-1 flex-[1.4] px-3 py-2 flex items-center border-b lg:border-b-0 lg:border-r border-slate-300/50">
                   <div className="flex items-center gap-1.5 w-full">
-                    <input type="number" name="minPrice" placeholder="Price from" className="w-full border-none bg-transparent font-sans text-xs sm:text-sm font-bold text-[#1A1A18] outline-none placeholder:text-slate-500 placeholder:font-medium min-w-0" />
-                    <span className="text-slate-400 font-bold">-</span>
-                    <input type="number" name="maxPrice" placeholder="Price to" className="w-full border-none bg-transparent font-sans text-xs sm:text-sm font-bold text-[#1A1A18] outline-none placeholder:text-slate-500 placeholder:font-medium min-w-0" />
-                    <span className="font-sans text-xs sm:text-sm font-bold text-[#1A1A18] ml-1">€</span>
+                    <input type="number" name="minPrice" placeholder="Price from" className="w-full border-none bg-transparent font-sans text-xs sm:text-sm font-normal text-[#1A1A18] outline-none placeholder:text-slate-500 placeholder:font-normal min-w-0" />
+                    <span className="text-slate-400 font-normal">-</span>
+                    <input type="number" name="maxPrice" placeholder="Price to" className="w-full border-none bg-transparent font-sans text-xs sm:text-sm font-normal text-[#1A1A18] outline-none placeholder:text-slate-500 placeholder:font-normal min-w-0" />
+                    <span className="font-sans text-xs sm:text-sm font-normal text-[#1A1A18] ml-1">€</span>
                   </div>
                 </div>
 
@@ -311,7 +314,7 @@ function HeroGradient() {
             </div>
 
             {/* Search Button */}
-            <button type="submit" className="w-full lg:w-36 bg-gradient-to-r from-[#0B3D91] to-[#1e58bd] text-white font-sans text-sm sm:text-base font-bold py-3.5 lg:py-0 px-6 rounded-[14px] lg:rounded-[9px] cursor-pointer transition-all duration-300 hover:scale-[1.03] lg:h-auto shrink-0 shadow-[0_8px_24px_rgba(11,61,145,0.4)]">
+            <button type="submit" className="w-full lg:w-36 bg-gradient-to-r from-[#0B3D91] to-[#1e58bd] text-white font-sans text-sm sm:text-base font-normal py-3.5 lg:py-0 px-6 rounded-[14px] lg:rounded-[9px] cursor-pointer transition-all duration-300 hover:scale-[1.03] lg:h-auto shrink-0 shadow-[0_8px_24px_rgba(11,61,145,0.4)]">
               Search
             </button>
           </form>
@@ -369,16 +372,16 @@ function HeroGradient() {
               {/* Price From-To */}
               <div className="col-span-2 lg:col-span-1 flex-[1.4] px-3 py-2 flex items-center border-b lg:border-b-0 lg:border-r border-slate-300/50">
                 <div className="flex items-center gap-1.5 w-full">
-                  <input type="number" name="minPrice" placeholder="Price from" className="w-full border-none bg-transparent font-sans text-xs sm:text-sm font-bold text-[#1A1A18] outline-none placeholder:text-slate-500 placeholder:font-medium min-w-0" />
-                  <span className="text-slate-400 font-bold">-</span>
-                  <input type="number" name="maxPrice" placeholder="Price to" className="w-full border-none bg-transparent font-sans text-xs sm:text-sm font-bold text-[#1A1A18] outline-none placeholder:text-slate-500 placeholder:font-medium min-w-0" />
-                  <span className="font-sans text-xs sm:text-sm font-bold text-[#1A1A18] ml-1">€</span>
+                  <input type="number" name="minPrice" placeholder="Price from" className="w-full border-none bg-transparent font-sans text-xs sm:text-sm font-normal text-[#1A1A18] outline-none placeholder:text-slate-500 placeholder:font-normal min-w-0" />
+                  <span className="text-slate-400 font-normal">-</span>
+                  <input type="number" name="maxPrice" placeholder="Price to" className="w-full border-none bg-transparent font-sans text-xs sm:text-sm font-normal text-[#1A1A18] outline-none placeholder:text-slate-500 placeholder:font-normal min-w-0" />
+                  <span className="font-sans text-xs sm:text-sm font-normal text-[#1A1A18] ml-1">€</span>
                 </div>
               </div>
 
               {/* Search Button */}
               <div className="col-span-2 lg:col-span-1 flex justify-center mt-2 lg:mt-0 p-1.5 lg:p-0">
-                <button type="submit" className="w-full lg:w-auto bg-gradient-to-r from-[#0B3D91] to-[#1e58bd] text-white font-sans text-sm sm:text-base font-bold py-2.5 px-8 rounded-[9px] lg:rounded-full cursor-pointer transition-all duration-300 hover:scale-[1.02] h-11 lg:h-full lg:ml-1.5 shrink-0 shadow-[0_8px_24px_rgba(11,61,145,0.4)]">
+                <button type="submit" className="w-full lg:w-auto bg-gradient-to-r from-[#0B3D91] to-[#1e58bd] text-white font-sans text-sm sm:text-base font-normal py-2.5 px-8 rounded-[9px] lg:rounded-full cursor-pointer transition-all duration-300 hover:scale-[1.02] h-11 lg:h-full lg:ml-1.5 shrink-0 shadow-[0_8px_24px_rgba(11,61,145,0.4)]">
                   Search
                 </button>
               </div>
@@ -394,14 +397,10 @@ function PopularProperties({ properties }) {
   return (
     <section id="properties" className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 pt-9 pb-24">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-9 gap-3">
-        <div>
-          <div className="flex items-center gap-1.5 mb-3">
-            <div className="w-6 h-1 bg-[#2B7FFF]"></div>
-            <p className="font-sans text-xs font-bold uppercase tracking-[2px] text-[#2B7FFF] m-0">Hand-picked</p>
-          </div>
-          <h2 className="font-serif text-[clamp(36px,5vw,52px)] font-bold text-[#1A1A18] tracking-[-1px] leading-[1.1]">Popular properties</h2>
-        </div>
-        <a href="#all-properties" className="group font-sans text-sm font-bold text-[#0B3D91] hover:text-[#2B7FFF] transition-colors flex items-center gap-1.5">
+        <h2 className="font-serif text-[clamp(32px,4vw,44px)] font-bold text-[#1A1A18] tracking-[-0.5px] leading-[1.1] m-0">
+          Popular properties
+        </h2>
+        <a href="#all-properties" className="group font-sans text-sm font-bold text-[#0B3D91] hover:text-[#2B7FFF] transition-all flex items-center gap-2 py-2 px-5 rounded-full bg-white hover:bg-blue-50/70 border border-slate-200/80 shadow-sm">
           View all listings 
           <span className="transition-transform group-hover:translate-x-1">→</span>
         </a>
@@ -422,17 +421,11 @@ function Agents({ agents }) {
       <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-[#EAF2FF] to-transparent opacity-50 pointer-events-none"></div>
       
       <div className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4 text-center md:text-left">
-          <div className="w-full md:w-auto">
-            <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
-              <div className="w-6 h-1 bg-[#2B7FFF] rounded-full"></div>
-              <p className="font-sans text-xs font-bold uppercase tracking-[2px] text-[#2B7FFF] m-0">Expert Guidance</p>
-            </div>
-            <h2 className="font-serif text-[clamp(36px,5vw,52px)] font-bold text-[#1A1A18] tracking-[-1px] leading-[1.1]">
-              Meet our top agents
-            </h2>
-          </div>
-          <a href="/agents" className="group font-sans text-sm font-bold text-[#0B3D91] hover:text-[#2B7FFF] transition-colors flex items-center gap-2 mx-auto md:mx-0 py-2.5 px-5 rounded-full bg-blue-50/70 border border-blue-100/50">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4 text-center md:text-left">
+          <h2 className="font-serif text-[clamp(32px,4vw,44px)] font-bold text-[#1A1A18] tracking-[-0.5px] leading-[1.1] m-0">
+            Meet our top agents
+          </h2>
+          <a href="/agents" className="group font-sans text-sm font-bold text-[#0B3D91] hover:text-[#2B7FFF] transition-all flex items-center gap-2 mx-auto md:mx-0 py-2 px-5 rounded-full bg-white hover:bg-blue-50/70 border border-slate-200/80 shadow-sm">
             See all agents
             <span className="transition-transform group-hover:translate-x-1">→</span>
           </a>
@@ -442,7 +435,7 @@ function Agents({ agents }) {
           {agents.map((a) => (
             <article
               key={a.id}
-              className="group bg-white rounded-3xl overflow-hidden shadow-[0_10px_35px_rgba(0,0,0,0.04)] border border-[#E8E5DF]/80 hover:border-[#2B7FFF]/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_24px_60px_rgba(11,61,145,0.12)] flex flex-col justify-between"
+              className="group bg-white rounded-3xl overflow-hidden shadow-[0_10px_35px_rgba(0,0,0,0.04)] border border-[#E8E5DF]/80 hover:border-[#2B7FFF]/40 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_24px_60px_rgba(11,61,145,0.12)] flex flex-col justify-between"
             >
               <div>
                 {/* Full-bleed Tall Image Container with Verified Badge on Right */}
@@ -476,9 +469,7 @@ function Agents({ agents }) {
 
               {/* Single Minimal Contact CTA */}
               <div className="px-6 pb-6 pt-0">
-                <button className="w-full bg-[#FAFAF8] group-hover:bg-[#0B3D91] text-[#0B3D91] group-hover:text-white border border-[#E8E5DF] group-hover:border-[#0B3D91] font-sans text-sm font-bold py-3 rounded-xl transition-all duration-300 cursor-pointer">
-                  Contact Agent
-                </button>
+                <ContactAgentButton agent={a} />
               </div>
             </article>
           ))}
@@ -495,28 +486,30 @@ function AdvancedSearchPromo() {
   }, []);
 
   return (
-    <section className="w-full bg-[#082d6b] relative overflow-hidden py-16 md:py-20 my-12 shadow-lg">
-      <div className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 relative z-10 text-white flex flex-col items-center text-center">
-        <p className="font-sans text-xs font-bold uppercase tracking-[2px] text-blue-200 mb-3">Găsește exact ce cauți</p>
-        <h2 className="font-serif text-[clamp(32px,4vw,48px)] font-bold leading-[1.15] mb-5 max-w-4xl mx-auto">
+    <section className="w-full relative overflow-hidden bg-gradient-to-br from-[#EAF2FF] via-[#FAFAF8] to-[#E6F0FF] flex flex-col items-center justify-center py-10 md:py-14">
+      {/* Dynamic Background matching Hero background color */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <div className="absolute top-[0%] left-[-10%] w-[40%] h-[50%] bg-blue-300/30 rounded-full blur-[68px] mix-blend-multiply animate-pulse"></div>
+        <div className="absolute bottom-[0%] right-[-10%] w-[50%] h-[50%] bg-indigo-200/20 rounded-full blur-[68px] mix-blend-multiply"></div>
+        {/* Short top and bottom transition overlays so color starts at the very top without covering text */}
+        <div className="absolute top-0 left-0 right-0 h-10 sm:h-12 bg-gradient-to-b from-[#FAFAF8] to-transparent pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-10 sm:h-12 bg-gradient-to-t from-[#FAFAF8] to-transparent pointer-events-none"></div>
+      </div>
+
+      <div className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 relative z-10 text-[#1A1A18] flex flex-col items-center text-center pt-6 md:pt-10">
+        <h2 className="font-serif text-[clamp(32px,4vw,48px)] font-bold leading-[1.15] mb-4 max-w-4xl mx-auto text-[#1A1A18]">
           Vă vom ajuta să găsiți cazare conform nevoilor dumneavoastră.
         </h2>
-        <p className="font-sans text-base sm:text-lg text-blue-100 font-medium max-w-3xl mx-auto leading-relaxed mb-8">
-          Căutare avansată de proprietăți cu multe filtre. Găsiți locația perfectă, prețul corect și dotările pe care vi le doriți.
+        <p className="font-sans text-base sm:text-lg text-[#4A5568] max-w-2xl mx-auto leading-[1.6] mb-8 font-normal">
+          Explorați proprietăți verificate, cu prețuri transparente și agenți dedicați gata să vă ghideze la fiecare pas.
         </p>
 
-        {/* Seamlessly Merged 3D Illustration Container */}
-        <div className="w-full mt-4 relative flex items-center justify-center overflow-hidden">
-          {/* Feathering overlays to merge image edges seamlessly with the section background */}
-          <div className="absolute top-0 left-0 right-0 h-16 sm:h-24 bg-gradient-to-b from-[#082d6b] to-transparent z-10 pointer-events-none" />
-          <div className="absolute bottom-0 left-0 right-0 h-16 sm:h-24 bg-gradient-to-t from-[#082d6b] to-transparent z-10 pointer-events-none" />
-          <div className="absolute top-0 bottom-0 left-0 w-12 sm:w-24 bg-gradient-to-r from-[#082d6b] to-transparent z-10 pointer-events-none" />
-          <div className="absolute top-0 bottom-0 right-0 w-12 sm:w-24 bg-gradient-to-l from-[#082d6b] to-transparent z-10 pointer-events-none" />
-
+        {/* 3D Illustration Container */}
+        <div className="w-full mt-2 relative flex items-center justify-center">
           <img
-            src="/promo-3d-new.jpg"
+            src="/promo_3d.png"
             alt="Haven 3D Interactive Real Estate Concept"
-            className="w-full max-w-6xl h-auto max-h-[620px] object-contain object-center relative z-0 transition-transform duration-700 hover:scale-[1.01]"
+            className="w-full max-w-4xl h-auto max-h-[55vh] object-contain object-center relative z-0 transition-transform duration-700 hover:scale-[1.01]"
           />
         </div>
       </div>

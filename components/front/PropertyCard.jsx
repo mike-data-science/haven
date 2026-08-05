@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { IconBed, IconBath, IconArea } from './Icons';
+import { IconBed, IconBath, IconArea, IconLocation } from './Icons';
 import { formatPrice } from "@/lib/data";
 
 function ImageCarousel({ images, alt }) {
@@ -115,7 +115,10 @@ export function PropertyCard({ listing, compact = false, selected = false, onSel
       <div className="p-4 flex flex-col justify-between flex-grow bg-white min-w-0">
         <div>
           <h3 className="font-serif text-lg font-semibold mb-1 text-ink truncate">{listing.title}</h3>
-          <p className="font-sans text-slate text-sm font-medium mb-2 truncate">{listing.location}</p>
+          <p className="font-sans text-slate text-sm font-medium mb-2 flex items-center gap-1.5 truncate">
+            <span className="text-[#2B7FFF] shrink-0"><IconLocation /></span>
+            <span className="truncate">{listing.location}</span>
+          </p>
         </div>
         <div className="flex justify-between items-center pt-2.5 border-t border-line mt-2">
           <div className="flex gap-3 text-xs text-slate-600">
@@ -159,9 +162,12 @@ export function PropertyCard({ listing, compact = false, selected = false, onSel
            </div>
            <div className="p-3 flex flex-col justify-between flex-grow min-w-0 bg-white">
              <div>
-               <h3 className="font-serif text-base font-semibold text-ink mb-1 truncate">{listing.title}</h3>
-               <p className="font-sans text-xs font-medium text-slate mb-1.5 truncate">{listing.location}</p>
-             </div>
+                <h3 className="font-serif text-base font-semibold text-ink mb-1 truncate">{listing.title}</h3>
+                <p className="font-sans text-xs font-medium text-slate mb-1.5 flex items-center gap-1 truncate">
+                  <span className="text-[#2B7FFF] shrink-0"><IconLocation /></span>
+                  <span className="truncate">{listing.location}</span>
+                </p>
+              </div>
              <div className="flex justify-between items-center pt-2 border-t border-line mt-1.5">
                <div className="flex gap-3 text-xs text-slate-600">
                  <span className="flex items-center gap-1 shrink-0 bg-slate-100 px-2 py-1 rounded-lg"><span className="w-3 h-3 text-navy"><IconBed /></span> {listing.beds}</span>

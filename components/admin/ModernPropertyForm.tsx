@@ -1,40 +1,151 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Upload, MapPin, Home, DollarSign, Layout, Layers, Hash, Calendar, Image as ImageIcon, X } from "lucide-react";
+import { 
+  Tv, Refrigerator, Shirt, Bath, Armchair, Microwave, ShowerHead, Droplets, 
+  Wind, Video, Activity, Lock, ArrowUpDown, ShieldCheck, Ban, ShoppingCart, 
+  Landmark, Cross, Smile, Store
+} from "lucide-react";
 import dynamic from "next/dynamic";
+import Variant1Minimalist from "./property-variants/Variant1Minimalist";
+import Variant2SplitPreview from "./property-variants/Variant2SplitPreview";
 
 const UniversalMap = dynamic(() => import("@/components/shared/UniversalMap"), { ssr: false });
 
 interface ModernPropertyFormProps {
   categories: { id: number; name: string }[];
+  initialData?: any;
 }
 
-export default function ModernPropertyForm({ categories }: ModernPropertyFormProps) {
+const SECTORS_CHISINAU = [
+  "Centru",
+  "Botanica",
+  "Buiucani",
+  "Ciocana",
+  "Rîșcani",
+  "Telecentru"
+];
+
+const INDOOR_AMENITIES = [
+  { id: "tv", label: "Televizor", icon: Tv },
+  { id: "refrigerator", label: "Frigider", icon: Refrigerator },
+  { id: "washer", label: "Mașină de spălat", icon: Shirt },
+  { id: "toilet", label: "Toaletă", icon: Bath },
+  { id: "furnished", label: "Mobilat", icon: Armchair },
+  { id: "microwave", label: "Cuptor cu microunde", icon: Microwave },
+  { id: "shower", label: "Cabină de duș", icon: ShowerHead },
+  { id: "bidet", label: "Bideu", icon: Droplets },
+  { id: "ac", label: "Aparat de aer condiționat", icon: Wind },
+  { id: "video_intercom", label: "Interfon Video", icon: Video },
+  { id: "dryer", label: "Uscător", icon: Wind },
+];
+
+const BUILDING_FEATURES = [
+  { id: "ramp", label: "Rampă", icon: Activity },
+  { id: "gated", label: "Zona închisă", icon: Lock },
+  { id: "elevator", label: "Lift", icon: ArrowUpDown },
+  { id: "security", label: "Securitate", icon: ShieldCheck },
+];
+
+const HOUSE_RULES = [
+  { id: "no_pets", label: "Interzis cu animale", icon: Ban },
+  { id: "no_smoking", label: "Fumatul interzis", icon: Ban },
+];
+
+const NEARBY_INFRASTRUCTURE = [
+  { id: "shopping", label: "Shoping", icon: ShoppingCart },
+  { id: "bank", label: "Bancă", icon: Landmark },
+  { id: "pharmacy", label: "Farmacie", icon: Cross },
+  { id: "dentist", label: "Dentist", icon: Smile },
+  { id: "supermarket", label: "Supermarket", icon: Store },
+];
+
+export default function ModernPropertyForm({ categories, initialData }: ModernPropertyFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [files, setFiles] = useState<File[]>([]);
+  const [variant, setVariant] = useState(2); // Default to Airbnb Live Preview
+
+  useEffect(() => {
+    const saved = localStorage.getItem("haven_create_property_variant");
+    if (saved && [1, 2].includes(Number(saved))) {
+      setVariant(Number(saved));
+    }
+  }, []);
+
+  // Parse initial tag and features from existing description if available
+  const parseInitialMeta = () => {
+    let cleanDesc = initialData?.description || "";
+    let tag = "For Sale";
+    let features = {
+      indoor: ["tv", "refrigerator", "washer", "toilet", "furnished", "ac", "shower"],
+      building: ["elevator", "security", "gated"],
+      rules: ["no_pets"],
+      nearby: ["shopping", "supermarket", "pharmacy", "bank"],
+    };
+
+    if (cleanDesc) {
+      const match = cleanDesc.match(/<!--HAVEN_META:(.*?)-->/);
+      if (match && match[1]) {
+        try {
+          const parsed = JSON.parse(match[1]);
+          if (parsed.tag) tag = parsed.tag;
+          if (parsed.features) features = parsed.features;
+        } catch (e) {}
+        cleanDesc = cleanDesc.replace(/<!--HAVEN_META:.*?-->/, "").trim();
+      }
+    }
+    return { cleanDesc, tag, features };
+  };
+
+  const initialMeta = parseInitialMeta();
+
+  // Tag / Transaction status shown on detail page
+  const [selectedTag, setSelectedTag] = useState(initialMeta.tag);
+
+  // Selected features matching the exact sections on PropertyDetailPage
+  const [selectedFeatures, setSelectedFeatures] = useState<{
+    indoor: string[];
+    building: string[];
+    rules: string[];
+    nearby: string[];
+  }>(initialMeta.features);
   
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    price: "",
-    city: "",
-    address: "",
-    rooms: "",
-    bathrooms: "",
-    area: "",
-    floor: "",
-    yearBuilt: "",
-    categoryId: categories[0]?.id?.toString() || "",
-    latitude: "",
-    longitude: "",
+    title: initialData?.title || "",
+    description: initialMeta.cleanDesc,
+    price: initialData?.price ? String(initialData.price) : "",
+    city: initialData?.city || "Centru",
+    address: initialData?.address || "",
+    rooms: initialData?.rooms ? String(initialData.rooms) : "",
+    bathrooms: initialData?.bathrooms ? String(initialData.bathrooms) : "",
+    area: initialData?.area ? String(initialData.area) : "",
+    floor: initialData?.floor ? String(initialData.floor) : "",
+    yearBuilt: initialData?.yearBuilt ? String(initialData.yearBuilt) : "",
+    categoryId: initialData?.categoryId ? String(initialData.categoryId) : (categories[0]?.id?.toString() || ""),
+    latitude: initialData?.latitude ? String(initialData.latitude) : "47.0245",
+    longitude: initialData?.longitude ? String(initialData.longitude) : "28.8322",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  const isEditing = Boolean(initialData?.id);
+
+  const toggleFeature = (group: "indoor" | "building" | "rules" | "nearby", id: string) => {
+    setSelectedFeatures(prev => {
+      const current = prev[group];
+      const exists = current.includes(id);
+      const updated = exists ? current.filter(x => x !== id) : [...current, id];
+      return { ...prev, [group]: updated };
+    });
+  };
+
+  const selectAllGroup = (group: "indoor" | "building" | "rules" | "nearby", allIds: string[]) => {
+    setSelectedFeatures(prev => ({ ...prev, [group]: allIds }));
+  };
+
+  const clearGroup = (group: "indoor" | "building" | "rules" | "nearby") => {
+    setSelectedFeatures(prev => ({ ...prev, [group]: [] }));
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,24 +164,37 @@ export default function ModernPropertyForm({ categories }: ModernPropertyFormPro
     setError("");
 
     try {
-      // 1. Create property (Backend assigns PENDING for simple users, APPROVED for admins)
-      const res = await fetch("/api/properties", {
-        method: "POST",
+      const metaObj = {
+        tag: selectedTag,
+        features: selectedFeatures
+      };
+      const finalDescription = `${formData.description.trim()}\n\n<!--HAVEN_META:${JSON.stringify(metaObj)}-->`;
+
+      const payload = {
+        ...formData,
+        description: finalDescription
+      };
+
+      const endpoint = isEditing ? `/api/properties/${initialData.id}` : "/api/properties";
+      const method = isEditing ? "PUT" : "POST";
+
+      const res = await fetch(endpoint, {
+        method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || "Failed to create property");
+        throw new Error(data.error || `Failed to ${isEditing ? "update" : "create"} property`);
       }
 
       const savedProp = await res.json();
+      const propId = savedProp.id || initialData?.id;
 
-      // 2. Upload images and await completion so the request is not canceled on navigate
-      if (files.length > 0) {
+      if (files.length > 0 && propId) {
         const uploadData = new FormData();
-        uploadData.append("propertyId", String(savedProp.id));
+        uploadData.append("propertyId", String(propId));
         files.forEach(f => uploadData.append("files", f));
 
         const uploadRes = await fetch("/api/upload", { method: "POST", body: uploadData });
@@ -80,7 +204,6 @@ export default function ModernPropertyForm({ categories }: ModernPropertyFormPro
         }
       }
 
-      // 3. Redirect instantly to My Properties
       router.push("/dashboard/my-properties");
       router.refresh();
       
@@ -90,156 +213,72 @@ export default function ModernPropertyForm({ categories }: ModernPropertyFormPro
     }
   };
 
+  const variantProps = {
+    formData,
+    setFormData,
+    selectedTag,
+    setSelectedTag,
+    selectedFeatures,
+    toggleFeature,
+    selectAllGroup,
+    clearGroup,
+    files,
+    handleFileChange,
+    removeFile,
+    categories,
+    SECTORS_CHISINAU,
+    INDOOR_AMENITIES,
+    BUILDING_FEATURES,
+    HOUSE_RULES,
+    NEARBY_INFRASTRUCTURE,
+    loading,
+    error,
+    isEditing,
+    handleSubmit,
+    UniversalMap,
+  };
+
   return (
-    <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
-      <div className="bg-[#18181b] p-5 text-white">
-        <h2 className="text-lg font-bold font-serif">List a New Property</h2>
-        <p className="text-slate-400 text-xs mt-1">Fill in the details below to create a new property listing.</p>
+    <div className="w-full pb-16 font-sans">
+      {/* Design Variant Selector Top Bar */}
+      <div className="mb-8 bg-white/95 backdrop-blur-xl border border-[#E8E5DF] rounded-2xl p-4 shadow-md flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-2.5">
+          <span className="w-2.5 h-2.5 rounded-full bg-[#2B7FFF] animate-pulse" />
+          <span className="font-serif text-sm font-bold text-[#1A1A18]">
+            Create Property Design Variants
+          </span>
+          <span className="text-xs bg-blue-50 text-[#0B3D91] px-2.5 py-0.5 rounded-full font-semibold border border-blue-100">
+            Click to Switch Style
+          </span>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          {[
+            { id: 1, name: "1. Minimalist Studio" },
+            { id: 2, name: "2. Airbnb Live Preview" },
+          ].map((v) => (
+            <button
+              key={v.id}
+              type="button"
+              onClick={() => {
+                setVariant(v.id);
+                localStorage.setItem("haven_create_property_variant", String(v.id));
+              }}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                variant === v.id
+                  ? "bg-[#0B3D91] text-white shadow-md scale-105"
+                  : "bg-[#FAFAF8] text-slate-600 hover:bg-slate-100 border border-[#E8E5DF]"
+              }`}
+            >
+              {v.name}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="p-5 md:p-6 space-y-8">
-        {error && (
-          <div className="bg-red-50 text-red-600 p-3 rounded-xl text-xs font-semibold border border-red-100">
-            {error}
-          </div>
-        )}
-
-        {/* Basic Info */}
-        <div className="space-y-4">
-          <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-100 pb-1.5">Basic Information</h3>
-          
-          <div>
-            <label className="block text-xs font-medium text-slate-700 mb-1">Title <span className="text-red-500">*</span></label>
-            <input required name="title" value={formData.title} onChange={handleChange} className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[var(--theme-accent)] focus:border-[var(--theme-accent)] outline-none transition-all bg-slate-50" placeholder="e.g. Modern Luxury Villa in the Hills" />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">Property Type <span className="text-red-500">*</span></label>
-              <div className="relative">
-                <Home className="absolute left-2 top-2.5 h-4 w-4 text-slate-400" />
-                <select required name="categoryId" value={formData.categoryId} onChange={handleChange} className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[var(--theme-accent)] focus:border-[var(--theme-accent)] outline-none transition-all bg-slate-50 appearance-none">
-                  {categories.map(c => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">Price ($) <span className="text-red-500">*</span></label>
-              <div className="relative">
-                <DollarSign className="absolute left-2 top-2.5 h-4 w-4 text-slate-400" />
-                <input required type="number" name="price" value={formData.price} onChange={handleChange} className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[var(--theme-accent)] focus:border-[var(--theme-accent)] outline-none transition-all bg-slate-50" placeholder="500000" />
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-slate-700 mb-1">Description <span className="text-red-500">*</span></label>
-            <textarea required name="description" value={formData.description} onChange={handleChange} rows={4} className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[var(--theme-accent)] focus:border-[var(--theme-accent)] outline-none transition-all bg-slate-50 resize-none" placeholder="Describe the property's best features..." />
-          </div>
-        </div>
-
-        {/* Location */}
-        <div className="space-y-4 pt-3">
-          <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-100 pb-1.5">Location</h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">City <span className="text-red-500">*</span></label>
-              <input required name="city" value={formData.city} onChange={handleChange} className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[var(--theme-accent)] focus:border-[var(--theme-accent)] outline-none transition-all bg-slate-50" placeholder="e.g. San Francisco" />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">Address <span className="text-red-500">*</span></label>
-              <div className="relative">
-                <MapPin className="absolute left-2 top-2.5 h-4 w-4 text-slate-400" />
-                <input required name="address" value={formData.address} onChange={handleChange} className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[var(--theme-accent)] focus:border-[var(--theme-accent)] outline-none transition-all bg-slate-50" placeholder="123 Main St" />
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-slate-700 mb-1.5">Pin on Map <span className="text-slate-400 font-normal">(Optional)</span></label>
-            <div className="h-56 w-full rounded-2xl overflow-hidden border border-slate-200 relative z-0">
-              <UniversalMap
-                mode="picker"
-                latitude={formData.latitude ? Number(formData.latitude) : undefined}
-                longitude={formData.longitude ? Number(formData.longitude) : undefined}
-                onChange={(lat: any, lng: any) => setFormData(prev => ({ ...prev, latitude: String(lat), longitude: String(lng) }))}
-                height="100%"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Details */}
-        <div className="space-y-4 pt-3">
-          <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-100 pb-1.5">Property Details</h3>
-          
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-            <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">Rooms <span className="text-red-500">*</span></label>
-              <input required type="number" name="rooms" value={formData.rooms} onChange={handleChange} className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[var(--theme-accent)] focus:border-[var(--theme-accent)] outline-none transition-all bg-slate-50" placeholder="3" />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">Baths <span className="text-red-500">*</span></label>
-              <input required type="number" name="bathrooms" value={formData.bathrooms} onChange={handleChange} className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[var(--theme-accent)] focus:border-[var(--theme-accent)] outline-none transition-all bg-slate-50" placeholder="2" />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">Area (sqm) <span className="text-red-500">*</span></label>
-              <input required type="number" name="area" value={formData.area} onChange={handleChange} className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[var(--theme-accent)] focus:border-[var(--theme-accent)] outline-none transition-all bg-slate-50" placeholder="120" />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">Floor <span className="text-red-500">*</span></label>
-              <input required type="number" name="floor" value={formData.floor} onChange={handleChange} className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[var(--theme-accent)] focus:border-[var(--theme-accent)] outline-none transition-all bg-slate-50" placeholder="1" />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">Year Built <span className="text-red-500">*</span></label>
-              <input required type="number" name="yearBuilt" value={formData.yearBuilt} onChange={handleChange} className="w-full px-3 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[var(--theme-accent)] focus:border-[var(--theme-accent)] outline-none transition-all bg-slate-50" placeholder="2022" />
-            </div>
-          </div>
-        </div>
-
-        {/* Photos */}
-        <div className="space-y-4 pt-3">
-          <h3 className="text-sm font-semibold text-slate-800 border-b border-slate-100 pb-1.5">Photos</h3>
-          
-          <div className="border-2 border-dashed border-slate-300 rounded-2xl p-6 text-center hover:bg-slate-50 transition-colors relative">
-            <input type="file" multiple accept="image/*" onChange={handleFileChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
-            <div className="flex flex-col items-center justify-center pointer-events-none">
-              <div className="w-9 h-9 bg-blue-100 text-[var(--theme-accent)] rounded-full flex items-center justify-center mb-3">
-                <Upload className="w-6 h-6" />
-              </div>
-              <p className="font-semibold text-slate-700 text-sm">Click or drag images here</p>
-              <p className="text-xs text-slate-500 mt-1">Upload up to 10 high-quality photos (JPG, PNG)</p>
-            </div>
-          </div>
-
-          {files.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-3">
-              {files.map((f, i) => (
-                <div key={i} className="flex items-center gap-1.5 bg-slate-100 px-2 py-1.5 rounded-xl text-xs font-medium text-slate-700 border border-slate-200">
-                  <ImageIcon className="w-3 h-3 text-slate-400" />
-                  <span className="truncate max-w-28">{f.name}</span>
-                  <button type="button" onClick={() => removeFile(i)} className="p-1 hover:bg-red-100 text-red-500 rounded-lg transition-colors ml-1">
-                    <X className="w-2.5 h-2.5" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Submit */}
-        <div className="pt-6 border-t border-slate-200 flex justify-end gap-3">
-          <button type="button" onClick={() => router.back()} className="px-5 py-2 rounded-xl border border-slate-300 font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
-            Cancel
-          </button>
-          <button type="submit" disabled={loading} className="px-6 py-2 rounded-xl bg-[var(--theme-accent)] font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/30 flex items-center gap-1.5">
-            {loading ? "Creating Property..." : "Create Property"}
-          </button>
-        </div>
-      </form>
+      {/* Render Selected Design Variant */}
+      {variant === 1 && <Variant1Minimalist {...variantProps} />}
+      {variant === 2 && <Variant2SplitPreview {...variantProps} />}
     </div>
   );
 }

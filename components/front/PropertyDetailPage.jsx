@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Navbar } from "./Navbar";
+import { Footer } from "./Footer";
+import { ContactAgentButton } from "./ContactAgentModal";
 import { PropertyCard } from "./PropertyCard";
 import { COLORS, TOUR_DATES, TOUR_TIMES, formatPrice } from "@/lib/data";
 import dynamic from "next/dynamic";
@@ -129,42 +131,95 @@ function PropertyFeatures({ property }) {
       )}
       
       {/* Ce e inautru */}
-      <div className="py-8 border-b border-line">
-        <h3 className="font-serif text-2xl font-bold text-ink mb-6">Ce e înăuntru</h3>
-        <ul className="grid grid-cols-2 sm:grid-cols-3 gap-y-5 gap-x-8 list-none p-0 m-0">
-          <li className="flex items-center gap-3 text-base font-medium text-ink"><Tv size={20} className="text-slate-500 shrink-0" /> Televizor</li>
-          <li className="flex items-center gap-3 text-base font-medium text-ink"><Refrigerator size={20} className="text-slate-500 shrink-0" /> Frigider</li>
-          <li className="flex items-center gap-3 text-base font-medium text-ink"><Shirt size={20} className="text-slate-500 shrink-0" /> Mașină de spălat</li>
-          <li className="flex items-center gap-3 text-base font-medium text-ink"><Bath size={20} className="text-slate-500 shrink-0" /> Toaletă</li>
-          <li className="flex items-center gap-3 text-base font-medium text-ink"><Armchair size={20} className="text-slate-500 shrink-0" /> Mobilat</li>
-          <li className="flex items-center gap-3 text-base font-medium text-ink"><Microwave size={20} className="text-slate-500 shrink-0" /> Cuptor cu microunde</li>
-          <li className="flex items-center gap-3 text-base font-medium text-ink"><ShowerHead size={20} className="text-slate-500 shrink-0" /> Cabină de duș</li>
-          <li className="flex items-center gap-3 text-base font-medium text-ink"><Droplets size={20} className="text-slate-500 shrink-0" /> Bideu</li>
-          <li className="flex items-center gap-3 text-base font-medium text-ink"><Wind size={20} className="text-slate-500 shrink-0" /> Aparat de aer condiționat</li>
-          <li className="flex items-center gap-3 text-base font-medium text-ink"><Video size={20} className="text-slate-500 shrink-0" /> Interfon Video</li>
-          <li className="flex items-center gap-3 text-base font-medium text-ink"><Wind size={20} className="text-slate-500 shrink-0" /> Uscător</li>
-        </ul>
-      </div>
+      {(!property.customFeatures || (property.customFeatures.indoor && property.customFeatures.indoor.length > 0)) && (
+        <div className="py-8 border-b border-line">
+          <h3 className="font-serif text-2xl font-bold text-ink mb-6">Ce e înăuntru</h3>
+          <ul className="grid grid-cols-2 sm:grid-cols-3 gap-y-5 gap-x-8 list-none p-0 m-0">
+            {(property.customFeatures?.indoor ? [
+              { id: "tv", label: "Televizor", icon: Tv },
+              { id: "refrigerator", label: "Frigider", icon: Refrigerator },
+              { id: "washer", label: "Mașină de spălat", icon: Shirt },
+              { id: "toilet", label: "Toaletă", icon: Bath },
+              { id: "furnished", label: "Mobilat", icon: Armchair },
+              { id: "microwave", label: "Cuptor cu microunde", icon: Microwave },
+              { id: "shower", label: "Cabină de duș", icon: ShowerHead },
+              { id: "bidet", label: "Bideu", icon: Droplets },
+              { id: "ac", label: "Aparat de aer condiționat", icon: Wind },
+              { id: "video_intercom", label: "Interfon Video", icon: Video },
+              { id: "dryer", label: "Uscător", icon: Wind }
+            ].filter(x => property.customFeatures.indoor.includes(x.id)) : [
+              { id: "tv", label: "Televizor", icon: Tv },
+              { id: "refrigerator", label: "Frigider", icon: Refrigerator },
+              { id: "washer", label: "Mașină de spălat", icon: Shirt },
+              { id: "toilet", label: "Toaletă", icon: Bath },
+              { id: "furnished", label: "Mobilat", icon: Armchair },
+              { id: "microwave", label: "Cuptor cu microunde", icon: Microwave },
+              { id: "shower", label: "Cabină de duș", icon: ShowerHead },
+              { id: "bidet", label: "Bideu", icon: Droplets },
+              { id: "ac", label: "Aparat de aer condiționat", icon: Wind },
+              { id: "video_intercom", label: "Interfon Video", icon: Video },
+              { id: "dryer", label: "Uscător", icon: Wind }
+            ]).map(item => {
+              const IconComp = item.icon;
+              return (
+                <li key={item.id} className="flex items-center gap-3 text-base font-medium text-ink">
+                  <IconComp size={20} className="text-slate-500 shrink-0" /> {item.label}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
 
       {/* Informatii despre casa */}
-      <div className="py-8 border-b border-line">
-        <h3 className="font-serif text-2xl font-bold text-ink mb-6">Informații despre casă</h3>
-        <ul className="grid grid-cols-2 sm:grid-cols-3 gap-y-5 gap-x-8 list-none p-0 m-0">
-          <li className="flex items-center gap-3 text-base font-medium text-ink"><Activity size={20} className="text-slate-500 shrink-0" /> Rampă</li>
-          <li className="flex items-center gap-3 text-base font-medium text-ink"><Lock size={20} className="text-slate-500 shrink-0" /> Zona închisă</li>
-          <li className="flex items-center gap-3 text-base font-medium text-ink"><ArrowUpDown size={20} className="text-slate-500 shrink-0" /> Lift</li>
-          <li className="flex items-center gap-3 text-base font-medium text-ink"><ShieldCheck size={20} className="text-slate-500 shrink-0" /> Securitate</li>
-        </ul>
-      </div>
+      {(!property.customFeatures || (property.customFeatures.building && property.customFeatures.building.length > 0)) && (
+        <div className="py-8 border-b border-line">
+          <h3 className="font-serif text-2xl font-bold text-ink mb-6">Informații despre casă</h3>
+          <ul className="grid grid-cols-2 sm:grid-cols-3 gap-y-5 gap-x-8 list-none p-0 m-0">
+            {(property.customFeatures?.building ? [
+              { id: "ramp", label: "Rampă", icon: Activity },
+              { id: "gated", label: "Zona închisă", icon: Lock },
+              { id: "elevator", label: "Lift", icon: ArrowUpDown },
+              { id: "security", label: "Securitate", icon: ShieldCheck }
+            ].filter(x => property.customFeatures.building.includes(x.id)) : [
+              { id: "ramp", label: "Rampă", icon: Activity },
+              { id: "gated", label: "Zona închisă", icon: Lock },
+              { id: "elevator", label: "Lift", icon: ArrowUpDown },
+              { id: "security", label: "Securitate", icon: ShieldCheck }
+            ]).map(item => {
+              const IconComp = item.icon;
+              return (
+                <li key={item.id} className="flex items-center gap-3 text-base font-medium text-ink">
+                  <IconComp size={20} className="text-slate-500 shrink-0" /> {item.label}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
 
       {/* Reguli in casa */}
-      <div className="py-8 border-b border-line">
-        <h3 className="font-serif text-2xl font-bold text-ink mb-6">Reguli în casă</h3>
-        <ul className="grid grid-cols-2 sm:grid-cols-3 gap-y-5 gap-x-8 list-none p-0 m-0">
-          <li className="flex items-center gap-3 text-base font-medium text-ink"><Ban size={20} className="text-slate-500 shrink-0" /> Interzis cu animale</li>
-          <li className="flex items-center gap-3 text-base font-medium text-ink"><Ban size={20} className="text-slate-500 shrink-0" /> Fumatul interzis</li>
-        </ul>
-      </div>
+      {(!property.customFeatures || (property.customFeatures.rules && property.customFeatures.rules.length > 0)) && (
+        <div className="py-8 border-b border-line">
+          <h3 className="font-serif text-2xl font-bold text-ink mb-6">Reguli în casă</h3>
+          <ul className="grid grid-cols-2 sm:grid-cols-3 gap-y-5 gap-x-8 list-none p-0 m-0">
+            {(property.customFeatures?.rules ? [
+              { id: "no_pets", label: "Interzis cu animale", icon: Ban },
+              { id: "no_smoking", label: "Fumatul interzis", icon: Ban }
+            ].filter(x => property.customFeatures.rules.includes(x.id)) : [
+              { id: "no_pets", label: "Interzis cu animale", icon: Ban },
+              { id: "no_smoking", label: "Fumatul interzis", icon: Ban }
+            ]).map(item => {
+              const IconComp = item.icon;
+              return (
+                <li key={item.id} className="flex items-center gap-3 text-base font-medium text-ink">
+                  <IconComp size={20} className="text-slate-500 shrink-0" /> {item.label}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
@@ -180,25 +235,42 @@ function PropertyMap({ property }) {
   );
 }
 
-function UsefulNearby() {
+function UsefulNearby({ property }) {
+  const NEARBY_LIST = [
+    { id: "shopping", label: "Shoping", icon: ShoppingCart },
+    { id: "bank", label: "Bancă", icon: Landmark },
+    { id: "pharmacy", label: "Farmacie", icon: Cross },
+    { id: "dentist", label: "Dentist", icon: Smile },
+    { id: "supermarket", label: "Supermarket", icon: Store },
+  ];
+
+  const items = property?.customFeatures?.nearby
+    ? NEARBY_LIST.filter(x => property.customFeatures.nearby.includes(x.id))
+    : NEARBY_LIST;
+
+  if (items.length === 0) return null;
+
   return (
     <div className="py-8">
       <h2 className="font-serif text-2xl font-bold text-ink mb-6">Util în apropiere</h2>
       <ul className="grid grid-cols-2 sm:grid-cols-3 gap-y-5 gap-x-8 list-none p-0 m-0">
-        <li className="flex items-center gap-3 text-base font-medium text-ink"><ShoppingCart size={20} className="text-slate-500 shrink-0" /> Shoping</li>
-        <li className="flex items-center gap-3 text-base font-medium text-ink"><Landmark size={20} className="text-slate-500 shrink-0" /> Bancă</li>
-        <li className="flex items-center gap-3 text-base font-medium text-ink"><Cross size={20} className="text-slate-500 shrink-0" /> Farmacie</li>
-        <li className="flex items-center gap-3 text-base font-medium text-ink"><Smile size={20} className="text-slate-500 shrink-0" /> Dentist</li>
-        <li className="flex items-center gap-3 text-base font-medium text-ink"><Store size={20} className="text-slate-500 shrink-0" /> Supermarket</li>
+        {items.map(item => {
+          const IconComp = item.icon;
+          return (
+            <li key={item.id} className="flex items-center gap-3 text-base font-medium text-ink">
+              <IconComp size={20} className="text-slate-500 shrink-0" /> {item.label}
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
 }
 
-function ContactAgentForm({ agent }) {
+function ContactAgentForm({ agent, propertyTitle }) {
   if (!agent) return null;
   return (
-    <div className="bg-white rounded-[16px] p-6 border border-line shadow-sm">
+    <div className="bg-gradient-to-br from-[#FAFAF8] via-white to-[#F2F7FF] rounded-[20px] p-6 border border-blue-100/60 shadow-[0_12px_40px_rgba(11,61,145,0.06)]">
       <div className="flex items-center gap-3 mb-5 pb-5 border-b border-line">
         <img src={agent.image} alt={agent.name} className="w-12 h-12 rounded-full object-cover" />
         <div>
@@ -206,7 +278,24 @@ function ContactAgentForm({ agent }) {
           <span className="font-sans text-sm text-slate">{agent.role}</span>
         </div>
       </div>
-      <form className="flex flex-col gap-3" onSubmit={e => e.preventDefault()}>
+
+      <div className="mb-4">
+        <ContactAgentButton 
+          agent={agent} 
+          propertyTitle={propertyTitle}
+          className="w-full bg-[#0B3D91] hover:bg-[#1e58bd] text-white font-sans text-sm font-medium py-3 rounded-xl transition-colors cursor-pointer flex items-center justify-center"
+        >
+          Contact Agent
+        </ContactAgentButton>
+      </div>
+
+      <div className="relative flex py-2 items-center">
+        <div className="flex-grow border-t border-line"></div>
+        <span className="flex-shrink mx-3 text-[10px] text-slate-400 uppercase font-semibold">Or send message</span>
+        <div className="flex-grow border-t border-line"></div>
+      </div>
+
+      <form className="flex flex-col gap-3 mt-1" onSubmit={e => e.preventDefault()}>
         <input type="text" placeholder="Your name" className="w-full border border-line rounded-[8px] px-3.5 py-2.5 text-sm outline-none focus:border-navy bg-warm transition-colors" />
         <input type="email" placeholder="Your email" className="w-full border border-line rounded-[8px] px-3.5 py-2.5 text-sm outline-none focus:border-navy bg-warm transition-colors" />
         <input type="tel" placeholder="Phone number" className="w-full border border-line rounded-[8px] px-3.5 py-2.5 text-sm outline-none focus:border-navy bg-warm transition-colors" />
@@ -250,13 +339,14 @@ export default function PropertyDetailPage({ property, similarProperties = [] })
         <div className="flex flex-col">
           <PropertyFeatures property={property} />
           <PropertyMap property={property} />
-          <UsefulNearby />
+          <UsefulNearby property={property} />
         </div>
         <aside className="flex flex-col gap-6 lg:sticky lg:top-28 h-fit">
-          <ContactAgentForm agent={property.agent} />
+          <ContactAgentForm agent={property.agent} propertyTitle={property.title} />
         </aside>
       </main>
       <SimilarHomes homes={similarProperties} />
+      <Footer />
     </div>
   );
 }

@@ -21,6 +21,8 @@ const getHomeData = cache(async () => {
     id: p.id,
     title: p.title,
     location: `${p.address}, ${p.city}`,
+    address: p.address,
+    city: p.city,
     price: Number(p.price),
     beds: p.rooms,
     baths: p.bathrooms,

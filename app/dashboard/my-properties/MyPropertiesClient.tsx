@@ -65,7 +65,7 @@ export default function MyPropertiesClient({ initialProperties }: { initialPrope
                   <Eye className="w-[9px] h-[9px]" /> View
                 </Link>
                 <Link
-                  href={`/dashboard/properties/new`}
+                  href={`/dashboard/properties/${prop.id}/edit`}
                   className="px-[7px] py-[3px].5 border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-lg flex justify-center items-center transition-colors"
                   title="Edit Property"
                 >

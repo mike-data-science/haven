@@ -29,6 +29,20 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     notFound();
   }
 
+  let descriptionText = rawProperty.description || "";
+  let metaTag = rawProperty.status === 'APPROVED' ? "For Sale" : "Off Market";
+  let customFeatures = null;
+
+  const metaMatch = descriptionText.match(/<!--HAVEN_META:(.*?)-->/);
+  if (metaMatch && metaMatch[1]) {
+    try {
+      const parsedMeta = JSON.parse(metaMatch[1]);
+      if (parsedMeta.tag) metaTag = parsedMeta.tag;
+      if (parsedMeta.features) customFeatures = parsedMeta.features;
+    } catch (e) {}
+    descriptionText = descriptionText.replace(/<!--HAVEN_META:.*?-->/, "").trim();
+  }
+
   const property = {
     id: rawProperty.id,
     title: rawProperty.title,
@@ -39,8 +53,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     sqft: rawProperty.area,
     yearBuilt: rawProperty.yearBuilt,
     type: rawProperty.category?.name || "House",
-    tag: rawProperty.status === 'APPROVED' ? "For Sale" : "Off Market",
-    description: rawProperty.description,
+    tag: metaTag,
+    description: descriptionText,
+    customFeatures,
     image: rawProperty.images?.[0]?.url || "",
     gallery: rawProperty.images?.map(i => i.url) || [],
     agent: rawProperty.user ? {

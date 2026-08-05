@@ -28,16 +28,15 @@ export function Navbar() {
   
   return (
     <nav className={`fixed top-0 w-full z-[200] transition-all duration-500 ${isScrolled ? 'py-1.5 px-3' : 'py-3 md:py-5'}`}>
-      <div className={`w-full ${baseMaxWidthClass} mx-auto flex justify-between items-center px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-2 md:py-2 relative transition-all duration-500 ${isScrolled ? `bg-white/80 backdrop-blur-xl border border-white/80 shadow-[0_8px_32px_rgba(11,61,145,0.12)] rounded-full ${pillMaxWidthClass}` : 'bg-transparent border border-transparent shadow-none rounded-none'} ${pillPaddingClass}`}>
+      <div className={`w-full ${baseMaxWidthClass} mx-auto flex justify-between items-center px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-2 md:py-2 relative transition-all duration-500 ${isScrolled ? `bg-white/80 backdrop-blur-xl border border-[#E4EEFF]/90 shadow-[0_8px_32px_rgba(11,61,145,0.12)] rounded-full ${pillMaxWidthClass}` : 'bg-transparent border border-transparent shadow-none rounded-none'} ${pillPaddingClass}`}>
         <div className="flex-1 flex justify-start">
-          <Link href="/" className="font-serif text-xl font-bold tracking-[0px] text-[#1A1A18] flex items-center gap-1.5 no-underline group">
-            <span className="text-[#2B7FFF] transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110">⌂</span> 
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#0B3D91] to-[#1A1A18]">Haven</span>
+          <Link href="/" className="font-serif text-xl font-bold tracking-[0px] text-[#1A1A18] flex items-center no-underline group">
+            <span className="text-[#4388FF]">Haven</span>
           </Link>
         </div>
         
         <div className="hidden md:flex flex-1 justify-center items-center gap-8">
-          <Link href="/listings" className="font-sans text-sm font-bold text-[#1A1A18] transition-colors hover:text-[#2B7FFF]">Properties</Link>
+          <Link href="/listings" className="font-sans text-sm font-bold text-[#6B7280] transition-colors hover:text-[#2B7FFF]">Properties</Link>
           <Link href="/agents" className="font-sans text-sm font-bold text-[#6B7280] transition-colors hover:text-[#2B7FFF]">Agents</Link>
           <Link href="/about" className="font-sans text-sm font-bold text-[#6B7280] transition-colors hover:text-[#2B7FFF]">About</Link>
           <Link href="/contact" className="font-sans text-sm font-bold text-[#6B7280] transition-colors hover:text-[#2B7FFF]">Contact</Link>
@@ -84,7 +83,7 @@ export function Navbar() {
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-17 left-3 right-3 bg-white/85 backdrop-blur-2xl rounded-3xl border border-white/60 shadow-[0_32px_64px_rgba(11,61,145,0.15)] p-5 flex flex-col gap-5 animate-in slide-in-from-top-3 z-50">
           <div className="flex flex-col gap-3">
-            <Link onClick={() => setIsMobileMenuOpen(false)} href="/listings" className="font-sans text-base font-bold text-[#1A1A18]">Properties</Link>
+            <Link onClick={() => setIsMobileMenuOpen(false)} href="/listings" className="font-sans text-base font-bold text-[#6B7280]">Properties</Link>
             <Link onClick={() => setIsMobileMenuOpen(false)} href="/agents" className="font-sans text-base font-bold text-[#6B7280]">Agents</Link>
             <Link onClick={() => setIsMobileMenuOpen(false)} href="/about" className="font-sans text-base font-bold text-[#6B7280]">About</Link>
             <Link onClick={() => setIsMobileMenuOpen(false)} href="/contact" className="font-sans text-base font-bold text-[#6B7280]">Contact</Link>

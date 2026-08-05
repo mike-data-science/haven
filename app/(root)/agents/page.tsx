@@ -1,5 +1,6 @@
 import { Navbar } from '@/components/front/Navbar';
 import { Footer } from '@/components/front/Footer';
+import { ContactAgentButton } from '@/components/front/ContactAgentModal';
 import prisma from '@/lib/db';
 import { cache } from 'react';
 
@@ -18,6 +19,7 @@ export default async function AgentsRoute() {
     id: a.id,
     name: a.name,
     role: a.title || "Agent",
+    phone: a.phone || "+373 68 000 000",
     deals: 0,
     image: a.avatarUrl || "https://placehold.co/100x100?text=Agent"
   }));
@@ -45,9 +47,9 @@ export default async function AgentsRoute() {
                 <h3 className="font-serif text-[11px] font-bold text-[#1A1A18] mb-[2px]">{a.name}</h3>
                 <p className="font-sans text-[8px] text-[#6B7280] mb-[7px]">{a.role}</p>
                 <p className="font-sans text-[8px] font-bold text-[#C49A3C] mb-[14px] bg-[#C49A3C]/10 inline-block px-[7px] py-[2px] rounded-full">{a.deals} deals closed</p>
-                <button className="w-full bg-transparent text-[#1A1A18] font-sans text-[8px] font-bold py-[3px].5.5 rounded-[6px] border border-[#E8E5DF] cursor-pointer transition-colors hover:border-[#1A1A18] hover:bg-[#1A1A18]/5">
-                  Contact
-                </button>
+                <div className="mt-[10px]">
+                  <ContactAgentButton agent={a} />
+                </div>
               </article>
             ))}
             {agents.length === 0 && (
