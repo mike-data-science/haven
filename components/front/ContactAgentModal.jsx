@@ -198,7 +198,7 @@ export function ContactAgentModal({ isOpen, onClose, agent, propertyTitle }) {
   return createPortal(modalContent, document.body);
 }
 
-export function ContactAgentButton({ agent, propertyTitle = "", className, children, showQuickIcons = false }) {
+export function ContactAgentButton({ agent, propertyTitle = "", className = "", children = null, showQuickIcons = false }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
