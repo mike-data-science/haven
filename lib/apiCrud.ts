@@ -114,7 +114,7 @@ export function createCrudHandlers({
           const result = schema.safeParse(body);
           if (!result.success) {
             return NextResponse.json(
-              { error: "Validation failed", issues: result.error.errors },
+              { error: "Validation failed", issues: result.error.issues },
               { status: 400 }
             );
           }
@@ -202,7 +202,7 @@ export function createCrudHandlers({
           const result = schema.safeParse(body);
           if (!result.success) {
             return NextResponse.json(
-              { error: "Validation failed", issues: result.error.errors },
+              { error: "Validation failed", issues: result.error.issues },
               { status: 400 }
             );
           }
