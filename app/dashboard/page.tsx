@@ -20,7 +20,7 @@ export default async function AdminContentPage() {
   const thisWeek = recentProps.length;
 
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  const chartData = [];
+  const chartData: { name: string; value: number }[] = [];
   for (let i = 6; i >= 0; i--) {
     const d = new Date();
     d.setDate(d.getDate() - i);

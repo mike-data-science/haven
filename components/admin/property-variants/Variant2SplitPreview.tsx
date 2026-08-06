@@ -27,7 +27,7 @@ export default function Variant2SplitPreview(props: PropertyVariantProps) {
           if (data && data.length > 0) {
             const lat = parseFloat(data[0].lat).toFixed(6);
             const lon = parseFloat(data[0].lon).toFixed(6);
-            setFormData(prev => ({
+            setFormData((prev: any) => ({
               ...prev,
               latitude: lat,
               longitude: lon
@@ -295,7 +295,7 @@ export default function Variant2SplitPreview(props: PropertyVariantProps) {
                         
                         if (newAddress) {
                           setLastAddress(newAddress);
-                          setFormData(prev => ({ ...prev, address: newAddress, latitude: lat.toFixed(6), longitude: lng.toFixed(6) }));
+                          setFormData((prev: any) => ({ ...prev, address: newAddress, latitude: lat.toFixed(6), longitude: lng.toFixed(6) }));
                         }
                       }
                     })
