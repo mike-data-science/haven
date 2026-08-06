@@ -106,7 +106,7 @@ export default function AdminSidebar({ user, pendingCount = 0 }: { user: User, p
                   <span>{item.label}</span>
                  </div>
                 {item.badge && (
-                  <span className={`flex h-4 w-4 items-center justify-center rounded-full text-[6px] font-bold ${isActive ? "bg-[var(--theme-accent)] text-white" : "bg-slate-800 text-slate-400"}`}>
+                  <span className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold ${isActive ? "bg-[var(--theme-accent)] text-white" : "bg-slate-800 text-slate-400"}`}>
                     {item.badge}
                   </span>
                 )}
@@ -138,7 +138,7 @@ export default function AdminSidebar({ user, pendingCount = 0 }: { user: User, p
                 <span>Verification Queue</span>
               </div>
               {pendingCount > 0 && (
-                <span className={`flex h-4 w-4 items-center justify-center rounded-full text-[8px] font-bold ${pathname === "/dashboard/admin/queue" ? "bg-white text-amber-600" : "bg-amber-500 text-slate-900"}`}>
+                <span className={`flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold ${pathname === "/dashboard/admin/queue" ? "bg-white text-amber-600" : "bg-amber-500 text-slate-900"}`}>
                   {pendingCount}
                 </span>
               )}

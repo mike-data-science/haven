@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { Upload, MapPin, Home, DollarSign, Layout, Layers, Hash, Image as ImageIcon, X, Check, Sparkles, AlertCircle, Eye, BedDouble, Bath as BathIcon, Maximize2 } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Upload, MapPin, Home, DollarSign, Layout, Layers, Hash, Image as ImageIcon, X, Check, Sparkles, AlertCircle, Eye, BedDouble, Bath as BathIcon, Maximize2, ChevronLeft, ChevronRight } from "lucide-react";
 import { PropertyVariantProps } from "./types";
 
 export default function Variant2SplitPreview(props: PropertyVariantProps) {
@@ -13,6 +13,39 @@ export default function Variant2SplitPreview(props: PropertyVariantProps) {
     INDOOR_AMENITIES, BUILDING_FEATURES, HOUSE_RULES, NEARBY_INFRASTRUCTURE,
     loading, error, isEditing, handleSubmit, UniversalMap
   } = props;
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [lastAddress, setLastAddress] = useState(formData.address || "");
+
+  useEffect(() => {
+    if (!formData.address || formData.address === lastAddress) return;
+    
+    const timeoutId = setTimeout(() => {
+      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(formData.address + ", Moldova")}&limit=1`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.length > 0) {
+            const lat = parseFloat(data[0].lat).toFixed(6);
+            const lon = parseFloat(data[0].lon).toFixed(6);
+            setFormData(prev => ({
+              ...prev,
+              latitude: lat,
+              longitude: lon
+            }));
+            setLastAddress(formData.address);
+          }
+        })
+        .catch(err => console.error("Forward geocoding error:", err));
+    }, 1200);
+
+    return () => clearTimeout(timeoutId);
+  }, [formData.address, lastAddress, setFormData]);
+
+  useEffect(() => {
+    if (files.length > 0 && currentImageIndex >= files.length) {
+      setCurrentImageIndex(0);
+    }
+  }, [files, currentImageIndex]);
 
   // Total count of selected amenities
   const totalAmenities =
@@ -26,9 +59,6 @@ export default function Variant2SplitPreview(props: PropertyVariantProps) {
       {/* Header */}
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span className="inline-block text-xs font-bold uppercase tracking-wider text-[#0B3D91] bg-blue-100 px-3 py-1 rounded-full mb-2">
-            Airbnb Live Preview Design
-          </span>
           <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#1A1A18] m-0">
             {isEditing ? "Edit & Preview Listing" : "Create & Preview Listing"}
           </h1>
@@ -125,7 +155,7 @@ export default function Variant2SplitPreview(props: PropertyVariantProps) {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
               <div>
                 <label className="block font-sans text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Rooms</label>
                 <input
@@ -167,6 +197,18 @@ export default function Variant2SplitPreview(props: PropertyVariantProps) {
                   placeholder="5 / 9"
                   value={formData.floor}
                   onChange={(e) => setFormData({ ...formData, floor: e.target.value })}
+                  className="w-full bg-[#FAFAF8] border border-[#E8E5DF] rounded-xl px-3 py-2.5 text-sm text-[#1A1A18] outline-none focus:border-[#0B3D91] font-medium"
+                />
+              </div>
+              <div>
+                <label className="block font-sans text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Year Built *</label>
+                <input
+                  type="number"
+                  name="yearBuilt"
+                  required
+                  placeholder="2024"
+                  value={formData.yearBuilt}
+                  onChange={(e) => setFormData({ ...formData, yearBuilt: e.target.value })}
                   className="w-full bg-[#FAFAF8] border border-[#E8E5DF] rounded-xl px-3 py-2.5 text-sm text-[#1A1A18] outline-none focus:border-[#0B3D91] font-medium"
                 />
               </div>
@@ -232,13 +274,32 @@ export default function Variant2SplitPreview(props: PropertyVariantProps) {
               <UniversalMap
                 latitude={parseFloat(formData.latitude) || 47.0245}
                 longitude={parseFloat(formData.longitude) || 28.8322}
-                interactive={true}
-                onLocationSelect={(lat: number, lng: number) => {
+                mode="picker"
+                onChange={(lat: number, lng: number) => {
                   setFormData({
                     ...formData,
                     latitude: lat.toFixed(6),
                     longitude: lng.toFixed(6)
                   });
+                  
+                  fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                    .then(res => res.json())
+                    .then(data => {
+                      if (data && data.address) {
+                        const street = data.address.road || "";
+                        const houseNumber = data.address.house_number || "";
+                        const city = data.address.city || data.address.town || data.address.village || "";
+                        let newAddress = street;
+                        if (houseNumber) newAddress += ` ${houseNumber}`;
+                        if (!newAddress && city) newAddress = city;
+                        
+                        if (newAddress) {
+                          setLastAddress(newAddress);
+                          setFormData(prev => ({ ...prev, address: newAddress, latitude: lat.toFixed(6), longitude: lng.toFixed(6) }));
+                        }
+                      }
+                    })
+                    .catch(err => console.error("Reverse geocoding error:", err));
                 }}
               />
             </div>
@@ -399,9 +460,34 @@ export default function Variant2SplitPreview(props: PropertyVariantProps) {
             {/* Preview Property Card */}
             <div className="rounded-2xl overflow-hidden border border-[#E8E5DF] bg-white shadow-md transition-all">
               {/* Image Header */}
-              <div className="relative h-48 bg-gradient-to-br from-slate-200 to-slate-300 overflow-hidden">
+              <div className="relative h-48 bg-gradient-to-br from-slate-200 to-slate-300 overflow-hidden group">
                 {files.length > 0 ? (
-                  <img src={URL.createObjectURL(files[0])} alt="main preview" className="w-full h-full object-cover" />
+                  <>
+                    <img src={URL.createObjectURL(files[currentImageIndex])} alt={`preview ${currentImageIndex}`} className="w-full h-full object-cover transition-opacity duration-300" />
+                    {files.length > 1 && (
+                      <>
+                        <button
+                          type="button"
+                          onClick={(e) => { e.preventDefault(); setCurrentImageIndex(prev => prev === 0 ? files.length - 1 : prev - 1); }}
+                          className="absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/80 backdrop-blur-sm text-slate-800 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white cursor-pointer"
+                        >
+                          <ChevronLeft className="w-4 h-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => { e.preventDefault(); setCurrentImageIndex(prev => prev === files.length - 1 ? 0 : prev + 1); }}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/80 backdrop-blur-sm text-slate-800 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white cursor-pointer"
+                        >
+                          <ChevronRight className="w-4 h-4" />
+                        </button>
+                        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1 z-10">
+                          {files.map((_, idx) => (
+                            <span key={idx} className={`w-1.5 h-1.5 rounded-full transition-colors ${idx === currentImageIndex ? 'bg-white' : 'bg-white/50'}`} />
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </>
                 ) : (
                   <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 gap-2">
                     <ImageIcon className="w-10 h-10" />
@@ -417,6 +503,7 @@ export default function Variant2SplitPreview(props: PropertyVariantProps) {
                   <MapPin className="w-3 h-3 text-[#0B3D91]" />
                   <span>{formData.city || "Centru"}</span>
                 </div>
+
               </div>
 
               {/* Card Content */}

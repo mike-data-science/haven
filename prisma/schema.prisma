@@ -107,7 +107,7 @@ model Image {
   alt        String?
   order      Int      @default(0)
   propertyId Int
-  property   Property @relation(fields: [propertyId], references: [id])
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 }
 
 model Appointment {
@@ -120,7 +120,7 @@ model Appointment {
   user       User     @relation(fields: [userId], references: [id])
   
   propertyId Int
-  property   Property @relation(fields: [propertyId], references: [id])
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -133,7 +133,7 @@ model Conversation {
   user       User      @relation(fields: [userId], references: [id])
   
   propertyId Int?
-  property   Property? @relation(fields: [propertyId], references: [id])
+  property   Property? @relation(fields: [propertyId], references: [id], onDelete: SetNull)
   
   createdAt  DateTime  @default(now())
   
@@ -145,7 +145,7 @@ model Message {
   content        String
   
   conversationId Int
-  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   
   senderId       Int
   sender         User         @relation(fields: [senderId], references: [id])
@@ -160,7 +160,7 @@ model Favorite {
   user       User     @relation(fields: [userId], references: [id])
   
   propertyId Int
-  property   Property @relation(fields: [propertyId], references: [id])
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   
   createdAt  DateTime @default(now())
 }
@@ -176,7 +176,7 @@ model Inquiry {
   user       User?     @relation(fields: [userId], references: [id])
   
   propertyId Int
-  property   Property  @relation(fields: [propertyId], references: [id])
+  property   Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   
   createdAt  DateTime  @default(now())
 }
@@ -190,7 +190,7 @@ model Review {
   user       User     @relation(fields: [userId], references: [id])
   
   propertyId Int
-  property   Property @relation(fields: [propertyId], references: [id])
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   
   createdAt  DateTime @default(now())
 }

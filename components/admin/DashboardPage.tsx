@@ -7,31 +7,49 @@ const UniversalMap = dynamic(() => import("@/components/shared/UniversalMap"), {
 import { Search, SlidersHorizontal, Map as MapIcon, ChevronDown, Activity } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
-const chartData = [
-  { name: "Mon", value: 40 },
-  { name: "Tue", value: 30 },
-  { name: "Wed", value: 55 },
-  { name: "Thu", value: 45 },
-  { name: "Fri", value: 70 },
-  { name: "Sat", value: 25 },
-  { name: "Sun", value: 35 },
-];
-
 export default function DashboardPage({
   recentListings,
   stats,
   topAgents,
   typeCounts,
+  weeklyActivityData,
 }: {
   recentListings: any[];
   stats: any;
   topAgents: any[];
   typeCounts: any[];
+  weeklyActivityData: any[];
 }) {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState("Buy");
   const [subTab, setSubTab] = useState("Recommended");
   const [mapView, setMapView] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredListings = recentListings
+    .filter((listing) => {
+      // Basic Search Filter
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        if (
+          !listing.title.toLowerCase().includes(q) &&
+          !listing.location?.toLowerCase().includes(q) &&
+          !listing.type?.toLowerCase().includes(q)
+        ) {
+          return false;
+        }
+      }
+      
+      // Top Tab Filter (Mock logic)
+      if (activeTab === "Rent" && listing.type !== "Apartment") return false; // example constraint for demo
+      
+      return true;
+    })
+    .sort((a, b) => {
+      if (subTab === "Popular") return b.id - a.id;
+      if (subTab === "Nearest") return a.price - b.price;
+      return 0; // Recommended (default)
+    });
 
   return (
     <div className="font-sans text-slate-900 min-h-full pb-8">
@@ -58,7 +76,7 @@ export default function DashboardPage({
           {/* Header Row */}
           <div className="flex flex-wrap items-center justify-between mb-6 gap-3">
             <h1 className="text-lg font-bold">
-              {stats.totalListings} Results <span className="text-slate-400 font-normal text-xs">in System</span>
+              {filteredListings.length} Results <span className="text-slate-400 font-normal text-xs">in System</span>
             </h1>
             <div className="flex items-center gap-2">
               <span className="text-xs font-bold text-slate-700">Map View</span>
@@ -78,6 +96,8 @@ export default function DashboardPage({
               <input
                 type="text"
                 placeholder="Search Here..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-9 pr-3 py-2 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[var(--theme-accent)]/20 text-xs font-medium"
               />
             </div>
@@ -109,7 +129,7 @@ export default function DashboardPage({
 
           {/* Property Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-            {recentListings.map((listing) => (
+            {filteredListings.map((listing) => (
               <div key={listing.id} className="h-full">
                 <PropertyCard
                   listing={listing}
@@ -135,7 +155,7 @@ export default function DashboardPage({
             </div>
             <div className="h-34 w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData}>
+                <BarChart data={weeklyActivityData}>
                   <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} />
                   <Tooltip cursor={{ fill: 'rgba(0,0,0,0.05)' }} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
                   <Bar dataKey="value" fill="var(--theme-accent)" radius={[4, 4, 0, 0]} />
@@ -160,7 +180,7 @@ export default function DashboardPage({
               <div className="flex-1 rounded-xl overflow-hidden min-h-56">
                 <UniversalMap
                   mode="listings"
-                  listings={recentListings}
+                  listings={filteredListings}
                   selectedId={selectedId}
                   onSelectPin={setSelectedId}
                   height="100%"

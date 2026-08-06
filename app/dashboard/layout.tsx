@@ -23,7 +23,7 @@ export default async function Layout({
   return (
     <ThemeProvider initialColor={initialColor}>
       <div className="flex h-screen overflow-hidden bg-slate-50">
-        <aside className="w-[158px] shrink-0 border-r border-slate-800 bg-[#18181b] z-20 overflow-y-auto">
+        <aside className="w-[200px] shrink-0 border-r border-slate-800 bg-[#18181b] z-20 overflow-y-auto">
           {sidebar}
         </aside>
         <main className="flex-1 overflow-y-auto bg-slate-50 p-[14px] lg:p-[23px]">{children}</main>

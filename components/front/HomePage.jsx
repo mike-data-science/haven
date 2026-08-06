@@ -480,10 +480,6 @@ function Agents({ agents }) {
 }
 
 function AdvancedSearchPromo() {
-  useEffect(() => {
-    // Ensure the new promo photo is copied into the public folder
-    fetch('/api/copy-promo').catch(() => {});
-  }, []);
 
   return (
     <section className="w-full relative overflow-hidden bg-gradient-to-br from-[#EAF2FF] via-[#FAFAF8] to-[#E6F0FF] flex flex-col items-center justify-center py-10 md:py-14">

@@ -15,6 +15,7 @@ export default async function DiscoverPage() {
   const formattedProperties = properties.map((p: any) => ({
     id: p.id,
     title: p.title,
+    address: p.address,
     location: p.city,
     price: p.price,
     beds: p.rooms,

@@ -118,6 +118,15 @@ export default function AdminEntityPage({ table, categories, currentUser }: Admi
       let savedId = selectedId;
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);
+        if (errorData?.details) {
+          const msgs = Object.entries(errorData.details)
+            .filter(([k]) => k !== '_errors')
+            .map(([k, v]: any) => `${k}: ${v?._errors?.join(', ')}`);
+          if (errorData.details._errors?.length) {
+            msgs.push(`GENERAL: ${errorData.details._errors.join(', ')}`);
+          }
+          throw new Error(`Validation Error: ${msgs.join(' | ')}`);
+        }
         throw new Error(errorData?.detail || errorData?.error || `Request failed with status ${response.status}`);
       } else {
         const savedRecord = await response.json();

@@ -2,12 +2,13 @@ import PropertyDetailPage from '@/components/front/PropertyDetailPage';
 import prisma from '@/lib/db';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
+import { getCurrentUser } from '@/lib/auth/session';
 
 export const revalidate = 300; // 5 minutes
 
 const getPropertyById = cache(async (id: number) => {
   return prisma.property.findFirst({
-    where: { id, status: 'APPROVED', isDeleted: false },
+    where: { id, isDeleted: false },
     include: { user: true, images: true, category: true },
   });
 });
@@ -27,6 +28,20 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   if (!rawProperty) {
     notFound();
+  }
+
+  // If the property is not approved, only the owner or an admin can view it
+  if (rawProperty.status !== 'APPROVED') {
+    let user = null;
+    try {
+      user = await getCurrentUser();
+    } catch (error) {
+      // Ignore unauthorized error, user is null
+    }
+
+    if (!user || (user.role !== 'ADMIN' && user.id !== rawProperty.userId)) {
+      notFound();
+    }
   }
 
   let descriptionText = rawProperty.description || "";

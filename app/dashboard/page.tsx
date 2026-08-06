@@ -12,8 +12,25 @@ export default async function AdminContentPage() {
 
   const sevenDaysAgo = new Date();
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-  const thisWeek = await prisma.property.count({
-    where: { createdAt: { gte: sevenDaysAgo }, status: 'APPROVED', isDeleted: false }
+  const recentProps = await prisma.property.findMany({
+    where: { createdAt: { gte: sevenDaysAgo }, status: 'APPROVED', isDeleted: false },
+    select: { createdAt: true }
+  });
+  
+  const thisWeek = recentProps.length;
+
+  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const chartData = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    chartData.push({ name: daysOfWeek[d.getDay()], value: 0 });
+  }
+
+  recentProps.forEach(p => {
+    const dayName = daysOfWeek[new Date(p.createdAt).getDay()];
+    const entry = chartData.find(c => c.name === dayName);
+    if (entry) entry.value++;
   });
 
   // Top Agents
@@ -68,6 +85,7 @@ export default async function AdminContentPage() {
   const recentListings = rawRecentListings.map(p => ({
     id: p.id,
     title: p.title,
+    address: p.address,
     location: p.city,
     price: p.price,
     beds: p.rooms,
@@ -103,6 +121,7 @@ export default async function AdminContentPage() {
       stats={stats}
       topAgents={topAgents}
       typeCounts={typeCounts}
+      weeklyActivityData={chartData}
     />
   );
 }

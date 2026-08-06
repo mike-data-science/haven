@@ -210,6 +210,21 @@ export default function Variant1Minimalist(props: PropertyVariantProps) {
               />
             </div>
 
+            <div>
+              <label className="block font-sans text-xs font-bold uppercase tracking-wider text-[#1A1A18] mb-2">
+                Year Built *
+              </label>
+              <input
+                type="number"
+                name="yearBuilt"
+                required
+                placeholder="2024"
+                value={formData.yearBuilt}
+                onChange={(e) => setFormData({ ...formData, yearBuilt: e.target.value })}
+                className="w-full bg-[#FAFAF8] border border-[#E8E5DF] rounded-xl px-4 py-3 text-sm text-[#1A1A18] outline-none focus:border-[#2B7FFF] focus:bg-white transition-all font-medium"
+              />
+            </div>
+
             {/* Description */}
             <div className="md:col-span-2">
               <label className="block font-sans text-xs font-bold uppercase tracking-wider text-[#1A1A18] mb-2">

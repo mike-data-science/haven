@@ -21,6 +21,7 @@ const getListingsData = cache(async () => {
     id: p.id,
     title: p.title,
     location: `${p.address}, ${p.city}`,
+    address: p.address,
     price: Number(p.price),
     beds: p.rooms,
     baths: p.bathrooms,

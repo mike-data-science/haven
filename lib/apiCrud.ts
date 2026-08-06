@@ -5,6 +5,7 @@ import { UnauthorizedError } from "@/lib/auth/session";
 import { Role } from "@prisma/client";
 import { checkRateLimit } from "@/lib/rateLimit";
 import { auditLog } from "@/lib/auditLog";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 type Body = Record<string, unknown>;
@@ -114,7 +115,7 @@ export function createCrudHandlers({
           const result = schema.safeParse(body);
           if (!result.success) {
             return NextResponse.json(
-              { error: "Validation failed", issues: result.error.issues },
+              { error: "Validation failed", issues: result.error.issues, details: result.error.format() },
               { status: 400 }
             );
           }
@@ -140,6 +141,7 @@ export function createCrudHandlers({
           targetId: saved.id,
         });
 
+        revalidatePath('/', 'layout');
         return NextResponse.json(saved, { status: 201 });
       } catch (error) {
         return NextResponse.json(
@@ -202,7 +204,7 @@ export function createCrudHandlers({
           const result = schema.safeParse(body);
           if (!result.success) {
             return NextResponse.json(
-              { error: "Validation failed", issues: result.error.issues },
+              { error: "Validation failed", issues: result.error.issues, details: result.error.format() },
               { status: 400 }
             );
           }
@@ -239,6 +241,7 @@ export function createCrudHandlers({
           targetId: id,
         });
 
+        revalidatePath('/', 'layout');
         return NextResponse.json(saved);
       } catch (error) {
         return NextResponse.json(
@@ -287,6 +290,7 @@ export function createCrudHandlers({
           targetId: id,
         });
 
+        revalidatePath('/', 'layout');
         return NextResponse.json({ message: `${entityName} deleted successfully.` });
       } catch (error) {
         return NextResponse.json(
