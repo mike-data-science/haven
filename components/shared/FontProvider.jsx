@@ -5,23 +5,33 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 const FontContext = createContext();
 
 export function FontProvider({ children }) {
-  const [fontStyle, setFontStyle] = useState("urbanist"); // 'modern', 'minimalist', 'elegant', etc.
-  const [pillWidth, setPillWidth] = useState("1400px"); // '1400px', '1240px', '1180px'
+  const [fontStyle, setFontStyle] = useState("minimalist");
+  const [pillWidth, setPillWidth] = useState("1240px");
+  const [themeColor, setThemeColor] = useState("light-gradient");
+  const [cardStyle, setCardStyle] = useState("variant3");
 
   useEffect(() => {
-    // Migrate to default Urbanist and 1400px on first load
-    const migrated = localStorage.getItem("haven-default-urbanist-v1");
+    // Migrate to default settings on first load
+    const migrated = localStorage.getItem("haven-default-v2");
     if (!migrated) {
-      localStorage.setItem("haven-default-urbanist-v1", "true");
-      localStorage.setItem("haven-font-style", "urbanist");
-      localStorage.setItem("haven-pill-width", "1400px");
-      setFontStyle("urbanist");
-      setPillWidth("1400px");
+      localStorage.setItem("haven-default-v2", "true");
+      localStorage.setItem("haven-font-style", "minimalist");
+      localStorage.setItem("haven-pill-width", "1240px");
+      localStorage.setItem("haven-theme-color", "light-gradient");
+      localStorage.setItem("haven-card-style", "variant3");
+      setFontStyle("minimalist");
+      setPillWidth("1240px");
+      setThemeColor("light-gradient");
+      setCardStyle("variant3");
     } else {
       const saved = localStorage.getItem("haven-font-style");
       if (saved) setFontStyle(saved);
       const savedWidth = localStorage.getItem("haven-pill-width");
       if (savedWidth) setPillWidth(savedWidth);
+      const savedColor = localStorage.getItem("haven-theme-color");
+      if (savedColor) setThemeColor(savedColor);
+      const savedCardStyle = localStorage.getItem("haven-card-style");
+      if (savedCardStyle) setCardStyle(savedCardStyle);
     }
   }, []);
 
@@ -33,6 +43,16 @@ export function FontProvider({ children }) {
   const togglePillWidth = (width) => {
     setPillWidth(width);
     localStorage.setItem("haven-pill-width", width);
+  };
+
+  const toggleThemeColor = (color) => {
+    setThemeColor(color);
+    localStorage.setItem("haven-theme-color", color);
+  };
+
+  const toggleCardStyle = (style) => {
+    setCardStyle(style);
+    localStorage.setItem("haven-card-style", style);
   };
 
   useEffect(() => {
@@ -81,7 +101,7 @@ export function FontProvider({ children }) {
   }, [fontStyle]);
 
   return (
-    <FontContext.Provider value={{ fontStyle, setFontStyle: toggleFontStyle, pillWidth, setPillWidth: togglePillWidth }}>
+    <FontContext.Provider value={{ fontStyle, setFontStyle: toggleFontStyle, pillWidth, setPillWidth: togglePillWidth, themeColor, setThemeColor: toggleThemeColor, cardStyle, setCardStyle: toggleCardStyle }}>
       {children}
     </FontContext.Provider>
   );

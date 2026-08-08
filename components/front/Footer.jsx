@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { ContactAgentModal, getAgentMessengerLinks } from './ContactAgentModal';
+import { useFontTheme } from '../shared/FontProvider';
 
 export function Footer() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,12 +16,7 @@ export function Footer() {
   const links = getAgentMessengerLinks(defaultAgent);
 
   return (
-    <footer className="w-full relative overflow-hidden border-t border-[#E8E5DF] mt-20 font-sans text-[#1A1A18]">
-      {/* Dynamic Animated Hero Background */}
-      <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#EAF2FF] via-[#FAFAF8] to-[#E6F0FF] overflow-hidden">
-        <div className="absolute top-[0%] left-[-10%] w-[40%] h-[50%] bg-blue-300/30 rounded-full blur-[68px] mix-blend-multiply animate-pulse"></div>
-        <div className="absolute bottom-[0%] right-[-10%] w-[50%] h-[50%] bg-indigo-200/20 rounded-full blur-[68px] mix-blend-multiply"></div>
-      </div>
+    <footer className="w-full relative overflow-hidden mt-20 font-sans bg-[#0B3D91] text-white">
 
       {/* Main Footer Content */}
       <div className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-16 relative z-10">
@@ -29,25 +25,25 @@ export function Footer() {
           {/* Column 1: Brand Info (2 spans) */}
           <div className="lg:col-span-2 flex flex-col justify-between">
             <div>
-              <Link href="/" className="font-serif text-2xl font-bold text-[#1A1A18] flex items-center no-underline group mb-4">
-                <span><span className="text-[#4388FF]">Haven</span> Realty</span>
+              <Link href="/" className="font-serif text-2xl font-bold flex items-center no-underline group mb-4 text-white">
+                <span><span className="text-blue-300">Haven</span> Realty</span>
               </Link>
-              <p className="font-sans text-sm text-slate-600 leading-relaxed max-w-sm mb-6">
+              <p className="font-sans text-sm leading-relaxed max-w-sm mb-6 text-blue-100/80">
                 Moldova's premier real estate platform. We curate verified residential and commercial properties with transparent pricing and dedicated agents who actually answer your call.
               </p>
             </div>
 
-            <div className="flex flex-col gap-2 text-xs sm:text-sm text-slate-600 font-medium">
+            <div className="flex flex-col gap-2 text-xs sm:text-sm font-medium text-blue-100">
               <div className="flex items-center gap-2.5">
-                <span className="w-2 h-2 rounded-full bg-[#2B7FFF]" />
+                <span className="w-2 h-2 rounded-full bg-blue-400" />
                 <span>bd. Ștefan cel Mare și Sfânt 105, Chișinău, Moldova</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <span className="w-2 h-2 rounded-full bg-[#2B7FFF]" />
+                <span className="w-2 h-2 rounded-full bg-blue-400" />
                 <span>{links.displayPhone} (24/7 Agent Support)</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <span className="w-2 h-2 rounded-full bg-[#2B7FFF]" />
+                <span className="w-2 h-2 rounded-full bg-blue-400" />
                 <span>contact@havenrealty.md</span>
               </div>
             </div>
@@ -55,60 +51,60 @@ export function Footer() {
 
           {/* Column 2: Quick Links */}
           <div className="flex flex-col gap-3">
-            <h4 className="font-serif text-base font-bold text-[#1A1A18] uppercase tracking-wider mb-2">
+            <h4 className="font-serif text-base font-bold uppercase tracking-wider mb-2 text-white">
               Explore
             </h4>
-            <Link href="/listings?transaction=buy" className="font-sans text-sm text-slate-600 hover:text-[#0B3D91] transition-colors no-underline">
+            <Link href="/listings?transaction=buy" className="font-sans text-sm transition-colors no-underline text-blue-100/80 hover:text-white">
               Buy a Property
             </Link>
-            <Link href="/listings?transaction=rent" className="font-sans text-sm text-slate-600 hover:text-[#0B3D91] transition-colors no-underline">
+            <Link href="/listings?transaction=rent" className="font-sans text-sm transition-colors no-underline text-blue-100/80 hover:text-white">
               Rent an Apartment
             </Link>
-            <Link href="/listings?transaction=sell" className="font-sans text-sm text-slate-600 hover:text-[#0B3D91] transition-colors no-underline">
+            <Link href="/listings?transaction=sell" className="font-sans text-sm transition-colors no-underline text-blue-100/80 hover:text-white">
               Sell Your Home
             </Link>
-            <Link href="/agents" className="font-sans text-sm text-slate-600 hover:text-[#0B3D91] transition-colors no-underline">
+            <Link href="/agents" className="font-sans text-sm transition-colors no-underline text-blue-100/80 hover:text-white">
               Meet Our Agents
             </Link>
-            <Link href="/about" className="font-sans text-sm text-slate-600 hover:text-[#0B3D91] transition-colors no-underline">
+            <Link href="/about" className="font-sans text-sm transition-colors no-underline text-blue-100/80 hover:text-white">
               About Haven
             </Link>
-            <Link href="/contact" className="font-sans text-sm text-slate-600 hover:text-[#0B3D91] transition-colors no-underline">
+            <Link href="/contact" className="font-sans text-sm transition-colors no-underline text-blue-100/80 hover:text-white">
               Contact Office
             </Link>
           </div>
 
           {/* Column 3: Chișinău Sectors */}
           <div className="flex flex-col gap-3">
-            <h4 className="font-serif text-base font-bold text-[#1A1A18] uppercase tracking-wider mb-2">
+            <h4 className="font-serif text-base font-bold uppercase tracking-wider mb-2 text-white">
               Chișinău Sectors
             </h4>
-            <Link href="/listings?region=centru" className="font-sans text-sm text-slate-600 hover:text-[#0B3D91] transition-colors no-underline">
+            <Link href="/listings?region=centru" className="font-sans text-sm transition-colors no-underline text-blue-100/80 hover:text-white">
               Centru
             </Link>
-            <Link href="/listings?region=botanica" className="font-sans text-sm text-slate-600 hover:text-[#0B3D91] transition-colors no-underline">
+            <Link href="/listings?region=botanica" className="font-sans text-sm transition-colors no-underline text-blue-100/80 hover:text-white">
               Botanica
             </Link>
-            <Link href="/listings?region=buiucani" className="font-sans text-sm text-slate-600 hover:text-[#0B3D91] transition-colors no-underline">
+            <Link href="/listings?region=buiucani" className="font-sans text-sm transition-colors no-underline text-blue-100/80 hover:text-white">
               Buiucani
             </Link>
-            <Link href="/listings?region=ciocana" className="font-sans text-sm text-slate-600 hover:text-[#0B3D91] transition-colors no-underline">
+            <Link href="/listings?region=ciocana" className="font-sans text-sm transition-colors no-underline text-blue-100/80 hover:text-white">
               Ciocana
             </Link>
-            <Link href="/listings?region=riscani" className="font-sans text-sm text-slate-600 hover:text-[#0B3D91] transition-colors no-underline">
+            <Link href="/listings?region=riscani" className="font-sans text-sm transition-colors no-underline text-blue-100/80 hover:text-white">
               Rîșcani
             </Link>
-            <Link href="/listings?region=telecentru" className="font-sans text-sm text-slate-600 hover:text-[#0B3D91] transition-colors no-underline">
+            <Link href="/listings?region=telecentru" className="font-sans text-sm transition-colors no-underline text-blue-100/80 hover:text-white">
               Telecentru
             </Link>
           </div>
 
           {/* Column 4: Contact Agents Box */}
           <div className="flex flex-col gap-3">
-            <h4 className="font-serif text-base font-bold text-[#1A1A18] uppercase tracking-wider mb-2">
+            <h4 className="font-serif text-base font-bold uppercase tracking-wider mb-2 text-white">
               Contact Agent
             </h4>
-            <p className="font-sans text-xs text-slate-600 mb-2 leading-relaxed">
+            <p className="font-sans text-xs mb-2 leading-relaxed text-blue-100/80">
               Prefer speaking with an agent directly? Choose a platform below:
             </p>
 
@@ -158,19 +154,19 @@ export function Footer() {
         </div>
 
         {/* Bottom Legal Bar */}
-        <div className="mt-16 pt-8 border-t border-[#E8E5DF] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <div className="mt-16 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4 text-xs border-white/20 text-blue-200">
           <p className="font-medium m-0">
             &copy; {new Date().getFullYear()} Haven Realty SRL. All rights reserved.
           </p>
 
           <div className="flex items-center gap-6">
-            <Link href="/privacy" className="hover:text-[#0B3D91] transition-colors no-underline">
+            <Link href="/privacy" className="transition-colors no-underline hover:text-white">
               Privacy Policy
             </Link>
-            <Link href="/terms" className="hover:text-[#0B3D91] transition-colors no-underline">
+            <Link href="/terms" className="transition-colors no-underline hover:text-white">
               Terms of Service
             </Link>
-            <Link href="/cookies" className="hover:text-[#0B3D91] transition-colors no-underline">
+            <Link href="/cookies" className="transition-colors no-underline hover:text-white">
               Cookies
             </Link>
           </div>

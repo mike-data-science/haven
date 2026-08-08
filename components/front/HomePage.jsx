@@ -70,12 +70,11 @@ function ModernSelect({ id, label, options, defaultValue, isLast, className }) {
 }
 
 function HeroGradient() {
-  const [layoutType, setLayoutType] = useState('classic'); // 'modern' or 'classic'
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
 
-  const { fontStyle, setFontStyle, pillWidth, setPillWidth } = useFontTheme();
+  const { fontStyle, setFontStyle, pillWidth, setPillWidth, themeColor, setThemeColor, cardStyle, setCardStyle } = useFontTheme();
 
   useEffect(() => {
     setIsMounted(true);
@@ -89,14 +88,22 @@ function HeroGradient() {
   }, []);
 
   return (
-    <section className="relative z-[100] w-full min-h-94 h-auto flex flex-col items-center justify-center text-center pt-21 pb-9">
+    <section className={`relative z-[100] w-full min-h-94 h-auto flex flex-col items-center justify-center text-center pt-21 pb-9 ${themeColor === 'solid-blue' ? 'bg-[#0052cc]' : ''}`}>
       {/* Dynamic Animated Background */}
-      <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#EAF2FF] via-[#FAFAF8] to-[#E6F0FF] overflow-hidden">
-        <div className="absolute top-[0%] left-[-10%] w-[40%] h-[50%] bg-blue-300/30 rounded-full blur-[68px] mix-blend-multiply animate-pulse"></div>
-        <div className="absolute bottom-[0%] right-[-10%] w-[50%] h-[50%] bg-indigo-200/20 rounded-full blur-[68px] mix-blend-multiply"></div>
-        {/* Seamless bottom transition overlay so the bottom right blends smoothly into the page without any straight line */}
-        <div className="absolute bottom-0 left-0 right-0 h-36 sm:h-48 bg-gradient-to-t from-[#FAFAF8] via-[#FAFAF8]/80 to-transparent pointer-events-none"></div>
-      </div>
+      {themeColor === 'solid-blue' ? (
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <div className="absolute top-[0%] left-[-10%] w-[40%] h-[50%] bg-white/10 rounded-full blur-[68px] mix-blend-overlay animate-pulse"></div>
+          <div className="absolute bottom-[0%] right-[-10%] w-[50%] h-[50%] bg-blue-300/10 rounded-full blur-[68px] mix-blend-overlay"></div>
+          <div className="absolute bottom-0 left-0 right-0 h-36 sm:h-48 bg-gradient-to-t from-[#FAFAF8] to-transparent pointer-events-none"></div>
+        </div>
+      ) : (
+        <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#EAF2FF] via-[#FAFAF8] to-[#E6F0FF] overflow-hidden">
+          <div className="absolute top-[0%] left-[-10%] w-[40%] h-[50%] bg-blue-300/30 rounded-full blur-[68px] mix-blend-multiply animate-pulse"></div>
+          <div className="absolute bottom-[0%] right-[-10%] w-[50%] h-[50%] bg-indigo-200/20 rounded-full blur-[68px] mix-blend-multiply"></div>
+          {/* Seamless bottom transition overlay so the bottom right blends smoothly into the page without any straight line */}
+          <div className="absolute bottom-0 left-0 right-0 h-36 sm:h-48 bg-gradient-to-t from-[#FAFAF8] via-[#FAFAF8]/80 to-transparent pointer-events-none"></div>
+        </div>
+      )}
       
       <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 flex flex-col items-center mt-0 animate-in fade-in slide-in-from-bottom-6 duration-1000">
         
@@ -114,49 +121,6 @@ function HeroGradient() {
           </button>
           {menuOpen && (
             <div className="absolute top-[110%] right-0 bg-white rounded-2xl shadow-xl border border-slate-100 p-1.5 z-50 min-w-38 animate-in fade-in zoom-in-95 origin-top-right text-left">
-              <p className="font-sans text-[7px] font-bold text-slate-400 uppercase tracking-wider px-2 py-1.5">Search Layout</p>
-              <button 
-                onClick={() => { setLayoutType('modern'); setMenuOpen(false); }}
-                className={`w-full text-left px-2 py-1.5 rounded-xl font-sans text-[8px] font-medium transition-colors flex items-center justify-between ${layoutType === 'modern' ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50'}`}
-              >
-                Modern Layout
-                {layoutType === 'modern' && <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>}
-              </button>
-              <button 
-                onClick={() => { setLayoutType('classic'); setMenuOpen(false); }}
-                className={`w-full text-left px-2 py-1.5 rounded-xl font-sans text-[8px] font-medium transition-colors flex items-center justify-between ${layoutType === 'classic' ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50'}`}
-              >
-                Classic Layout
-                {layoutType === 'classic' && <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>}
-              </button>
-
-              <div className="h-px bg-slate-100 my-1.5 mx-1"></div>
-              
-              <p className="font-sans text-[7px] font-bold text-slate-400 uppercase tracking-wider px-2 py-1.5">Navbar Pill Width</p>
-              <button 
-                onClick={() => { setPillWidth('1400px'); setMenuOpen(false); }}
-                className={`w-full text-left px-2 py-1.5 rounded-xl font-sans text-[8px] font-medium transition-colors flex items-center justify-between ${pillWidth === '1400px' ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50'}`}
-              >
-                1400px (Current)
-                {pillWidth === '1400px' && <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>}
-              </button>
-              <button 
-                onClick={() => { setPillWidth('1240px'); setMenuOpen(false); }}
-                className={`w-full text-left px-2 py-1.5 rounded-xl font-sans text-[8px] font-medium transition-colors flex items-center justify-between ${pillWidth === '1240px' ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50'}`}
-              >
-                1240px (1400px w/o 80px padding)
-                {pillWidth === '1240px' && <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>}
-              </button>
-              <button 
-                onClick={() => { setPillWidth('1180px'); setMenuOpen(false); }}
-                className={`w-full text-left px-2 py-1.5 rounded-xl font-sans text-[8px] font-medium transition-colors flex items-center justify-between ${pillWidth === '1180px' ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50'}`}
-              >
-                1180px (Previous Option)
-                {pillWidth === '1180px' && <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>}
-              </button>
-
-              <div className="h-px bg-slate-100 my-1.5 mx-1"></div>
-              
               <p className="font-sans text-[7px] font-bold text-slate-400 uppercase tracking-wider px-2 py-1.5">Font Style</p>
               <button 
                 onClick={() => { setFontStyle('modern'); setMenuOpen(false); }}
@@ -214,14 +178,32 @@ function HeroGradient() {
                 Branding (Space Grotesk)
                 {fontStyle === 'space-grotesk' && <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>}
               </button>
+
+              <div className="h-px bg-slate-100 my-1.5 mx-1"></div>
+              
+              <p className="font-sans text-[7px] font-bold text-slate-400 uppercase tracking-wider px-2 py-1.5">Hero Theme</p>
+              <button 
+                onClick={() => { setThemeColor('light-gradient'); setMenuOpen(false); }}
+                className={`w-full text-left px-2 py-1.5 rounded-xl font-sans text-[8px] font-medium transition-colors flex items-center justify-between ${themeColor === 'light-gradient' ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50'}`}
+              >
+                Light Gradient
+                {themeColor === 'light-gradient' && <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>}
+              </button>
+              <button 
+                onClick={() => { setThemeColor('solid-blue'); setMenuOpen(false); }}
+                className={`w-full text-left px-2 py-1.5 rounded-xl font-sans text-[8px] font-medium transition-colors flex items-center justify-between ${themeColor === 'solid-blue' ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50'}`}
+              >
+                Solid Blue
+                {themeColor === 'solid-blue' && <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>}
+              </button>
             </div>
           )}
         </div>
 
-        <h1 className="font-serif text-[clamp(2.25rem,5vw,3.75rem)] font-bold text-[#1A1A18] leading-[1.1] tracking-[-0.5px] mb-5 drop-shadow-sm md:whitespace-nowrap">
-          Find your Haven.
+        <h1 className={`font-serif text-[clamp(2.25rem,5vw,3.75rem)] font-bold leading-[1.1] tracking-[-0.5px] mb-5 drop-shadow-sm ${themeColor === 'solid-blue' ? 'text-white' : 'text-[#1A1A18]'}`}>
+          Find your <span className={themeColor === 'solid-blue' ? '' : 'bg-clip-text text-transparent bg-gradient-to-r from-[#0B3D91] to-[#4388FF]'}>Haven.</span>
         </h1>
-        <p className={`font-sans text-base sm:text-lg text-[#4A5568] max-w-2xl leading-[1.6] mb-6 md:whitespace-nowrap ${fontStyle === 'modern' ? 'font-normal' : 'font-medium'}`}>
+        <p className={`font-sans text-base sm:text-lg max-w-2xl leading-[1.6] mb-6 ${fontStyle === 'modern' ? 'font-normal' : 'font-medium'} ${themeColor === 'solid-blue' ? 'text-blue-100' : 'text-[#4A5568]'}`}>
           Browse curated houses, condos, and apartments from agents who actually answer the phone.
         </p>
 
@@ -248,76 +230,6 @@ function HeroGradient() {
               </div>
             </div>
           </div>
-        ) : layoutType === 'modern' ? (
-          /* MODERN LAYOUT: Separated button, Price before Region */
-          <form action="/listings" method="GET" className="flex flex-col lg:flex-row gap-3 w-full relative z-20 transition-all duration-300">
-            {/* Filters Container */}
-            <div className="flex-1 bg-white/95 backdrop-blur-xl rounded-[14px] lg:rounded-[9px] shadow-[0_40px_100px_-10px_rgba(11,61,145,0.3)] border border-white/80 transition-all duration-300 hover:shadow-[0_50px_120px_-10px_rgba(11,61,145,0.4)]">
-              <div className="grid grid-cols-2 lg:flex lg:flex-row w-full items-stretch h-full">
-                <ModernSelect 
-                  id="transaction" 
-                  defaultValue="buy" 
-                  options={[{ value: 'buy', label: 'Buy' }, { value: 'sell', label: 'Sell' }, { value: 'rent', label: 'Rent' }]} 
-                  className="border-b lg:border-b-0 lg:border-r border-slate-300/50"
-                />
-                
-                <ModernSelect 
-                  id="type" 
-                  defaultValue="apartment" 
-                  options={[
-                    { value: 'apartment', label: 'Apartment' }, 
-                    { value: 'house', label: 'House' }, 
-                    { value: 'land', label: 'Land' }, 
-                    { value: 'commercial', label: 'Commercial' }
-                  ]} 
-                  className="border-b lg:border-b-0 lg:border-r border-slate-300/50"
-                />
-
-                <ModernSelect 
-                  id="rooms" 
-                  defaultValue="1" 
-                  options={[
-                    { value: '1', label: '1+ Rooms' }, 
-                    { value: '2', label: '2+ Rooms' }, 
-                    { value: '3', label: '3+ Rooms' }, 
-                    { value: '4', label: '4+ Rooms' }
-                  ]} 
-                  className="border-b border-r lg:border-b-0 lg:border-r border-slate-300/50"
-                />
-
-                {/* Price From-To */}
-                <div className="col-span-2 lg:col-span-1 flex-[1.4] px-3 py-2 flex items-center border-b lg:border-b-0 lg:border-r border-slate-300/50">
-                  <div className="flex items-center gap-1.5 w-full">
-                    <input type="number" name="minPrice" placeholder="Price from" className="w-full border-none bg-transparent font-sans text-xs sm:text-sm font-normal text-[#1A1A18] outline-none placeholder:text-slate-500 placeholder:font-normal min-w-0" />
-                    <span className="text-slate-400 font-normal">-</span>
-                    <input type="number" name="maxPrice" placeholder="Price to" className="w-full border-none bg-transparent font-sans text-xs sm:text-sm font-normal text-[#1A1A18] outline-none placeholder:text-slate-500 placeholder:font-normal min-w-0" />
-                    <span className="font-sans text-xs sm:text-sm font-normal text-[#1A1A18] ml-1">€</span>
-                  </div>
-                </div>
-
-                <ModernSelect 
-                  id="region" 
-                  defaultValue="any" 
-                  options={[
-                    { value: 'any', label: 'Chișinău (All)' }, 
-                    { value: 'centru', label: 'Chișinău, Centru' }, 
-                    { value: 'botanica', label: 'Chișinău, Botanica' }, 
-                    { value: 'buiucani', label: 'Chișinău, Buiucani' }, 
-                    { value: 'ciocana', label: 'Chișinău, Ciocana' }, 
-                    { value: 'riscani', label: 'Chișinău, Rîșcani' }, 
-                    { value: 'telecentru', label: 'Chișinău, Telecentru' }, 
-                    { value: 'posta-veche', label: 'Chișinău, Poșta Veche' }
-                  ]} 
-                  className="border-b lg:border-b-0 border-slate-300/50"
-                />
-              </div>
-            </div>
-
-            {/* Search Button */}
-            <button type="submit" className="w-full lg:w-36 bg-gradient-to-r from-[#0B3D91] to-[#1e58bd] text-white font-sans text-sm sm:text-base font-normal py-3.5 lg:py-0 px-6 rounded-[14px] lg:rounded-[9px] cursor-pointer transition-all duration-300 hover:scale-[1.03] lg:h-auto shrink-0 shadow-[0_8px_24px_rgba(11,61,145,0.4)]">
-              Search
-            </button>
-          </form>
         ) : (
           /* CLASSIC LAYOUT: Single pill, Region before Price */
           <form action="/listings" method="GET" className="flex flex-col bg-white/70 backdrop-blur-xl p-1.5 rounded-[14px] lg:rounded-full shadow-[0_40px_100px_-10px_rgba(11,61,145,0.4)] border border-white/80 w-full relative z-20 transition-all duration-300 hover:shadow-[0_50px_120px_-10px_rgba(11,61,145,0.5)]">
@@ -396,20 +308,27 @@ function HeroGradient() {
 function PopularProperties({ properties }) {
   return (
     <section id="properties" className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 pt-9 pb-24">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-9 gap-3">
-        <h2 className="font-serif text-[clamp(32px,4vw,44px)] font-bold text-[#1A1A18] tracking-[-0.5px] leading-[1.1] m-0">
+      <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-9 gap-4">
+        <h2 className="font-serif text-[clamp(32px,4vw,44px)] font-bold text-[#1A1A18] tracking-[-0.5px] leading-[1.1] m-0 text-center md:text-left w-full md:w-auto">
           Popular properties
         </h2>
-        <a href="#all-properties" className="group font-sans text-sm font-bold text-[#0B3D91] hover:text-[#2B7FFF] transition-all flex items-center gap-2 py-2 px-5 rounded-full bg-white hover:bg-blue-50/70 border border-slate-200/80 shadow-sm">
+        <a href="/listings" className="hidden md:flex group font-sans text-sm font-bold text-[#0B3D91] hover:text-[#2B7FFF] transition-all items-center gap-2 py-2 px-5 rounded-full bg-white hover:bg-blue-50/70 border border-slate-200/80 shadow-sm">
           View all listings 
           <span className="transition-transform group-hover:translate-x-1">→</span>
         </a>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 xl:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 xl:gap-6">
         {properties.map((p) => (
           <PropertyCard key={p.id} listing={p} />
         ))}
+      </div>
+      
+      <div className="md:hidden mt-8 flex justify-center">
+        <a href="/listings" className="group font-sans text-sm font-bold text-[#0B3D91] hover:text-[#2B7FFF] transition-all flex items-center justify-center gap-2 py-3 w-full rounded-full bg-white border border-[#E8E5DF] shadow-sm">
+          View all listings 
+          <span className="transition-transform group-hover:translate-x-1">→</span>
+        </a>
       </div>
     </section>
   );
@@ -431,7 +350,7 @@ function Agents({ agents }) {
           </a>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
           {agents.map((a) => (
             <article
               key={a.id}
@@ -480,23 +399,25 @@ function Agents({ agents }) {
 }
 
 function AdvancedSearchPromo() {
+  const { themeColor } = useFontTheme() || { themeColor: 'light-gradient' };
 
   return (
-    <section className="w-full relative overflow-hidden bg-gradient-to-br from-[#EAF2FF] via-[#FAFAF8] to-[#E6F0FF] flex flex-col items-center justify-center py-10 md:py-14">
+    <section className={`w-full relative overflow-hidden flex flex-col items-center justify-center py-10 md:py-14 ${themeColor === 'solid-blue' ? 'bg-[#0052cc]' : 'bg-gradient-to-br from-[#EAF2FF] via-[#FAFAF8] to-[#E6F0FF]'}`}>
       {/* Dynamic Background matching Hero background color */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        <div className="absolute top-[0%] left-[-10%] w-[40%] h-[50%] bg-blue-300/30 rounded-full blur-[68px] mix-blend-multiply animate-pulse"></div>
-        <div className="absolute bottom-[0%] right-[-10%] w-[50%] h-[50%] bg-indigo-200/20 rounded-full blur-[68px] mix-blend-multiply"></div>
-        {/* Short top and bottom transition overlays so color starts at the very top without covering text */}
-        <div className="absolute top-0 left-0 right-0 h-10 sm:h-12 bg-gradient-to-b from-[#FAFAF8] to-transparent pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 right-0 h-10 sm:h-12 bg-gradient-to-t from-[#FAFAF8] to-transparent pointer-events-none"></div>
-      </div>
+      {themeColor === 'solid-blue' ? null : (
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <div className="absolute top-[0%] left-[-10%] w-[40%] h-[50%] bg-blue-300/30 rounded-full blur-[68px] mix-blend-multiply animate-pulse"></div>
+          <div className="absolute bottom-[0%] right-[-10%] w-[50%] h-[50%] bg-indigo-200/20 rounded-full blur-[68px] mix-blend-multiply"></div>
+          <div className="absolute top-0 left-0 right-0 h-10 sm:h-12 bg-gradient-to-b from-[#FAFAF8] to-transparent pointer-events-none"></div>
+          <div className="absolute bottom-0 left-0 right-0 h-10 sm:h-12 bg-gradient-to-t from-[#FAFAF8] to-transparent pointer-events-none"></div>
+        </div>
+      )}
 
-      <div className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 relative z-10 text-[#1A1A18] flex flex-col items-center text-center pt-6 md:pt-10">
-        <h2 className="font-serif text-[clamp(32px,4vw,48px)] font-bold leading-[1.15] mb-4 max-w-4xl mx-auto text-[#1A1A18]">
+      <div className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 relative z-10 flex flex-col items-center text-center pt-6 md:pt-10">
+        <h2 className={`font-serif text-[clamp(32px,4vw,48px)] font-bold leading-[1.15] mb-4 max-w-4xl mx-auto ${themeColor === 'solid-blue' ? 'text-white' : 'text-[#1A1A18]'}`}>
           Vă vom ajuta să găsiți cazare conform nevoilor dumneavoastră.
         </h2>
-        <p className="font-sans text-base sm:text-lg text-[#4A5568] max-w-2xl mx-auto leading-[1.6] mb-8 font-normal">
+        <p className={`font-sans text-base sm:text-lg max-w-2xl mx-auto leading-[1.6] mb-8 font-normal ${themeColor === 'solid-blue' ? 'text-blue-100' : 'text-[#4A5568]'}`}>
           Explorați proprietăți verificate, cu prețuri transparente și agenți dedicați gata să vă ghideze la fiecare pas.
         </p>
 

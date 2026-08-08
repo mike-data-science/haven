@@ -117,7 +117,7 @@ async function main() {
       await fs.mkdir(destImageDir, { recursive: true });
 
       const filesInFolder = await fs.readdir(folderPath);
-      const imageFiles = filesInFolder.filter(f => f.toLowerCase().endsWith('.jpg') || f.toLowerCase().endsWith('.png'));
+      const imageFiles = filesInFolder.filter(f => f.toLowerCase().endsWith('.jpg') || f.toLowerCase().endsWith('.jpeg') || f.toLowerCase().endsWith('.png') || f.toLowerCase().endsWith('.webp'));
 
       let order = 0;
       for (const imgFile of imageFiles) {

@@ -28,6 +28,8 @@ const getHomeData = cache(async () => {
     baths: p.bathrooms,
     sqft: p.area,
     yearBuilt: p.yearBuilt,
+    floor: p.floor,
+    totalFloors: p.totalFloors,
     type: p.category?.name || "House",
     tag: p.status === 'APPROVED' ? "For Sale" : "Off Market",
     description: p.description,

@@ -1,0 +1,8 @@
+{
+  "title": "Exemplu",
+  "description": "Acesta este un apartament exemplu.",
+  "price": "125000",
+  "rooms": "3",
+  "area_sqm": "80",
+  "floor": "2"
+}

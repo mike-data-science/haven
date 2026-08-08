@@ -1,5 +1,6 @@
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { getCurrentUser } from "@/lib/auth/session";
+import { DashboardMobileMenu } from "./DashboardMobileMenu";
 
 export const dynamic = "force-dynamic";
 
@@ -22,8 +23,10 @@ export default async function Layout({
 
   return (
     <ThemeProvider initialColor={initialColor}>
-      <div className="flex h-screen overflow-hidden bg-slate-50">
-        <aside className="w-[200px] shrink-0 border-r border-slate-800 bg-[#18181b] z-20 overflow-y-auto">
+      <div className="flex flex-col md:flex-row h-screen overflow-hidden bg-slate-50">
+        <DashboardMobileMenu sidebar={sidebar} />
+        
+        <aside className="hidden md:block w-[200px] shrink-0 border-r border-slate-800 bg-[#18181b] z-20 overflow-y-auto">
           {sidebar}
         </aside>
         <main className="flex-1 overflow-y-auto bg-slate-50 p-[14px] lg:p-[23px]">{children}</main>

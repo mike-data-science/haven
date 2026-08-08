@@ -9,7 +9,7 @@ export default function Loading() {
       {/* Hero Section Skeleton */}
       <section className="relative z-30 w-full min-h-94 h-auto flex flex-col items-center justify-center text-center pt-21 pb-9">
         <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 flex flex-col items-center mt-0 pointer-events-none opacity-80">
-          <h1 className="font-serif text-[clamp(3rem,7vw,5.25rem)] font-bold text-[#1A1A18] leading-[1.05] tracking-[-1px] mb-5 drop-shadow-sm md:whitespace-nowrap">
+          <h1 className="font-serif text-[clamp(2.25rem,5vw,3.75rem)] font-bold leading-[1.1] tracking-[-0.5px] mb-5 drop-shadow-sm text-[#1A1A18] md:whitespace-nowrap">
             Find your <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#0B3D91] to-[#4388FF]">Haven.</span>
           </h1>
           <p className="font-sans text-base sm:text-lg text-[#4A5568] max-w-2xl leading-[1.6] mb-6 font-medium md:whitespace-nowrap">
@@ -17,25 +17,25 @@ export default function Loading() {
           </p>
 
           {/* Classic Layout Single Pill Search Skeleton */}
-          <div className="flex flex-col bg-white/80 backdrop-blur-xl p-1.5 rounded-[14px] lg:rounded-full shadow-[0_40px_100px_-10px_rgba(11,61,145,0.25)] border border-white/80 w-full relative z-20">
+          <div className="flex flex-col bg-white/95 backdrop-blur-xl p-1.5 rounded-[14px] lg:rounded-[9px] shadow-[0_40px_100px_-10px_rgba(11,61,145,0.3)] border border-white/80 w-full relative z-20">
             <div className="grid grid-cols-2 lg:flex lg:flex-row w-full items-stretch animate-pulse">
-              <div className="flex-[0.8] px-3 py-3 flex items-center border-b border-r lg:border-b-0 lg:border-r border-[#E8E5DF]">
-                <div className="w-full h-4 bg-slate-200 rounded"></div>
+              <div className="flex-[0.8] px-1.5 sm:px-3 py-2 flex items-center border-b border-r lg:border-b-0 lg:border-r border-[#E8E5DF]">
+                <div className="w-full h-5 bg-slate-100 rounded"></div>
               </div>
-              <div className="flex-[0.8] px-3 py-3 flex items-center border-b lg:border-b-0 lg:border-r border-[#E8E5DF]">
-                <div className="w-full h-4 bg-slate-200 rounded"></div>
+              <div className="flex-[0.8] px-1.5 sm:px-3 py-2 flex items-center border-b lg:border-b-0 lg:border-r border-[#E8E5DF]">
+                <div className="w-full h-5 bg-slate-100 rounded"></div>
               </div>
-              <div className="flex-[0.8] px-3 py-3 flex items-center border-b border-r lg:border-b-0 lg:border-r border-[#E8E5DF]">
-                <div className="w-full h-4 bg-slate-200 rounded"></div>
+              <div className="flex-[0.8] px-1.5 sm:px-3 py-2 flex items-center border-b border-r lg:border-b-0 lg:border-r border-[#E8E5DF]">
+                <div className="w-full h-5 bg-slate-100 rounded"></div>
               </div>
-              <div className="flex-[0.8] px-3 py-3 flex items-center border-b lg:border-b-0 lg:border-r border-[#E8E5DF]">
-                <div className="w-full h-4 bg-slate-200 rounded"></div>
+              <div className="flex-[0.8] px-1.5 sm:px-3 py-2 flex items-center border-b lg:border-b-0 lg:border-r border-[#E8E5DF]">
+                <div className="w-full h-5 bg-slate-100 rounded"></div>
               </div>
-              <div className="col-span-2 lg:col-span-1 flex-[1.4] px-4 py-3 flex items-center border-b lg:border-b-0 lg:border-r border-[#E8E5DF]">
-                <div className="w-full h-4 bg-slate-200 rounded"></div>
+              <div className="col-span-2 lg:col-span-1 flex-[1.4] px-3 py-2 flex items-center border-b lg:border-b-0 lg:border-r border-[#E8E5DF]">
+                <div className="w-full h-5 bg-slate-100 rounded"></div>
               </div>
-              <div className="col-span-2 lg:col-span-1 flex justify-center mt-2 lg:mt-0 p-1 lg:p-0">
-                <div className="w-full lg:w-28 bg-slate-300 h-10 lg:h-full lg:ml-1.5 rounded-full"></div>
+              <div className="col-span-2 lg:col-span-1 flex justify-center mt-2 lg:mt-0 p-1.5 lg:p-0">
+                <div className="w-full lg:w-23 bg-slate-200 h-10 lg:h-full lg:ml-1.5 rounded-[9px] lg:rounded-full"></div>
               </div>
             </div>
           </div>

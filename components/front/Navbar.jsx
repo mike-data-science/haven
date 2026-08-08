@@ -8,13 +8,13 @@ import { useFontTheme } from '../shared/FontProvider';
 
 export function Navbar() {
   const { userId } = useAuth();
-  const { pillWidth = '1240px' } = useFontTheme() || {};
+  const { themeColor } = useFontTheme() || {};
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  const pillMaxWidthClass = pillWidth === '1180px' ? '!max-w-[1180px]' : (pillWidth === '1240px' ? '!max-w-[1240px]' : '!max-w-[1400px]');
-  const baseMaxWidthClass = pillWidth === '1180px' ? 'max-w-[1180px]' : (pillWidth === '1240px' ? 'max-w-[1240px]' : 'max-w-[1400px]');
-  const pillPaddingClass = (isScrolled && pillWidth === '1240px') ? '!px-6 sm:!px-8 md:!px-8 lg:!px-8 xl:!px-8' : '';
+  const pillMaxWidthClass = '!max-w-[1240px]';
+  const baseMaxWidthClass = 'max-w-[1240px]';
+  const pillPaddingClass = isScrolled ? '!px-6 sm:!px-8 md:!px-8 lg:!px-8 xl:!px-8' : '';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,20 +26,27 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   
+  const isSolidBlue = themeColor === 'solid-blue';
+  
+  // Dynamic text colors based on scroll state and theme
+  const logoColorClass = (isSolidBlue && !isScrolled && !isMobileMenuOpen) ? "text-white" : "text-[#4388FF]";
+  const linkColorClass = (isSolidBlue && !isScrolled && !isMobileMenuOpen) ? "text-blue-100 hover:text-white" : "text-[#6B7280] hover:text-[#2B7FFF]";
+  const toggleColorClass = (isSolidBlue && !isScrolled && !isMobileMenuOpen) ? "text-white" : "text-slate-700";
+  
   return (
     <nav className={`fixed top-0 w-full z-[200] transition-all duration-500 ${isScrolled ? 'py-1.5 px-3' : 'py-3 md:py-5'}`}>
-      <div className={`w-full ${baseMaxWidthClass} mx-auto flex justify-between items-center px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-2 md:py-2 relative transition-all duration-500 ${isScrolled ? `bg-white/80 backdrop-blur-xl border border-[#E4EEFF]/90 shadow-[0_8px_32px_rgba(11,61,145,0.12)] rounded-full ${pillMaxWidthClass}` : 'bg-transparent border border-transparent shadow-none rounded-none'} ${pillPaddingClass}`}>
+      <div className={`w-full ${baseMaxWidthClass} mx-auto flex justify-between items-center px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-2 md:py-2 relative z-[210] transition-all duration-500 ${(isScrolled && !isMobileMenuOpen) ? `bg-white/80 backdrop-blur-xl border border-[#E4EEFF]/90 shadow-[0_8px_32px_rgba(11,61,145,0.12)] rounded-full ${pillMaxWidthClass}` : 'bg-transparent border border-transparent shadow-none rounded-none'} ${(!isMobileMenuOpen && pillPaddingClass) ? pillPaddingClass : ''}`}>
         <div className="flex-1 flex justify-start">
           <Link href="/" className="font-serif text-xl font-bold tracking-[0px] text-[#1A1A18] flex items-center no-underline group">
-            <span className="text-[#4388FF]">Haven</span>
+            <span className={`transition-colors duration-300 ${logoColorClass}`}>Haven</span>
           </Link>
         </div>
         
         <div className="hidden md:flex flex-1 justify-center items-center gap-8">
-          <Link href="/listings" className="font-sans text-sm font-bold text-[#6B7280] transition-colors hover:text-[#2B7FFF]">Properties</Link>
-          <Link href="/agents" className="font-sans text-sm font-bold text-[#6B7280] transition-colors hover:text-[#2B7FFF]">Agents</Link>
-          <Link href="/about" className="font-sans text-sm font-bold text-[#6B7280] transition-colors hover:text-[#2B7FFF]">About</Link>
-          <Link href="/contact" className="font-sans text-sm font-bold text-[#6B7280] transition-colors hover:text-[#2B7FFF]">Contact</Link>
+          <Link href="/listings" className={`font-sans text-sm font-bold transition-colors duration-300 ${linkColorClass}`}>Properties</Link>
+          <Link href="/agents" className={`font-sans text-sm font-bold transition-colors duration-300 ${linkColorClass}`}>Agents</Link>
+          <Link href="/about" className={`font-sans text-sm font-bold transition-colors duration-300 ${linkColorClass}`}>About</Link>
+          <Link href="/contact" className={`font-sans text-sm font-bold transition-colors duration-300 ${linkColorClass}`}>Contact</Link>
         </div>
 
         {/* Desktop Auth */}
@@ -72,7 +79,7 @@ export function Navbar() {
 
         {/* Mobile Hamburger Toggle */}
         <button 
-          className="md:hidden p-1.5 text-slate-700 hover:text-[#0B3D91] transition-colors"
+          className={`md:hidden p-1.5 hover:text-[#0B3D91] transition-colors ${toggleColorClass}`}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -81,40 +88,44 @@ export function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-17 left-3 right-3 bg-white/85 backdrop-blur-2xl rounded-3xl border border-white/60 shadow-[0_32px_64px_rgba(11,61,145,0.15)] p-5 flex flex-col gap-5 animate-in slide-in-from-top-3 z-50">
-          <div className="flex flex-col gap-3">
-            <Link onClick={() => setIsMobileMenuOpen(false)} href="/listings" className="font-sans text-base font-bold text-[#6B7280]">Properties</Link>
-            <Link onClick={() => setIsMobileMenuOpen(false)} href="/agents" className="font-sans text-base font-bold text-[#6B7280]">Agents</Link>
-            <Link onClick={() => setIsMobileMenuOpen(false)} href="/about" className="font-sans text-base font-bold text-[#6B7280]">About</Link>
-            <Link onClick={() => setIsMobileMenuOpen(false)} href="/contact" className="font-sans text-base font-bold text-[#6B7280]">Contact</Link>
+        <div className="md:hidden fixed inset-0 pt-24 pb-10 px-6 bg-white z-[190] h-[100dvh] overflow-y-auto flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div className="flex flex-col items-center justify-center gap-8 flex-1 pb-10">
+            <Link onClick={() => setIsMobileMenuOpen(false)} href="/listings" className="font-sans text-2xl font-bold text-[#1A1A18] transition-colors hover:text-[#0B3D91]">Properties</Link>
+            <Link onClick={() => setIsMobileMenuOpen(false)} href="/agents" className="font-sans text-2xl font-bold text-[#1A1A18] transition-colors hover:text-[#0B3D91]">Agents</Link>
+            <Link onClick={() => setIsMobileMenuOpen(false)} href="/about" className="font-sans text-2xl font-bold text-[#1A1A18] transition-colors hover:text-[#0B3D91]">About</Link>
+            <Link onClick={() => setIsMobileMenuOpen(false)} href="/contact" className="font-sans text-2xl font-bold text-[#1A1A18] transition-colors hover:text-[#0B3D91]">Contact</Link>
           </div>
           
-          <div className="border-t border-slate-200/60 pt-5">
+          <div className="border-t border-slate-100 pt-8 pb-4 w-full flex flex-col items-center justify-center">
             {!userId ? (
               <SignInButton mode="modal" fallbackRedirectUrl="/dashboard" forceRedirectUrl="/dashboard">
-                <button className="w-full bg-gradient-to-r from-[#0B3D91] to-[#1e58bd] text-white font-sans text-sm font-bold py-2.5 px-6 rounded-[9px] cursor-pointer shadow-[0_8px_24px_rgba(11,61,145,0.2)] border-none">
+                <button className="w-full max-w-[280px] bg-gradient-to-r from-[#0B3D91] to-[#1e58bd] text-white font-sans text-base font-bold py-3.5 px-6 rounded-full cursor-pointer shadow-[0_8px_24px_rgba(11,61,145,0.2)] border-none">
                   Sign in
                 </button>
               </SignInButton>
             ) : (
-              <div className="flex items-center gap-3">
-                <UserButton 
-                  afterSignOutUrl="/"
-                  appearance={{
-                    elements: {
-                      userButtonPopoverCard: "scale-[0.75] origin-top-right",
-                    }
-                  }}
-                >
-                  <UserButton.MenuItems>
-                    <UserButton.Link
-                      label="Dashboard"
-                      labelIcon={<DashboardIcon />}
-                      href="/dashboard"
-                    />
-                  </UserButton.MenuItems>
-                </UserButton>
-                <Link href="/dashboard" className="font-sans font-bold text-slate-700">Go to Dashboard</Link>
+              <div className="flex flex-col items-center justify-center gap-4">
+                <div className="scale-110">
+                  <UserButton 
+                    afterSignOutUrl="/"
+                    appearance={{
+                      elements: {
+                        userButtonPopoverCard: "origin-top",
+                      }
+                    }}
+                  >
+                    <UserButton.MenuItems>
+                      <UserButton.Link
+                        label="Dashboard"
+                        labelIcon={<DashboardIcon />}
+                        href="/dashboard"
+                      />
+                    </UserButton.MenuItems>
+                  </UserButton>
+                </div>
+                <Link onClick={() => setIsMobileMenuOpen(false)} href="/dashboard" className="font-sans text-lg font-bold text-[#1A1A18] hover:text-[#0B3D91]">
+                  Go to Dashboard
+                </Link>
               </div>
             )}
           </div>
