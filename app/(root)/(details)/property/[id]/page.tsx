@@ -94,11 +94,18 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       id: p.id,
       title: p.title,
       location: `${p.address}, ${p.city}`,
+      address: p.address,
       price: Number(p.price),
       beds: p.rooms,
       baths: p.bathrooms,
       sqft: p.area,
+      floor: p.floor,
+      // @ts-ignore
+      totalFloors: p.totalFloors,
+      type: p.category?.name || "House",
+      tag: p.status === 'APPROVED' ? "For Sale" : "Off Market",
       image: p.images?.[0]?.url || "",
+      gallery: p.images?.map(i => i.url) || [],
     }));
 
   // @ts-ignore

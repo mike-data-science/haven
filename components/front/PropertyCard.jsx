@@ -9,7 +9,6 @@ import { formatPrice } from "@/lib/data";
 
 function ImageCarousel({ images, alt, indicator = 'dots' }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
 
   if (!images || images.length === 0) {
     return <div className="w-full h-full bg-slate-200 block" />;
@@ -39,22 +38,20 @@ function ImageCarousel({ images, alt, indicator = 'dots' }) {
   return (
     <div 
       className="relative w-full h-full overflow-hidden group/carousel"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       <img src={images[currentIndex]} alt={alt} loading="lazy" className="w-full h-full object-cover transition-transform duration-300 group-hover/carousel:scale-105 block" />
       
-      {images.length > 1 && isHovered && (
+      {images.length > 1 && (
         <>
           <button 
             onClick={prevImage}
-            className="absolute left-1.5 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-1.5 rounded-full shadow-md transition-all opacity-0 group-hover/carousel:opacity-100 z-20"
+            className="absolute left-1.5 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-1.5 rounded-full shadow-md transition-all opacity-100 md:opacity-0 group-hover/carousel:opacity-100 z-20"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           </button>
           <button 
             onClick={nextImage}
-            className="absolute right-1.5 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-1.5 rounded-full shadow-md transition-all opacity-0 group-hover/carousel:opacity-100 z-20"
+            className="absolute right-1.5 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-1.5 rounded-full shadow-md transition-all opacity-100 md:opacity-0 group-hover/carousel:opacity-100 z-20"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
           </button>

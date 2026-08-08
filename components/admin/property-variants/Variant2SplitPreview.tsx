@@ -276,11 +276,11 @@ export default function Variant2SplitPreview(props: PropertyVariantProps) {
                 longitude={parseFloat(formData.longitude) || 28.8322}
                 mode="picker"
                 onChange={(lat: number, lng: number) => {
-                  setFormData({
-                    ...formData,
+                  setFormData((prev: any) => ({
+                    ...prev,
                     latitude: lat.toFixed(6),
                     longitude: lng.toFixed(6)
-                  });
+                  }));
                   
                   fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
                     .then(res => res.json())

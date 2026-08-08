@@ -1,10 +1,8 @@
 import { NextResponse } from 'next/server';
 import { requireRole } from '@/lib/auth/roles';
 import prisma from '@/lib/db';
-import { writeFile } from 'fs/promises';
-import { join } from 'path';
 import crypto from 'crypto';
-import { mkdir } from 'fs/promises';
+import { put } from '@vercel/blob';
 
 const ALLOWED_TYPES: Record<string, string[]> = {
   'image/jpeg': ['jpg', 'jpeg'],
@@ -75,15 +73,6 @@ export async function POST(request: Request) {
       );
     }
 
-    const uploadDir = join(process.cwd(), 'public', 'uploads');
-    
-    // Ensure directory exists
-    try {
-      await mkdir(uploadDir, { recursive: true });
-    } catch (err) {
-      // Ignore if it exists
-    }
-
     const savedImages = [];
 
     for (let i = 0; i < files.length; i++) {
@@ -135,18 +124,17 @@ export async function POST(request: Request) {
 
       // Generate a unique filename with validated extension
       const filename = `${crypto.randomUUID()}.${extension}`;
-      const filepath = join(uploadDir, filename);
 
-      // Write to public/uploads
-      await writeFile(filepath, buffer);
-
-      // Public URL to store in DB
-      const publicUrl = `/uploads/${filename}`;
+      // Upload to Vercel Blob instead of local filesystem
+      const blob = await put(filename, buffer, {
+        access: 'public',
+        contentType: file.type,
+      });
 
       // Save to Prisma
       const imageRecord = await prisma.image.create({
         data: {
-          url: publicUrl,
+          url: blob.url,
           alt: file.name.replace(/\.[^.]+$/, ''), // Strip extension from alt text
           order: i,
           propertyId,
@@ -160,7 +148,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Upload Error:', error);
     return NextResponse.json(
-      { error: 'Failed to upload files', ...(process.env.NODE_ENV !== 'production' && { detail: error instanceof Error ? error.message : 'Unknown error' }) },
+      { error: error instanceof Error ? error.message : 'Unknown error during upload' },
       { status: 500 }
     );
   }

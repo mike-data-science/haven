@@ -63,7 +63,7 @@ export function ContactAgentModal({ isOpen, onClose, agent, propertyTitle }) {
         </button>
 
         {/* Agent Profile Header */}
-        <div className="flex items-center gap-4 mb-6 pb-5 border-b border-slate-100">
+        <div className="flex items-center gap-4 mb-6 pb-5 border-b border-slate-100 pr-12">
           <div className="relative shrink-0">
             {agent?.image ? (
               <img 

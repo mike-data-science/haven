@@ -88,7 +88,7 @@ function HeroGradient() {
   }, []);
 
   return (
-    <section className={`relative z-[100] w-full min-h-94 h-auto flex flex-col items-center justify-center text-center pt-21 pb-9 ${themeColor === 'solid-blue' ? 'bg-[#0052cc]' : ''}`}>
+    <section className={`relative z-[100] w-full min-h-94 h-auto flex flex-col items-center justify-center text-center pt-16 md:pt-21 pb-6 md:pb-9 ${themeColor === 'solid-blue' ? 'bg-[#0052cc]' : ''}`}>
       {/* Dynamic Animated Background */}
       {themeColor === 'solid-blue' ? (
         <div className="absolute inset-0 z-0 overflow-hidden">
@@ -307,7 +307,7 @@ function HeroGradient() {
 
 function PopularProperties({ properties }) {
   return (
-    <section id="properties" className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 pt-9 pb-24">
+    <section id="properties" className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 pt-6 md:pt-9 pb-12 md:pb-24">
       <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-9 gap-4">
         <h2 className="font-serif text-[clamp(32px,4vw,44px)] font-bold text-[#1A1A18] tracking-[-0.5px] leading-[1.1] m-0 text-center md:text-left w-full md:w-auto">
           Popular properties
@@ -336,7 +336,7 @@ function PopularProperties({ properties }) {
 
 function Agents({ agents }) {
   return (
-    <section id="agents" className="relative bg-gradient-to-b from-[#FAFAF8] via-[#F3F7FF]/50 to-[#FAFAF8] py-24 overflow-hidden">
+    <section id="agents" className="relative bg-gradient-to-b from-[#FAFAF8] via-[#F3F7FF]/50 to-[#FAFAF8] py-12 md:py-24 overflow-hidden">
       <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-[#EAF2FF] to-transparent opacity-50 pointer-events-none"></div>
       
       <div className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 relative z-10">
@@ -402,7 +402,7 @@ function AdvancedSearchPromo() {
   const { themeColor } = useFontTheme() || { themeColor: 'light-gradient' };
 
   return (
-    <section className={`w-full relative overflow-hidden flex flex-col items-center justify-center py-10 md:py-14 ${themeColor === 'solid-blue' ? 'bg-[#0052cc]' : 'bg-gradient-to-br from-[#EAF2FF] via-[#FAFAF8] to-[#E6F0FF]'}`}>
+    <section className={`w-full relative overflow-hidden flex flex-col items-center justify-center py-8 md:py-14 ${themeColor === 'solid-blue' ? 'bg-[#0052cc]' : 'bg-gradient-to-br from-[#EAF2FF] via-[#FAFAF8] to-[#E6F0FF]'}`}>
       {/* Dynamic Background matching Hero background color */}
       {themeColor === 'solid-blue' ? null : (
         <div className="absolute inset-0 z-0 overflow-hidden">
