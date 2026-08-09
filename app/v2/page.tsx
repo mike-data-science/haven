@@ -57,9 +57,14 @@ export default function V2DashboardPage() {
 
   // Fetch data from the API
   useEffect(() => {
+    console.log("Starting fetch for properties...");
     fetch("/api/v2/properties")
-      .then((res) => res.json())
+      .then((res) => {
+        console.log("Fetch response status:", res.status);
+        return res.json();
+      })
       .then((data) => {
+        console.log("Fetch success, setting data...");
         setProperties(data.properties || []);
         setStats(data.stats || null);
         setLoading(false);
@@ -98,12 +103,7 @@ export default function V2DashboardPage() {
 
   return (
     <div className="relative w-full h-screen overflow-hidden bg-[#E6EFF8] font-sora">
-      {/* Loading overlay */}
-      {loading && (
-        <div className="absolute inset-0 bg-[#E6EFF8] z-[2000] flex items-center justify-center">
-          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      )}
+      {/* Loading overlay removed for debugging */}
 
       {/* Background Map */}
       <V2Map 
