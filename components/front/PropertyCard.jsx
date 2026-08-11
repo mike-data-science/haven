@@ -80,8 +80,9 @@ function ImageCarousel({ images, alt, indicator = 'dots' }) {
  * @param {Function} [props.onSelect]
  * @param {Function} [props.onZoom]
  * @param {boolean} [props.showOverlay=false]
+ * @param {string} [props.theme="light"]
  */
-export function PropertyCard({ listing, compact = false, selected = false, showOverlay = false, onSelect, onZoom }) {
+export function PropertyCard({ listing, compact = false, selected = false, showOverlay = false, onSelect, onZoom, theme = "light" }) {
   const router = useRouter();
 
   const images = listing.gallery && listing.gallery.length > 0 ? listing.gallery : [listing.image].filter(Boolean);
@@ -145,7 +146,7 @@ export function PropertyCard({ listing, compact = false, selected = false, showO
       </div>
 
       {/* Content Area */}
-      <div className="p-5 flex flex-col min-w-0 flex-grow justify-between bg-white">
+      <div className={`p-5 flex flex-col min-w-0 flex-grow justify-between ${theme === 'dark' ? 'bg-[#1A1A18]' : 'bg-white'}`}>
         <div>
           <div className="flex items-center gap-4 text-[13px] font-medium text-slate-600 mb-1.5">
             <div className="flex items-center gap-1.5">
@@ -163,7 +164,7 @@ export function PropertyCard({ listing, compact = false, selected = false, showO
           </div>
           
           <div className="flex items-center gap-3 mb-1.5 min-w-0">
-            <h3 className="font-sans text-[17px] font-bold text-[#1A1A18] leading-[1.3] truncate">
+            <h3 className={`font-sans text-[17px] font-bold leading-[1.3] truncate ${theme === 'dark' ? 'text-white' : 'text-[#1A1A18]'}`}>
               {displayType}
             </h3>
             {isApartment && listing.floor !== undefined && listing.floor !== null && (
@@ -179,7 +180,7 @@ export function PropertyCard({ listing, compact = false, selected = false, showO
           </div>
         </div>
 
-        <div className="w-full h-px bg-[#E8E5DF]/50 my-2.5" />
+        <div className={`w-full h-px my-2.5 ${theme === 'dark' ? 'bg-slate-800' : 'bg-[#E8E5DF]/50'}`} />
         
         <div className="flex justify-between items-center mt-auto">
           <div className="flex flex-col">
@@ -199,9 +200,10 @@ export function PropertyCard({ listing, compact = false, selected = false, showO
 
   return (
     <div
-        className={`flex bg-white overflow-hidden border transition-all duration-300 cursor-pointer text-[#1A1A18]
-        ${compact ? "rounded-[11px] flex-row h-28 items-stretch w-full" : "rounded-2xl flex-col h-full w-full"}
-        ${selected ? "border-[#0B3D91] ring-2 ring-[#0B3D91] shadow-md" : "border-[#E8E5DF] hover:-translate-y-1 hover:shadow-xl hover:border-slate-300"}`}
+        className={`flex overflow-hidden border transition-all duration-300 cursor-pointer 
+        ${theme === 'dark' ? 'bg-[#27272A] border-slate-700 text-white' : 'bg-white border-[#E8E5DF] text-[#1A1A18]'}
+        ${compact ? "rounded-[11px] flex-row h-[140px] sm:h-[150px] items-stretch w-full" : "rounded-2xl flex-col h-full w-full"}
+        ${selected ? "border-[var(--theme-accent)] ring-2 ring-[var(--theme-accent)] shadow-[var(--theme-accent)]/20" : `hover:-translate-y-1 hover:shadow-xl ${theme === 'dark' ? 'hover:border-slate-500' : 'hover:border-slate-300'}`}`}
       onClick={(e) => {
         if (onZoom) {
           onSelect?.(listing.id);
@@ -237,11 +239,11 @@ export function PropertyCard({ listing, compact = false, selected = false, showO
              )}
            </div>
            
-           <div className="p-2 sm:p-3 lg:p-4 flex flex-col justify-between flex-grow min-w-0 bg-white">
+           <div className={`p-2 sm:p-3 lg:p-4 flex flex-col justify-between flex-grow min-w-0 ${theme === 'dark' ? 'bg-[#27272A]' : 'bg-white'}`}>
              <div>
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-0.5 sm:gap-2 mb-1">
                   <div className="flex items-center gap-2 min-w-0">
-                    <h3 className="font-sans text-[15px] sm:text-[16px] font-bold text-[#1A1A18] leading-tight truncate">
+                    <h3 className={`font-sans text-[15px] sm:text-[16px] font-bold leading-tight truncate ${theme === 'dark' ? 'text-white' : 'text-[#1A1A18]'}`}>
                       {displayType}
                     </h3>
                     {isApartment && listing.floor !== undefined && listing.floor !== null && (
@@ -258,6 +260,7 @@ export function PropertyCard({ listing, compact = false, selected = false, showO
                   </div>
                 </div>
 
+                <div className={`w-full h-px my-2 sm:my-3 ${theme === 'dark' ? 'bg-slate-800' : 'bg-[#E8E5DF]/50'}`} />
                 <div className="flex items-center gap-1 text-slate-500 mb-1 sm:mb-2">
                   <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0 text-[#0B3D91]" />
                   <span className="font-sans text-[11px] sm:text-xs font-medium truncate">{streetAddress}, {locationFirstWord}</span>

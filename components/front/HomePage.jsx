@@ -6,8 +6,10 @@ import Link from 'next/link';
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { formatPrice } from "@/lib/data";
-import { PropertyCard } from "./PropertyCard";
+import { PropertyCard } from './PropertyCard';
+import AgentCard from './AgentCard';
 import { ContactAgentButton } from "./ContactAgentModal";
+import { SignInButton } from "@clerk/nextjs";
 
 function ModernSelect({ id, label, options, defaultValue, isLast, className }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -74,7 +76,7 @@ function HeroGradient() {
   const menuRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
 
-  const { fontStyle, setFontStyle, pillWidth, setPillWidth, themeColor, setThemeColor, cardStyle, setCardStyle } = useFontTheme();
+  const { fontStyle, setFontStyle, pillWidth, setPillWidth, themeColor, setThemeColor, cardStyle, setCardStyle, propertyTypeStyle, setPropertyTypeStyle } = useFontTheme();
 
   useEffect(() => {
     setIsMounted(true);
@@ -196,6 +198,23 @@ function HeroGradient() {
                 Solid Blue
                 {themeColor === 'solid-blue' && <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>}
               </button>
+              <div className="h-px bg-slate-100 my-1.5 mx-1"></div>
+              
+              <p className="font-sans text-[7px] font-bold text-slate-400 uppercase tracking-wider px-2 py-1.5">Property Cards</p>
+              <button 
+                onClick={() => { setPropertyTypeStyle('modern'); setMenuOpen(false); }}
+                className={`w-full text-left px-2 py-1.5 rounded-xl font-sans text-[8px] font-medium transition-colors flex items-center justify-between ${propertyTypeStyle === 'modern' ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50'}`}
+              >
+                Modern Compact
+                {propertyTypeStyle === 'modern' && <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>}
+              </button>
+              <button 
+                onClick={() => { setPropertyTypeStyle('photo'); setMenuOpen(false); }}
+                className={`w-full text-left px-2 py-1.5 rounded-xl font-sans text-[8px] font-medium transition-colors flex items-center justify-between ${propertyTypeStyle === 'photo' ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50'}`}
+              >
+                Photo Realistic (Wide)
+                {propertyTypeStyle === 'photo' && <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>}
+              </button>
             </div>
           )}
         </div>
@@ -305,6 +324,140 @@ function HeroGradient() {
   );
 }
 
+function PropertyTypes() {
+  const { propertyTypeStyle } = useFontTheme();
+  const scrollContainerRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  const types = [
+    { name: "Apartments", count: 71, icon: "/prop_apt_1786370381611.png" },
+    { name: "Houses & Villas", count: 12, icon: "/prop_house_1786370408922.png" },
+    { name: "Land", count: 20, icon: "/prop_land_1786370435215.png" },
+    { name: "Commercial", count: 7, icon: "/prop_commercial_1786370451322.png" },
+    { name: "Residential", count: 3, icon: "/prop_residential_1786370470652.png" },
+  ];
+
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
+    setScrollLeft(scrollContainerRef.current.scrollLeft);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - scrollContainerRef.current.offsetLeft;
+    const walk = (x - startX) * 2;
+    scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleClick = (e) => {
+    // If we dragged more than a few pixels, prevent click
+    if (Math.abs(scrollLeft - scrollContainerRef.current.scrollLeft) > 5) {
+      e.preventDefault();
+    }
+  };
+
+  const isPhoto = propertyTypeStyle === 'photo';
+
+  if (!isPhoto) {
+    return (
+      <section className="w-full pt-10 pb-6 md:pb-8 relative z-20 -mt-8">
+        <div className="w-full relative [mask-image:linear-gradient(to_right,transparent,black_3%,black_97%,transparent)]">
+          <div 
+            ref={scrollContainerRef}
+            onMouseDown={handleMouseDown}
+            onMouseLeave={handleMouseLeave}
+            onMouseUp={handleMouseUp}
+            onMouseMove={handleMouseMove}
+            className={`flex gap-5 md:gap-6 overflow-x-auto px-4 sm:px-8 md:px-12 pb-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${isDragging ? 'cursor-grabbing snap-none' : 'cursor-grab snap-x snap-mandatory'} w-full`}
+          >
+            {types.map((type, i) => (
+              <Link 
+                href={`/listings?type=${type.name.toLowerCase()}`} 
+                onClick={handleClick}
+                draggable={false}
+                key={i} 
+                className="group relative flex-none w-[320px] md:w-[360px] h-[200px] md:h-[240px] bg-[#F5F5F5] rounded-[24px] md:rounded-[32px] p-6 hover:shadow-md transition-all duration-300 snap-center overflow-hidden flex justify-between !cursor-[inherit]"
+              >
+                <div className="flex flex-col justify-between relative z-10 w-[55%]">
+                  <span className="font-sans font-bold text-[#1A1A18] text-lg md:text-xl leading-tight block select-none self-start">{type.name}</span> 
+                  
+                  {type.count !== undefined && (
+                    <div className="mt-auto font-black text-4xl text-[#E8E8E8] transition-all group-hover:text-[#0B3D91]" style={{ textShadow: '1px 1px 2px rgba(255,255,255,1), -1px -1px 2px rgba(0,0,0,0.08)' }}>
+                      {type.count}
+                    </div>
+                  )}
+                </div>
+
+                <div className="absolute top-0 right-0 h-full w-[50%] pointer-events-none select-none">
+                  <img 
+                    src={type.icon} 
+                    alt={type.name} 
+                    draggable={false}
+                    className="w-full h-full object-cover object-left mix-blend-multiply opacity-95 group-hover:scale-105 transition-transform duration-500" 
+                  />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 pt-10 pb-6 md:pb-8 relative z-20 -mt-8 overflow-hidden">
+      {/* Full bleed right trick: negative margin on the right side only */}
+      <div 
+        ref={scrollContainerRef}
+        onMouseDown={handleMouseDown}
+        onMouseLeave={handleMouseLeave}
+        onMouseUp={handleMouseUp}
+        onMouseMove={handleMouseMove}
+        className={`flex gap-5 md:gap-6 overflow-x-auto pb-6 pr-[calc(50vw-50%)] mr-[calc(-50vw+50%)] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${isDragging ? 'cursor-grabbing snap-none' : 'cursor-grab snap-x snap-mandatory'}`}
+      >
+        {types.map((type, i) => (
+          <Link 
+            href={`/listings?type=${type.name.toLowerCase()}`} 
+            onClick={handleClick}
+            draggable={false}
+            key={i} 
+            className="group relative flex-none w-[320px] md:w-[360px] h-[200px] md:h-[240px] bg-white rounded-[24px] md:rounded-[32px] p-6 shadow-[0_8px_24px_rgba(0,0,0,0.04)] border border-[#E8E5DF]/60 hover:shadow-[0_12px_40px_rgba(11,61,145,0.08)] transition-all duration-300 snap-center overflow-hidden flex flex-col justify-between !cursor-[inherit]"
+          >
+            <span className="font-sans font-semibold text-[#1A1A18] text-xl md:text-2xl max-w-[140px] md:max-w-[160px] whitespace-normal leading-tight block select-none self-start z-10 relative">{type.name}</span> 
+            
+            {type.count !== undefined && (
+              <div className="mt-auto z-10 relative font-black text-5xl md:text-6xl text-[#F0F0F0] transition-all group-hover:text-[#0B3D91]" style={{ textShadow: '1px 1px 2px rgba(255,255,255,1), -1px -1px 3px rgba(0,0,0,0.1)' }}>
+                {type.count}
+              </div>
+            )}
+
+            <img 
+              src={type.icon} 
+              alt={type.name} 
+              draggable={false}
+              className="absolute top-0 right-0 h-full w-auto min-w-[50%] object-cover object-right group-hover:scale-105 transition-transform duration-700 pointer-events-none mix-blend-multiply opacity-90 select-none" 
+            />
+            {/* Fade gradient overlay for the photo style to blend image with card */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/50 to-transparent pointer-events-none select-none"></div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function PopularProperties({ properties }) {
   return (
     <section id="properties" className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 pt-6 md:pt-9 pb-12 md:pb-24">
@@ -334,63 +487,165 @@ function PopularProperties({ properties }) {
   );
 }
 
-function Agents({ agents }) {
+function Services() {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const carouselItems = [
+    { image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=600", title: "The best choice", subtitle: "For your future" },
+    { image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=600", title: "Modern Design", subtitle: "Absolute comfort" },
+    { image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=600", title: "Premium Locations", subtitle: "In the heart of nature" }
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % carouselItems.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [carouselItems.length]);
+
+  const services = [
+    { title: "Buying", description: "We find the perfect home for you.", icon: "https://placehold.co/150x150/f8f9fa/333?text=B" },
+    { title: "Selling", description: "We sell quickly at the best price.", icon: "https://placehold.co/150x150/f8f9fa/333?text=S" },
+    { title: "Renting", description: "We find reliable tenants for you.", icon: "https://placehold.co/150x150/f8f9fa/333?text=R" },
+    { title: "Consulting", description: "Expert market analysis and advice.", icon: "https://placehold.co/150x150/f8f9fa/333?text=C" },
+    { title: "Valuation", description: "Precise and realistic market valuations.", icon: "https://placehold.co/150x150/f8f9fa/333?text=V" },
+    { title: "Management", description: "We take care of all property worries.", icon: "https://placehold.co/150x150/f8f9fa/333?text=M" },
+  ];
+
   return (
-    <section id="agents" className="relative bg-gradient-to-b from-[#FAFAF8] via-[#F3F7FF]/50 to-[#FAFAF8] py-12 md:py-24 overflow-hidden">
-      <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-[#EAF2FF] to-transparent opacity-50 pointer-events-none"></div>
-      
-      <div className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4 text-center md:text-left">
-          <h2 className="font-serif text-[clamp(32px,4vw,44px)] font-bold text-[#1A1A18] tracking-[-0.5px] leading-[1.1] m-0">
-            Meet our top agents
-          </h2>
-          <a href="/agents" className="group font-sans text-sm font-bold text-[#0B3D91] hover:text-[#2B7FFF] transition-all flex items-center gap-2 mx-auto md:mx-0 py-2 px-5 rounded-full bg-white hover:bg-blue-50/70 border border-slate-200/80 shadow-sm">
-            See all agents
-            <span className="transition-transform group-hover:translate-x-1">→</span>
-          </a>
+    <section className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-12 md:py-20 bg-[#FAFAF8]">
+      <div className="mb-8 md:mb-10">
+        <h2 className="font-serif text-[clamp(28px,3vw,36px)] font-bold text-[#1A1A18] tracking-[-0.5px] leading-[1.1] m-0">
+          Our Services
+        </h2>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 md:gap-5">
+        
+        {/* Left Side: 3x2 Grid of Small Cards */}
+        <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
+          {services.map((service, i) => (
+            <div key={i} className="group relative bg-white rounded-2xl p-5 h-[160px] shadow-[0_4px_16px_rgba(0,0,0,0.03)] border border-[#E8E5DF]/50 hover:shadow-[0_8px_30px_rgba(11,61,145,0.08)] transition-all duration-300 overflow-hidden flex flex-col justify-between cursor-pointer">
+              <div className="z-10">
+                <h3 className="font-sans font-semibold text-[#1A1A18] text-[16px] mb-1">
+                  {service.title}
+                </h3>
+                <p className="font-sans text-[#6B7280] text-[13px] leading-snug font-medium max-w-[180px]">
+                  {service.description}
+                </p>
+              </div>
+              
+              <div className="absolute -bottom-4 -right-4 w-[100px] h-[100px] bg-[#F0F4F8] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                <span className="font-serif font-bold text-4xl text-[#0B3D91] opacity-40">{service.icon.slice(-1)}</span>
+              </div>
+            </div>
+          ))}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
-          {agents.map((a) => (
-            <article
-              key={a.id}
-              className="group bg-white rounded-3xl overflow-hidden shadow-[0_10px_35px_rgba(0,0,0,0.04)] border border-[#E8E5DF]/80 hover:border-[#2B7FFF]/40 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_24px_60px_rgba(11,61,145,0.12)] flex flex-col justify-between"
+        {/* Right Side: Tall Carousel Promo Banner */}
+        <div className="lg:col-span-1 h-full min-h-[340px] rounded-2xl relative overflow-hidden group shadow-[0_8px_24px_rgba(0,0,0,0.08)]">
+          {carouselItems.map((item, i) => (
+            <div 
+              key={i} 
+              className="absolute inset-0 transition-opacity duration-1000 ease-in-out"
+              style={{ opacity: i === activeSlide ? 1 : 0 }}
             >
-              <div>
-                {/* Full-bleed Tall Image Container with Verified Badge on Right */}
-                <div className="relative w-full h-72 overflow-hidden bg-gradient-to-b from-[#F2F6FE] to-white border-b border-[#F0F2F7]">
-                  <div className="absolute top-3 right-3 z-10 bg-white/95 backdrop-blur-md text-[#0B3D91] font-sans text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full shadow-sm border border-blue-100 flex items-center gap-1">
-                    <span className="text-[#2B7FFF]">★</span> Verified
-                  </div>
-                  {a.image ? (
-                    <img
-                      src={a.image}
-                      alt={a.name}
-                      className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-[#EAF2FF] flex items-center justify-center text-[#0B3D91] font-serif font-bold text-3xl">
-                      {a.name?.charAt(0) || "A"}
+              <img src={item.image} alt={item.title} className={`absolute inset-0 w-full h-full object-cover transition-transform duration-[4000ms] ease-linear ${i === activeSlide ? 'scale-110' : 'scale-100'}`} />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0F2F57] via-[#0F2F57]/50 to-transparent"></div>
+              
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center text-white z-10 mt-16">
+                <h3 className="font-sans text-2xl font-bold mb-2 drop-shadow-lg">{item.title}</h3>
+                <p className="font-sans text-[11px] font-bold tracking-widest uppercase opacity-90">{item.subtitle}</p>
+              </div>
+            </div>
+          ))}
+
+          {/* Carousel Indicators */}
+          <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-2 z-20">
+            {carouselItems.map((_, i) => (
+              <div 
+                key={i} 
+                onClick={() => setActiveSlide(i)}
+                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${i === activeSlide ? 'w-6 bg-white' : 'w-2 bg-white/40 hover:bg-white/70'}`}
+              ></div>
+            ))}
+          </div>
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+function AgentRecruitmentBanner() {
+  return (
+    <section className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-10">
+      <div className="w-full bg-gradient-to-br from-[#0B3D91] via-[#1a55b3] to-[#2B7FFF] rounded-[32px] p-8 md:p-14 flex flex-col md:flex-row items-center justify-between relative overflow-hidden shadow-[0_20px_50px_rgba(11,61,145,0.3)]">
+        
+        {/* Background Decorative Elements */}
+        <div className="absolute -top-24 -left-24 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/3 w-48 h-48 bg-white/5 rounded-full blur-2xl"></div>
+
+        <div className="flex-1 text-left relative z-10 mb-8 md:mb-0 max-w-xl">
+          <h2 className="font-serif text-[clamp(32px,4vw,48px)] font-bold text-white tracking-tight leading-[1.1] mb-4">
+            List your property<br/>on Haven today
+          </h2>
+          <p className="font-sans text-blue-100 text-sm md:text-base mb-8 max-w-md font-medium leading-relaxed">
+            Reach thousands of potential buyers and renters. Create an account in seconds to start listing your properties on our premium platform.
+          </p>
+          <SignInButton mode="modal" fallbackRedirectUrl="/dashboard" forceRedirectUrl="/dashboard">
+            <button className="bg-white text-[#0B3D91] font-sans text-sm font-bold py-3 px-8 rounded-full shadow-[0_4px_14px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.25)] transition-all hover:-translate-y-0.5 border-none cursor-pointer">
+              Create an property
+            </button>
+          </SignInButton>
+        </div>
+
+        <div className="flex-1 relative z-10 flex justify-center md:justify-end">
+          <div className="relative w-full max-w-[500px]">
+             {/* Tablet Mockup Placeholder */}
+             <div className="w-full aspect-[4/3] bg-[#0f172a] rounded-3xl border-8 border-[#080c17] shadow-2xl overflow-hidden relative rotate-2 hover:rotate-0 transition-transform duration-500">
+               <div className="w-full h-8 bg-[#1e293b] flex items-center px-4 gap-2 border-b border-[#334155]">
+                 <div className="w-2.5 h-2.5 rounded-full bg-red-400"></div>
+                 <div className="w-2.5 h-2.5 rounded-full bg-yellow-400"></div>
+                 <div className="w-2.5 h-2.5 rounded-full bg-green-400"></div>
+               </div>
+               <div className="p-4 bg-[#f8fafc] h-full">
+                  <div className="flex gap-4 items-center mb-4 border-b pb-4 border-[#e2e8f0]">
+                    <div className="w-16 h-16 rounded-full bg-[#cbd5e1]"></div>
+                    <div>
+                      <div className="w-32 h-4 bg-[#cbd5e1] rounded mb-2"></div>
+                      <div className="w-20 h-3 bg-[#e2e8f0] rounded"></div>
                     </div>
-                  )}
-                </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="h-24 bg-[#e2e8f0] rounded-lg"></div>
+                    <div className="h-24 bg-[#e2e8f0] rounded-lg"></div>
+                    <div className="h-24 bg-[#e2e8f0] rounded-lg"></div>
+                  </div>
+               </div>
+             </div>
+             
+             {/* Floating Coffee Cup */}
+             <img src="https://placehold.co/100x100/f8f9fa/333?text=Haven" alt="Haven" className="absolute -right-8 -top-8 w-24 h-24 rounded-full shadow-xl border-4 border-white rotate-12" />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-                {/* Minimal Elegant Agent Header */}
-                <div className="p-6 text-left">
-                  <h3 className="font-serif text-xl font-bold text-[#1A1A18] mb-1 group-hover:text-[#0B3D91] transition-colors">
-                    {a.name}
-                  </h3>
-                  <p className="font-sans text-xs font-semibold text-[#6B7280] uppercase tracking-wider line-clamp-1">
-                    {a.role}
-                  </p>
-                </div>
-              </div>
+function Agents({ agents }) {
+  if (!agents || agents.length === 0) return null;
 
-              {/* Single Minimal Contact CTA */}
-              <div className="px-6 pb-6 pt-0">
-                <ContactAgentButton agent={a} />
-              </div>
-            </article>
+  return (
+    <section id="agents" className="relative bg-[#FAFAF8] py-12 md:py-24">
+      <div className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 relative z-10 text-center">
+        <h2 className="font-serif text-[clamp(28px,3vw,36px)] font-bold text-[#1A1A18] tracking-[-0.5px] leading-[1.1] mb-12">
+          Our top agents
+        </h2>
+
+        <div className="flex flex-wrap justify-center gap-10 md:gap-16">
+          {agents.map((a) => (
+            <AgentCard key={a.id} agent={a} />
           ))}
         </div>
       </div>
@@ -415,10 +670,10 @@ function AdvancedSearchPromo() {
 
       <div className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 relative z-10 flex flex-col items-center text-center pt-6 md:pt-10">
         <h2 className={`font-serif text-[clamp(32px,4vw,48px)] font-bold leading-[1.15] mb-4 max-w-4xl mx-auto ${themeColor === 'solid-blue' ? 'text-white' : 'text-[#1A1A18]'}`}>
-          Vă vom ajuta să găsiți cazare conform nevoilor dumneavoastră.
+          We'll help you find the perfect property for your needs.
         </h2>
         <p className={`font-sans text-base sm:text-lg max-w-2xl mx-auto leading-[1.6] mb-8 font-normal ${themeColor === 'solid-blue' ? 'text-blue-100' : 'text-[#4A5568]'}`}>
-          Explorați proprietăți verificate, cu prețuri transparente și agenți dedicați gata să vă ghideze la fiecare pas.
+          Explore verified properties, with transparent pricing and dedicated agents ready to guide you at every step.
         </p>
 
         {/* 3D Illustration Container */}
@@ -439,8 +694,11 @@ export default function HomePage({ properties, agents }) {
     <div className="font-sans text-[#1A1A18] bg-[#FAFAF8] min-h-screen">
       <Navbar />
       <HeroGradient />
+      <PropertyTypes />
       <PopularProperties properties={properties} />
       <AdvancedSearchPromo />
+      <Services />
+      <AgentRecruitmentBanner />
       <Agents agents={agents} />
       <Footer />
     </div>

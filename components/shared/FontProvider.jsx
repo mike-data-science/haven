@@ -9,6 +9,7 @@ export function FontProvider({ children }) {
   const [pillWidth, setPillWidth] = useState("1240px");
   const [themeColor, setThemeColor] = useState("light-gradient");
   const [cardStyle, setCardStyle] = useState("variant3");
+  const [propertyTypeStyle, setPropertyTypeStyle] = useState("modern");
 
   useEffect(() => {
     // Migrate to default settings on first load
@@ -19,10 +20,12 @@ export function FontProvider({ children }) {
       localStorage.setItem("haven-pill-width", "1240px");
       localStorage.setItem("haven-theme-color", "light-gradient");
       localStorage.setItem("haven-card-style", "variant3");
+      localStorage.setItem("haven-property-style", "modern");
       setFontStyle("minimalist");
       setPillWidth("1240px");
       setThemeColor("light-gradient");
       setCardStyle("variant3");
+      setPropertyTypeStyle("modern");
     } else {
       const saved = localStorage.getItem("haven-font-style");
       if (saved) setFontStyle(saved);
@@ -32,6 +35,8 @@ export function FontProvider({ children }) {
       if (savedColor) setThemeColor(savedColor);
       const savedCardStyle = localStorage.getItem("haven-card-style");
       if (savedCardStyle) setCardStyle(savedCardStyle);
+      const savedPropertyStyle = localStorage.getItem("haven-property-style");
+      if (savedPropertyStyle) setPropertyTypeStyle(savedPropertyStyle);
     }
   }, []);
 
@@ -53,6 +58,11 @@ export function FontProvider({ children }) {
   const toggleCardStyle = (style) => {
     setCardStyle(style);
     localStorage.setItem("haven-card-style", style);
+  };
+
+  const togglePropertyTypeStyle = (style) => {
+    setPropertyTypeStyle(style);
+    localStorage.setItem("haven-property-style", style);
   };
 
   useEffect(() => {
@@ -101,7 +111,7 @@ export function FontProvider({ children }) {
   }, [fontStyle]);
 
   return (
-    <FontContext.Provider value={{ fontStyle, setFontStyle: toggleFontStyle, pillWidth, setPillWidth: togglePillWidth, themeColor, setThemeColor: toggleThemeColor, cardStyle, setCardStyle: toggleCardStyle }}>
+    <FontContext.Provider value={{ fontStyle, setFontStyle: toggleFontStyle, pillWidth, setPillWidth: togglePillWidth, themeColor, setThemeColor: toggleThemeColor, cardStyle, setCardStyle: toggleCardStyle, propertyTypeStyle, setPropertyTypeStyle: togglePropertyTypeStyle }}>
       {children}
     </FontContext.Provider>
   );

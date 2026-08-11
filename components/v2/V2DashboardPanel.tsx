@@ -2,7 +2,16 @@
 
 import React from "react";
 import { Settings2, TrendingUp, DollarSign, Activity, Clock, Percent, Home, BarChart } from "lucide-react";
-import type { V2Stats } from "@/app/v2/page";
+export interface V2Stats {
+  soldPercent?: number;
+  pendingPercent?: number;
+  totalApproved?: number;
+  totalPending?: number;
+  avgPrice?: number;
+  avgPricePerSqm?: number;
+  weeklyTrend?: { name: string; value: number }[];
+}
+
 
 interface V2DashboardPanelProps {
   stats: V2Stats | null;

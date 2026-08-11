@@ -4,18 +4,34 @@ import V2Navbar from "@/components/v2/V2Navbar";
 import Image from "next/image";
 import { MoreHorizontal, Download, Filter, Printer, Edit, Trash2 } from "lucide-react";
 
+import V2Pagination from "@/components/v2/V2Pagination";
+
 export const revalidate = 0; // Dynamic route
 
-export default async function V2ListingsPage() {
-  const properties = await prisma.property.findMany({
-    where: { isDeleted: false },
-    include: {
-      user: true,
-      category: true,
-      images: { orderBy: { order: "asc" }, take: 1 },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+export default async function V2ListingsPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
+  const sp = await searchParams;
+  const page = typeof sp.page === 'string' ? parseInt(sp.page, 10) || 1 : 1;
+  const limit = typeof sp.limit === 'string' ? parseInt(sp.limit, 10) || 10 : 10;
+  const skip = (page - 1) * limit;
+
+  const [properties, totalCount] = await Promise.all([
+    prisma.property.findMany({
+      where: { isDeleted: false },
+      include: {
+        user: true,
+        category: true,
+        images: { orderBy: { order: "asc" }, take: 1 },
+      },
+      orderBy: { createdAt: "desc" },
+      skip,
+      take: limit,
+    }),
+    prisma.property.count({
+      where: { isDeleted: false }
+    })
+  ]);
+
+  const totalPages = Math.ceil(totalCount / limit);
 
   return (
     <div className="min-h-screen bg-[#F0F2F5] font-sora relative">
@@ -148,27 +164,12 @@ export default async function V2ListingsPage() {
           </div>
           
           {/* Pagination Footer */}
-          <div className="border-t border-gray-100 p-4 flex items-center justify-between bg-white text-sm text-gray-500">
-            <div className="flex items-center gap-2">
-              <span>Showing data</span>
-              <select className="border border-gray-200 rounded-md px-2 py-1 bg-transparent">
-                <option>10</option>
-                <option>20</option>
-                <option>50</option>
-              </select>
-            </div>
-            <div>
-              Showing 1-10 from {properties.length} data
-            </div>
-            <div className="flex gap-1">
-              <button className="w-8 h-8 rounded-full flex items-center justify-center border border-gray-200 hover:bg-gray-50">&lt;</button>
-              <button className="w-8 h-8 rounded-full flex items-center justify-center bg-[#E1F036] text-black font-bold">1</button>
-              <button className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-50">2</button>
-              <button className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-50">3</button>
-              <button className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-50">4</button>
-              <button className="w-8 h-8 rounded-full flex items-center justify-center border border-gray-200 hover:bg-gray-50">&gt;</button>
-            </div>
-          </div>
+          <V2Pagination 
+            currentPage={page} 
+            totalPages={totalPages} 
+            totalCount={totalCount} 
+            limit={limit} 
+          />
         </div>
       </div>
     </div>

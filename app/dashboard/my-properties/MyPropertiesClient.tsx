@@ -7,7 +7,15 @@ import { CheckCircle2, Clock, XCircle, Eye, Edit, Trash2, MapPin, BedDouble, Bat
 import ImageCarousel from "@/components/front/ImageCarousel";
 import { useRouter } from "next/navigation";
 
-export default function MyPropertiesClient({ initialProperties }: { initialProperties: any[] }) {
+export default function MyPropertiesClient({ 
+  initialProperties, 
+  totalPages = 1,
+  currentPage = 1
+}: { 
+  initialProperties: any[],
+  totalPages?: number,
+  currentPage?: number
+}) {
   const [properties, setProperties] = useState(initialProperties);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const router = useRouter();
@@ -49,7 +57,7 @@ export default function MyPropertiesClient({ initialProperties }: { initialPrope
           </div>
         )}
         
-        {properties.slice(0, 30).map((prop) => {
+        {properties.map((prop) => {
           const streetAddress = prop.address ? prop.address.split(',')[0].trim() : "No street address provided";
           
           return (
@@ -142,6 +150,59 @@ export default function MyPropertiesClient({ initialProperties }: { initialPrope
           </div>
         )})}
       </div>
+      
+      {/* Pagination UI */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-2 mt-8 py-4">
+          <button
+            onClick={() => router.push(`/dashboard/my-properties?page=${currentPage - 1}`)}
+            disabled={currentPage <= 1}
+            className="px-4 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            Previous
+          </button>
+          
+          <div className="flex items-center gap-1">
+            {(() => {
+              const maxVisiblePages = 5;
+              let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+              let endPage = startPage + maxVisiblePages - 1;
+
+              if (endPage > totalPages) {
+                endPage = totalPages;
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+              }
+
+              const visiblePages = Array.from(
+                { length: endPage - startPage + 1 },
+                (_, i) => startPage + i
+              );
+
+              return visiblePages.map((page) => (
+                <button
+                  key={page}
+                  onClick={() => router.push(`/dashboard/my-properties?page=${page}`)}
+                  className={`w-10 h-10 rounded-lg text-sm font-semibold transition-colors ${
+                    currentPage === page 
+                      ? "bg-[#0B3D91] text-white" 
+                      : "border border-slate-200 text-slate-700 hover:bg-slate-50"
+                  }`}
+                >
+                  {page}
+                </button>
+              ));
+            })()}
+          </div>
+
+          <button
+            onClick={() => router.push(`/dashboard/my-properties?page=${currentPage + 1}`)}
+            disabled={currentPage >= totalPages}
+            className="px-4 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }

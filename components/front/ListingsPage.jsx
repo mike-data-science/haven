@@ -12,6 +12,8 @@ export default function ListingsPage({ properties, agents, categories, searchPar
   const [selectedId, setSelectedId] = useState(null);
   const [zoomedId, setZoomedId] = useState(null);
   const [layoutMode, setLayoutMode] = useState('list'); // 'list' | 'grid'
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 30;
   
   // Mobile UI States
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -89,6 +91,14 @@ export default function ListingsPage({ properties, agents, categories, searchPar
     return result;
   }, [properties, sortBy, location, selectedTypes, minPrice, maxPrice, minSize, maxSize, rooms]);
 
+  const totalPages = Math.ceil(filteredListings.length / itemsPerPage);
+  const paginatedListings = filteredListings.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [sortBy, location, selectedTypes, minPrice, maxPrice, minSize, maxSize, rooms]);
+
   const toggleType = (type) => {
     const newTypes = new Set(selectedTypes);
     if (type === "All") {
@@ -107,7 +117,7 @@ export default function ListingsPage({ properties, agents, categories, searchPar
   };
 
   const FiltersContent = () => (
-    <div className="flex flex-col gap-7 h-full overflow-y-auto pb-4 pr-1">
+    <div className="flex flex-col gap-7 pb-4 pr-5">
       <div className="flex flex-col gap-1.5">
         <label className="text-[13px] font-bold text-[#1A1A18]">Sort By</label>
         <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-[13px] bg-slate-50 outline-none focus:border-[#0B3D91] focus:ring-1 focus:ring-[#0B3D91] transition-all text-[#1A1A18] cursor-pointer hover:bg-slate-100">
@@ -243,7 +253,7 @@ export default function ListingsPage({ properties, agents, categories, searchPar
       <main className="flex-1 flex overflow-hidden w-full max-w-[1400px] mx-auto relative">
         
         {/* Desktop Sidebar Filters */}
-        <aside className={`w-64 sm:w-72 shrink-0 border-r border-line bg-white flex-col h-full overflow-y-auto hidden md:flex ${layoutMode === 'grid' ? 'md:hidden lg:flex' : ''}`}>
+        <aside className={`w-64 sm:w-72 shrink-0 border-r border-line bg-white flex-col h-full overflow-hidden hidden md:flex ${layoutMode === 'grid' ? 'md:hidden lg:flex' : ''}`}>
           <div className="p-5 border-b border-line flex justify-between items-center shrink-0">
             <h2 className="font-serif text-lg font-semibold text-ink">Filter</h2>
             <button 
@@ -258,7 +268,7 @@ export default function ListingsPage({ properties, agents, categories, searchPar
               )}
             </button>
           </div>
-          <div className="p-5 flex-grow overflow-y-auto">
+          <div className="flex-1 overflow-y-auto w-full [scrollbar-width:thin] pl-5 py-5">
             <FiltersContent />
           </div>
         </aside>
@@ -287,9 +297,9 @@ export default function ListingsPage({ properties, agents, categories, searchPar
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-3 lg:px-5 py-3 lg:py-5 pb-18">
+            <div className="flex-1 overflow-y-auto overflow-x-hidden px-3 lg:px-5 py-3 lg:py-5 pb-18">
               <div className={`grid gap-5 ${layoutMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2' : 'grid-cols-1'}`}>
-                {filteredListings.slice(0, 30).map(l => (
+                {paginatedListings.map(l => (
                   <div 
                     key={l.id} 
                     id={`property-card-${l.id}`}
@@ -306,17 +316,65 @@ export default function ListingsPage({ properties, agents, categories, searchPar
                     />
                   </div>
                 ))}
-                {filteredListings.length > 30 && (
-                  <div className="col-span-full py-6 text-center">
-                    <p className="text-slate-500 font-sans">Showing 30 of {filteredListings.length} properties. Try refining your search.</p>
-                  </div>
-                )}
                 {filteredListings.length === 0 && (
                   <div className="col-span-full py-9 text-center text-slate-500 font-bold font-serif text-base">
                     No properties match your filters.
                   </div>
                 )}
               </div>
+
+              {/* Pagination UI */}
+              {totalPages > 1 && (
+                <div className="flex justify-center items-center gap-2 mt-8 py-4">
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    Previous
+                  </button>
+                  
+                  <div className="flex items-center gap-1">
+                    {(() => {
+                      const maxVisiblePages = 5;
+                      let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+                      let endPage = startPage + maxVisiblePages - 1;
+
+                      if (endPage > totalPages) {
+                        endPage = totalPages;
+                        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+                      }
+
+                      const visiblePages = Array.from(
+                        { length: endPage - startPage + 1 },
+                        (_, i) => startPage + i
+                      );
+
+                      return visiblePages.map((page) => (
+                        <button
+                          key={page}
+                          onClick={() => setCurrentPage(page)}
+                          className={`w-8 h-8 sm:w-10 sm:h-10 shrink-0 rounded-lg text-sm font-semibold transition-colors ${
+                            currentPage === page 
+                              ? "bg-[#0B3D91] text-white shadow-md shadow-[#0B3D91]/20" 
+                              : "border border-slate-200 text-slate-700 hover:bg-slate-50"
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      ));
+                    })()}
+                  </div>
+
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                    className="px-4 py-2 rounded-lg border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
@@ -327,7 +385,7 @@ export default function ListingsPage({ properties, agents, categories, searchPar
           `}>
              <UniversalMap 
                 mode="listings"
-                listings={filteredListings.slice(0, 30)} 
+                listings={paginatedListings} 
                 selectedId={selectedId}
                 onSelectPin={setSelectedId}
                 zoomedId={zoomedId}

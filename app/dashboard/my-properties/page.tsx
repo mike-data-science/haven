@@ -2,20 +2,37 @@ import { getCurrentUser } from "@/lib/auth/session";
 import prisma from "@/lib/db";
 import MyPropertiesClient from "./MyPropertiesClient";
 
-export default async function MyPropertiesPage() {
+export default async function MyPropertiesPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const user = await getCurrentUser();
+  const sp = await searchParams;
+  
+  const page = typeof sp.page === 'string' ? parseInt(sp.page, 10) || 1 : 1;
+  const limit = typeof sp.limit === 'string' ? parseInt(sp.limit, 10) || 12 : 12;
+  const skip = (page - 1) * limit;
 
-  const properties = await prisma.property.findMany({
-    where: { 
-      userId: user.id,
-      isDeleted: false 
-    },
-    include: {
-      category: true,
-      images: { orderBy: { order: 'asc' } },
-    },
-    orderBy: { createdAt: 'desc' }
-  });
+  const [properties, totalCount] = await Promise.all([
+    prisma.property.findMany({
+      where: { 
+        userId: user.id,
+        isDeleted: false 
+      },
+      include: {
+        category: true,
+        images: { orderBy: { order: 'asc' } },
+      },
+      orderBy: { createdAt: 'desc' },
+      skip,
+      take: limit,
+    }),
+    prisma.property.count({
+      where: { 
+        userId: user.id,
+        isDeleted: false 
+      }
+    })
+  ]);
+
+  const totalPages = Math.ceil(totalCount / limit);
 
   return (
     <div className="max-w-7xl mx-auto space-y-8">
@@ -26,7 +43,11 @@ export default async function MyPropertiesPage() {
         </div>
       </div>
       
-      <MyPropertiesClient initialProperties={properties as any} />
+      <MyPropertiesClient 
+        initialProperties={properties as any} 
+        totalPages={totalPages} 
+        currentPage={page} 
+      />
     </div>
   );
 }

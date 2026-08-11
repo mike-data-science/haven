@@ -43,7 +43,8 @@ export function Navbar() {
         </div>
         
         <div className="hidden md:flex flex-1 justify-center items-center gap-8">
-          <Link href="/listings" className={`font-sans text-sm font-bold transition-colors duration-300 ${linkColorClass}`}>Properties</Link>
+          <Link href="/" className={`font-sans text-sm font-bold transition-colors duration-300 ${linkColorClass}`}>Home</Link>
+          <Link href="/listings" className={`font-sans text-sm font-bold transition-colors duration-300 ${linkColorClass}`}>Listings</Link>
           <Link href="/agents" className={`font-sans text-sm font-bold transition-colors duration-300 ${linkColorClass}`}>Agents</Link>
           <Link href="/about" className={`font-sans text-sm font-bold transition-colors duration-300 ${linkColorClass}`}>About</Link>
           <Link href="/contact" className={`font-sans text-sm font-bold transition-colors duration-300 ${linkColorClass}`}>Contact</Link>
@@ -90,7 +91,8 @@ export function Navbar() {
       {isMobileMenuOpen && (
         <div className="md:hidden fixed inset-0 pt-24 pb-10 px-6 bg-white z-[190] h-[100dvh] overflow-y-auto flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-300">
           <div className="flex flex-col items-center justify-center gap-8 flex-1 pb-10">
-            <Link onClick={() => setIsMobileMenuOpen(false)} href="/listings" className="font-sans text-2xl font-bold text-[#1A1A18] transition-colors hover:text-[#0B3D91]">Properties</Link>
+            <Link onClick={() => setIsMobileMenuOpen(false)} href="/" className="font-sans text-2xl font-bold text-[#1A1A18] transition-colors hover:text-[#0B3D91]">Home</Link>
+            <Link onClick={() => setIsMobileMenuOpen(false)} href="/listings" className="font-sans text-2xl font-bold text-[#1A1A18] transition-colors hover:text-[#0B3D91]">Market</Link>
             <Link onClick={() => setIsMobileMenuOpen(false)} href="/agents" className="font-sans text-2xl font-bold text-[#1A1A18] transition-colors hover:text-[#0B3D91]">Agents</Link>
             <Link onClick={() => setIsMobileMenuOpen(false)} href="/about" className="font-sans text-2xl font-bold text-[#1A1A18] transition-colors hover:text-[#0B3D91]">About</Link>
             <Link onClick={() => setIsMobileMenuOpen(false)} href="/contact" className="font-sans text-2xl font-bold text-[#1A1A18] transition-colors hover:text-[#0B3D91]">Contact</Link>

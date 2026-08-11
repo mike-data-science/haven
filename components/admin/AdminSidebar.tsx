@@ -33,11 +33,10 @@ import {
 import { useState } from "react";
 
 const newNavItems = [
-  { slug: "dashboard", label: "Dashboard", icon: Home },
-  { slug: "my-properties", label: "My Properties", icon: Home },
+  { slug: "dashboard", label: "Market Insights", icon: BarChart2 },
   { slug: "discover", label: "Discover", icon: Compass },
+  { slug: "my-properties", label: "My Properties", icon: Home },
   { slug: "inbox", label: "Inbox", icon: Inbox, badge: 3 },
-  { slug: "analytics", label: "Analytics", icon: BarChart2 },
   { slug: "notifications", label: "Notifications", icon: Bell, badge: 5 },
   { slug: "settings", label: "Settings", icon: Settings },
 ];

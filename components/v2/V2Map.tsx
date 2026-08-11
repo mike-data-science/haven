@@ -4,7 +4,7 @@ import React from "react";
 import { MapContainer, TileLayer, Marker, ZoomControl } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import type { V2Property } from "@/app/v2/page";
+import type { V2Property } from "./V2PropertyCard";
 
 // Custom pulsing marker icon
 const createMarkerIcon = (isActive: boolean) => {
@@ -54,9 +54,10 @@ interface V2MapProps {
   properties: V2Property[];
   selectedId: number | null;
   onMarkerClick?: (id: number) => void;
+  isDarkMode?: boolean;
 }
 
-export default function V2Map({ properties, selectedId, onMarkerClick }: V2MapProps) {
+export default function V2Map({ properties, selectedId, onMarkerClick, isDarkMode = false }: V2MapProps) {
   if (typeof window === "undefined") return null;
 
   // Default center: Chisinau
@@ -65,7 +66,7 @@ export default function V2Map({ properties, selectedId, onMarkerClick }: V2MapPr
     : [47.026859, 28.841551];
 
   return (
-    <div className="absolute inset-0 z-0 bg-[#E6EFF8]">
+    <div className={`absolute inset-0 z-0 ${isDarkMode ? 'bg-[#0a0a0a]' : 'bg-[#E6EFF8]'}`}>
       <style>{`
         @keyframes ripple {
           0% { transform: scale(0.8); opacity: 1; }
@@ -77,11 +78,15 @@ export default function V2Map({ properties, selectedId, onMarkerClick }: V2MapPr
         zoom={12}
         zoomControl={false}
         className="w-full h-full"
-        style={{ background: "#E6EFF8" }}
+        style={{ background: isDarkMode ? "#0a0a0a" : "#E6EFF8" }}
       >
         <TileLayer
+          key={isDarkMode ? "dark" : "light"}
           attribution='&copy; <a href="https://carto.com/">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          url={isDarkMode 
+            ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            : "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          }
         />
         
         {properties.map((property) => (
