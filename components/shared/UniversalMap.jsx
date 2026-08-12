@@ -138,10 +138,10 @@ export default function UniversalMap({
       style: (feature) => {
         const isSelected = selectedContour?.id === feature.properties.id;
         return {
-          color: feature.properties.color || "#0B3D91",
+          color: feature.properties.color || "#1E65FF",
           weight: isSelected ? 4.0 : 2.5,
           opacity: isSelected ? 1 : 0.92,
-          fillColor: feature.properties.color || "#0B3D91",
+          fillColor: feature.properties.color || "#1E65FF",
           fillOpacity: isSelected ? 0.55 : 0.28,
           dashArray: "",
           className: "transition-all duration-300 drop-shadow-md cursor-pointer"
@@ -312,7 +312,7 @@ export default function UniversalMap({
       const lat = Number(latitude);
       const lng = Number(longitude);
       pickerMarkerRef.current = L.marker([lat, lng], {
-        icon: createPinIcon('#0B3D91', true),
+        icon: createPinIcon('#1E65FF', true),
         draggable: true,
       }).addTo(mapInstance.current);
 

@@ -9,23 +9,26 @@ export function FontProvider({ children }) {
   const [pillWidth, setPillWidth] = useState("1240px");
   const [themeColor, setThemeColor] = useState("light-gradient");
   const [cardStyle, setCardStyle] = useState("variant3");
-  const [propertyTypeStyle, setPropertyTypeStyle] = useState("modern");
+  const [propertyTypeStyle, setPropertyTypeStyle] = useState("photo");
+  const [promoStyle, setPromoStyle] = useState("full");
 
   useEffect(() => {
     // Migrate to default settings on first load
-    const migrated = localStorage.getItem("haven-default-v2");
+    const migrated = localStorage.getItem("haven-default-v3");
     if (!migrated) {
-      localStorage.setItem("haven-default-v2", "true");
+      localStorage.setItem("haven-default-v3", "true");
       localStorage.setItem("haven-font-style", "minimalist");
       localStorage.setItem("haven-pill-width", "1240px");
       localStorage.setItem("haven-theme-color", "light-gradient");
       localStorage.setItem("haven-card-style", "variant3");
-      localStorage.setItem("haven-property-style", "modern");
+      localStorage.setItem("haven-property-style", "photo");
+      localStorage.setItem("haven-promo-style", "full");
       setFontStyle("minimalist");
       setPillWidth("1240px");
       setThemeColor("light-gradient");
       setCardStyle("variant3");
-      setPropertyTypeStyle("modern");
+      setPropertyTypeStyle("photo");
+      setPromoStyle("full");
     } else {
       const saved = localStorage.getItem("haven-font-style");
       if (saved) setFontStyle(saved);
@@ -37,6 +40,8 @@ export function FontProvider({ children }) {
       if (savedCardStyle) setCardStyle(savedCardStyle);
       const savedPropertyStyle = localStorage.getItem("haven-property-style");
       if (savedPropertyStyle) setPropertyTypeStyle(savedPropertyStyle);
+      const savedPromoStyle = localStorage.getItem("haven-promo-style");
+      if (savedPromoStyle) setPromoStyle(savedPromoStyle);
     }
   }, []);
 
@@ -63,6 +68,11 @@ export function FontProvider({ children }) {
   const togglePropertyTypeStyle = (style) => {
     setPropertyTypeStyle(style);
     localStorage.setItem("haven-property-style", style);
+  };
+
+  const togglePromoStyle = (style) => {
+    setPromoStyle(style);
+    localStorage.setItem("haven-promo-style", style);
   };
 
   useEffect(() => {
@@ -111,7 +121,7 @@ export function FontProvider({ children }) {
   }, [fontStyle]);
 
   return (
-    <FontContext.Provider value={{ fontStyle, setFontStyle: toggleFontStyle, pillWidth, setPillWidth: togglePillWidth, themeColor, setThemeColor: toggleThemeColor, cardStyle, setCardStyle: toggleCardStyle, propertyTypeStyle, setPropertyTypeStyle: togglePropertyTypeStyle }}>
+    <FontContext.Provider value={{ fontStyle, setFontStyle: toggleFontStyle, pillWidth, setPillWidth: togglePillWidth, themeColor, setThemeColor: toggleThemeColor, cardStyle, setCardStyle: toggleCardStyle, propertyTypeStyle, setPropertyTypeStyle: togglePropertyTypeStyle, promoStyle, setPromoStyle: togglePromoStyle }}>
       {children}
     </FontContext.Provider>
   );

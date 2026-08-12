@@ -23,13 +23,13 @@ export default async function Layout({
 
   return (
     <ThemeProvider initialColor={initialColor}>
-      <div className="flex flex-col md:flex-row h-screen overflow-hidden bg-[#111114]">
+      <div className="flex flex-col md:flex-row h-screen overflow-hidden bg-[#FAFAF8]">
         <DashboardMobileMenu sidebar={sidebar} />
         
-        <aside className="hidden md:block w-[200px] shrink-0 border-r border-slate-800 bg-[#18181b] z-20 overflow-y-auto">
+        <aside className="hidden md:block w-[200px] shrink-0 border-r border-[#E8E5DF] bg-white z-20 overflow-y-auto shadow-[2px_0_15px_rgba(0,0,0,0.02)]">
           {sidebar}
         </aside>
-        <main className="flex-1 overflow-y-auto overflow-x-hidden bg-[#111114] p-[14px] lg:p-[23px] min-w-0">{children}</main>
+        <main className="flex-1 overflow-y-auto overflow-x-hidden bg-[#FAFAF8] p-[14px] lg:p-[23px] min-w-0">{children}</main>
       </div>
     </ThemeProvider>
   );

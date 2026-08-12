@@ -28,7 +28,8 @@ import {
   ShieldCheck,
   Heart,
   MessageCircle,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Mail
 } from "lucide-react";
 import { useState } from "react";
 
@@ -55,6 +56,7 @@ const oldAdminItems = [
   { slug: "favorites", label: "Favorites", icon: Heart },
   { slug: "conversations", label: "Conversations", icon: MessageCircle },
   { slug: "images", label: "Images", icon: ImageIcon },
+  { slug: "contact-messages", label: "Contact Form", icon: Mail },
 ];
 
 export default function AdminSidebar({ user, pendingCount = 0 }: { user: User, pendingCount?: number }) {
@@ -62,21 +64,21 @@ export default function AdminSidebar({ user, pendingCount = 0 }: { user: User, p
   const [adminOpen, setAdminOpen] = useState(true);
 
   return (
-    <div className="flex h-full flex-col bg-[#18181b] text-slate-300">
+    <div className="flex h-full flex-col bg-[#111114] text-slate-400">
       {/* Profile Section */}
-      <div className="flex flex-col items-center pt-8 pb-5 border-b border-slate-800/50">
+      <div className="flex flex-col items-center pt-8 pb-5 border-b border-white/5">
         <div className="relative mb-2">
           <Image
             src={user.avatarUrl || "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=200&auto=format&fit=crop"}
             alt={user.name}
             width={72}
             height={72}
-            className="rounded-full object-cover border-[2px] border-slate-800"
+            className="rounded-full object-cover border-[2px] border-white/10 shadow-sm"
             unoptimized
           />
         </div>
         <h2 className="text-white font-semibold text-sm">{user.name}</h2>
-        <p className="text-xs text-slate-500 mt-1">{user.title || "Real Estate Builders"}</p>
+        <p className="text-xs text-slate-400 mt-1">{user.title || "Real Estate Builders"}</p>
       </div>
 
       {/* Navigation */}
@@ -96,16 +98,16 @@ export default function AdminSidebar({ user, pendingCount = 0 }: { user: User, p
                 href={item.slug === "dashboard" ? "/dashboard" : `/dashboard/${item.slug}`}
                 className={`group flex items-center justify-between rounded-xl px-3 py-2 text-xs font-medium transition-all ${
                   isActive
-                    ? "bg-[#27272a] text-white border-l-4 border-l-[var(--theme-accent)]"
-                    : "text-slate-400 hover:bg-[#27272a]/50 hover:text-slate-200 border-l-4 border-l-transparent"
+                    ? "bg-[var(--theme-accent)]/10 text-[var(--theme-accent)] border-l-4 border-l-[var(--theme-accent)]"
+                    : "text-slate-400 hover:bg-white/5 hover:text-white border-l-4 border-l-transparent"
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <Icon className={`h-4 w-4 ${isActive ? "text-white" : "text-slate-500 group-hover:text-slate-300"}`} />
+                  <Icon className={`h-4 w-4 ${isActive ? "text-[var(--theme-accent)]" : "text-slate-500 group-hover:text-white"}`} />
                   <span>{item.label}</span>
                  </div>
                 {item.badge && (
-                  <span className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold ${isActive ? "bg-[var(--theme-accent)] text-white" : "bg-slate-800 text-slate-400"}`}>
+                  <span className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold ${isActive ? "bg-[var(--theme-accent)] text-white" : "bg-white/10 text-slate-300"}`}>
                     {item.badge}
                   </span>
                 )}
@@ -145,29 +147,29 @@ export default function AdminSidebar({ user, pendingCount = 0 }: { user: User, p
           </div>
         )}
 
-        {/* Admin Section - Only THIS section scrolls and looks super cool */}
+        {/* Admin Section */}
         {user.role === "ADMIN" && (
-          <div className="mt-3 border-t border-slate-800/80 pt-2.5 flex flex-col flex-1 min-h-0">
+          <div className="mt-3 border-t border-white/5 pt-2.5 flex flex-col flex-1 min-h-0">
             <button
               onClick={() => setAdminOpen(!adminOpen)}
-              className="group flex w-full items-center justify-between rounded-xl border border-slate-800/80 bg-gradient-to-r from-[#222226] to-[#1a1a1f] px-2.5 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-300 shadow-sm transition-all hover:border-slate-700 hover:text-white shrink-0"
+              className="group flex w-full items-center justify-between rounded-xl border border-white/5 bg-white/5 px-2.5 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-300 shadow-sm transition-all hover:border-white/10 hover:text-white shrink-0"
             >
               <div className="flex items-center gap-2">
-                <div className="flex h-5 w-5 items-center justify-center rounded-lg bg-[var(--theme-accent)]/20 text-[var(--theme-accent)] border border-[var(--theme-accent)]/30">
+                <div className="flex h-5 w-5 items-center justify-center rounded-lg bg-[var(--theme-accent)]/10 text-[var(--theme-accent)] border border-[var(--theme-accent)]/20">
                   <ShieldCheck className="h-3 w-3" />
                 </div>
                 <span>Admin Control</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="rounded-md border border-slate-700/60 bg-[#111114] px-1.5 py-0.5 font-mono text-[9px] font-semibold text-slate-400 group-hover:text-white">
+                <span className="rounded-md border border-white/10 bg-[#111114] px-1.5 py-0.5 font-mono text-[9px] font-semibold text-slate-400 group-hover:text-white">
                   {oldAdminItems.length}
                 </span>
-                <ChevronDown className={`h-3 w-3 text-slate-400 transition-transform duration-200 ${adminOpen ? "rotate-180 text-white" : ""}`} />
+                <ChevronDown className={`h-3 w-3 text-slate-500 transition-transform duration-200 ${adminOpen ? "rotate-180 text-white" : ""}`} />
               </div>
             </button>
             
             {adminOpen && (
-              <div className="mt-2 flex-1 overflow-y-auto pr-1 space-y-1 [scrollbar-width:thin] [scrollbar-color:#334155_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-700 hover:[&::-webkit-scrollbar-thumb]:bg-slate-500 [&::-webkit-scrollbar-track]:bg-transparent">
+              <div className="mt-2 flex-1 overflow-y-auto pr-1 space-y-1 [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.1)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/10 hover:[&::-webkit-scrollbar-thumb]:bg-white/20 [&::-webkit-scrollbar-track]:bg-transparent">
                 {oldAdminItems.map((item) => {
                   const isActive = pathname.startsWith(`/dashboard/${item.slug}`);
                   const Icon = item.icon;
@@ -177,12 +179,12 @@ export default function AdminSidebar({ user, pendingCount = 0 }: { user: User, p
                       href={`/dashboard/${item.slug}`}
                       className={`group relative flex items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-medium transition-all duration-200 ${
                         isActive
-                          ? "bg-gradient-to-r from-[var(--theme-accent)]/20 via-[var(--theme-accent)]/10 to-transparent text-white border border-[var(--theme-accent)]/30 shadow-[0_0_12px_rgba(59,130,246,0.15)]"
-                          : "text-slate-400 hover:bg-[#27272a]/40 hover:text-slate-200 hover:translate-x-1 border border-transparent"
+                          ? "bg-[var(--theme-accent)]/10 text-[var(--theme-accent)] border border-[var(--theme-accent)]/20 shadow-sm"
+                          : "text-slate-400 hover:bg-white/5 hover:text-white border border-transparent"
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
-                        <Icon className={`h-3.5 w-3.5 transition-colors ${isActive ? "text-[var(--theme-accent)]" : "text-slate-500 group-hover:text-slate-300"}`} />
+                        <Icon className={`h-3.5 w-3.5 transition-colors ${isActive ? "text-[var(--theme-accent)]" : "text-slate-500 group-hover:text-white"}`} />
                         <span>{item.label}</span>
                       </div>
                       {isActive && (
@@ -198,16 +200,16 @@ export default function AdminSidebar({ user, pendingCount = 0 }: { user: User, p
       </nav>
 
       {/* Footer Links */}
-      <div className="border-t border-slate-800/50 p-3 space-y-1">
+      <div className="border-t border-white/5 p-3 space-y-1">
         <Link
           href="/dashboard/support"
-          className="flex items-center gap-3 rounded-xl px-3 py-2 text-xs font-medium text-slate-400 hover:bg-[#27272a]/50 hover:text-slate-200 transition-all"
+          className="flex items-center gap-3 rounded-xl px-3 py-2 text-xs font-medium text-slate-400 hover:bg-white/5 hover:text-white transition-all"
         >
           <HelpCircle className="h-4 w-4 text-slate-500" />
           Help & Support
         </Link>
         <SignOutButton>
-          <button className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-xs font-medium text-red-500 hover:bg-red-500/10 transition-all">
+          <button className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-xs font-medium text-red-400 hover:bg-red-500/10 transition-all">
             <LogOut className="h-4 w-4" />
             Log Out
           </button>

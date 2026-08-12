@@ -56,7 +56,7 @@ export default function ListingsMap({ listings, selectedId, onSelectPin, zoomedI
       
       const iconHtml = `
         <div class="relative" style="pointer-events: none;">
-          <div class="bg-[#0B3D91] text-white font-sans text-[7px] font-bold py-1 px-1.5 rounded-full shadow-md border-2 ${isSelected ? 'border-white scale-110 z-40 bg-red-600' : 'border-white z-10'} transition-all duration-200 whitespace-nowrap -translate-x-1/2 -translate-y-full hover:bg-[#2B7FFF] cursor-pointer" style="pointer-events: auto;">
+          <div class="bg-[#1E65FF] text-white font-sans text-[7px] font-bold py-1 px-1.5 rounded-full shadow-md border-2 ${isSelected ? 'border-white scale-110 z-40 bg-red-600' : 'border-white z-10'} transition-all duration-200 whitespace-nowrap -translate-x-1/2 -translate-y-full hover:bg-[#2B7FFF] cursor-pointer" style="pointer-events: auto;">
             ${priceText}
           </div>
         </div>
@@ -105,7 +105,7 @@ export default function ListingsMap({ listings, selectedId, onSelectPin, zoomedI
   return (
     <div className="w-full h-full relative rounded-2xl overflow-hidden shadow-sm border border-[#E8E5DF]">
       <div ref={mapRef} className="absolute inset-0 z-0" />
-      <span className="absolute left-3 top-3 bg-white/90 backdrop-blur-sm px-1.5 py-1 rounded-[4px] text-[6px] font-bold text-[#0B3D91] shadow-sm uppercase tracking-[0px] z-[400] pointer-events-none">
+      <span className="absolute left-3 top-3 bg-white/90 backdrop-blur-sm px-1.5 py-1 rounded-[4px] text-[6px] font-bold text-[#1E65FF] shadow-sm uppercase tracking-[0px] z-[400] pointer-events-none">
         Interactive map
       </span>
     </div>

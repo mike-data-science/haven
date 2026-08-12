@@ -54,7 +54,7 @@ export function Navbar() {
         <div className="hidden md:flex flex-1 justify-end items-center gap-3">
           {!userId ? (
             <SignInButton mode="modal" fallbackRedirectUrl="/dashboard" forceRedirectUrl="/dashboard">
-              <button className="bg-gradient-to-r from-[#0B3D91] to-[#1e58bd] text-white font-sans text-sm font-bold py-2 px-6 rounded-full cursor-pointer transition-all duration-300 hover:scale-[1.03] shadow-[0_4px_16px_rgba(11,61,145,0.3)] border-none">
+              <button className="bg-gradient-to-r from-[#1E65FF] to-[#1455E1] text-white font-sans text-sm font-bold py-2 px-6 rounded-full cursor-pointer transition-all duration-300 hover:scale-[1.03] shadow-[0_4px_16px_rgba(11,61,145,0.3)] border-none">
                 Sign in
               </button>
             </SignInButton>
@@ -80,7 +80,7 @@ export function Navbar() {
 
         {/* Mobile Hamburger Toggle */}
         <button 
-          className={`md:hidden p-1.5 hover:text-[#0B3D91] transition-colors ${toggleColorClass}`}
+          className={`md:hidden p-1.5 hover:text-[#1E65FF] transition-colors ${toggleColorClass}`}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -91,17 +91,17 @@ export function Navbar() {
       {isMobileMenuOpen && (
         <div className="md:hidden fixed inset-0 pt-24 pb-10 px-6 bg-white z-[190] h-[100dvh] overflow-y-auto flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-300">
           <div className="flex flex-col items-center justify-center gap-8 flex-1 pb-10">
-            <Link onClick={() => setIsMobileMenuOpen(false)} href="/" className="font-sans text-2xl font-bold text-[#1A1A18] transition-colors hover:text-[#0B3D91]">Home</Link>
-            <Link onClick={() => setIsMobileMenuOpen(false)} href="/listings" className="font-sans text-2xl font-bold text-[#1A1A18] transition-colors hover:text-[#0B3D91]">Market</Link>
-            <Link onClick={() => setIsMobileMenuOpen(false)} href="/agents" className="font-sans text-2xl font-bold text-[#1A1A18] transition-colors hover:text-[#0B3D91]">Agents</Link>
-            <Link onClick={() => setIsMobileMenuOpen(false)} href="/about" className="font-sans text-2xl font-bold text-[#1A1A18] transition-colors hover:text-[#0B3D91]">About</Link>
-            <Link onClick={() => setIsMobileMenuOpen(false)} href="/contact" className="font-sans text-2xl font-bold text-[#1A1A18] transition-colors hover:text-[#0B3D91]">Contact</Link>
+            <Link onClick={() => setIsMobileMenuOpen(false)} href="/" className="font-sans text-2xl font-bold text-[#1A1A18] transition-colors hover:text-[#1E65FF]">Home</Link>
+            <Link onClick={() => setIsMobileMenuOpen(false)} href="/listings" className="font-sans text-2xl font-bold text-[#1A1A18] transition-colors hover:text-[#1E65FF]">Market</Link>
+            <Link onClick={() => setIsMobileMenuOpen(false)} href="/agents" className="font-sans text-2xl font-bold text-[#1A1A18] transition-colors hover:text-[#1E65FF]">Agents</Link>
+            <Link onClick={() => setIsMobileMenuOpen(false)} href="/about" className="font-sans text-2xl font-bold text-[#1A1A18] transition-colors hover:text-[#1E65FF]">About</Link>
+            <Link onClick={() => setIsMobileMenuOpen(false)} href="/contact" className="font-sans text-2xl font-bold text-[#1A1A18] transition-colors hover:text-[#1E65FF]">Contact</Link>
           </div>
           
           <div className="border-t border-slate-100 pt-8 pb-4 w-full flex flex-col items-center justify-center">
             {!userId ? (
               <SignInButton mode="modal" fallbackRedirectUrl="/dashboard" forceRedirectUrl="/dashboard">
-                <button className="w-full max-w-[280px] bg-gradient-to-r from-[#0B3D91] to-[#1e58bd] text-white font-sans text-base font-bold py-3.5 px-6 rounded-full cursor-pointer shadow-[0_8px_24px_rgba(11,61,145,0.2)] border-none">
+                <button className="w-full max-w-[280px] bg-gradient-to-r from-[#1E65FF] to-[#1455E1] text-white font-sans text-base font-bold py-3.5 px-6 rounded-full cursor-pointer shadow-[0_8px_24px_rgba(11,61,145,0.2)] border-none">
                   Sign in
                 </button>
               </SignInButton>
@@ -125,7 +125,7 @@ export function Navbar() {
                     </UserButton.MenuItems>
                   </UserButton>
                 </div>
-                <Link onClick={() => setIsMobileMenuOpen(false)} href="/dashboard" className="font-sans text-lg font-bold text-[#1A1A18] hover:text-[#0B3D91]">
+                <Link onClick={() => setIsMobileMenuOpen(false)} href="/dashboard" className="font-sans text-lg font-bold text-[#1A1A18] hover:text-[#1E65FF]">
                   Go to Dashboard
                 </Link>
               </div>

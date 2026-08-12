@@ -210,3 +210,12 @@ model PropertyModerationHistory {
   
   createdAt   DateTime @default(now())
 }
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+}

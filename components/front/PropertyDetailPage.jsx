@@ -283,7 +283,7 @@ function ContactAgentForm({ agent, propertyTitle }) {
         <ContactAgentButton 
           agent={agent} 
           propertyTitle={propertyTitle}
-          className="w-full bg-[#0B3D91] hover:bg-[#1e58bd] text-white font-sans text-sm font-medium py-3 rounded-xl transition-colors cursor-pointer flex items-center justify-center"
+          className="w-full bg-[#1E65FF] hover:bg-[#1455E1] text-white font-sans text-sm font-medium py-3 rounded-xl transition-colors cursor-pointer flex items-center justify-center"
         >
           Contact Agent
         </ContactAgentButton>
@@ -296,11 +296,11 @@ function ContactAgentForm({ agent, propertyTitle }) {
       </div>
 
       <form className="flex flex-col gap-3 mt-1" onSubmit={e => e.preventDefault()}>
-        <input type="text" placeholder="Your name" className="w-full border border-slate-200 rounded-[8px] px-3.5 py-2.5 text-sm text-black bg-white outline-none focus:border-[#0B3D91] transition-colors placeholder:text-slate-500" />
-        <input type="email" placeholder="Your email" className="w-full border border-slate-200 rounded-[8px] px-3.5 py-2.5 text-sm text-black bg-white outline-none focus:border-[#0B3D91] transition-colors placeholder:text-slate-500" />
-        <input type="tel" placeholder="Phone number" className="w-full border border-slate-200 rounded-[8px] px-3.5 py-2.5 text-sm text-black bg-white outline-none focus:border-[#0B3D91] transition-colors placeholder:text-slate-500" />
-        <textarea placeholder="I am interested in this property..." rows={3} className="w-full border border-slate-200 rounded-[8px] px-3.5 py-2.5 text-sm text-black bg-white outline-none focus:border-[#0B3D91] transition-colors resize-y placeholder:text-slate-500"></textarea>
-        <button type="submit" className="w-full bg-[#0B3D91] text-white rounded-[8px] py-3.5 font-bold text-base hover:bg-[#1e58bd] transition-colors cursor-pointer border-none mt-1.5 shadow-sm">
+        <input type="text" placeholder="Your name" className="w-full border border-slate-200 rounded-[8px] px-3.5 py-2.5 text-sm text-black bg-white outline-none focus:border-[#1E65FF] transition-colors placeholder:text-slate-500" />
+        <input type="email" placeholder="Your email" className="w-full border border-slate-200 rounded-[8px] px-3.5 py-2.5 text-sm text-black bg-white outline-none focus:border-[#1E65FF] transition-colors placeholder:text-slate-500" />
+        <input type="tel" placeholder="Phone number" className="w-full border border-slate-200 rounded-[8px] px-3.5 py-2.5 text-sm text-black bg-white outline-none focus:border-[#1E65FF] transition-colors placeholder:text-slate-500" />
+        <textarea placeholder="I am interested in this property..." rows={3} className="w-full border border-slate-200 rounded-[8px] px-3.5 py-2.5 text-sm text-black bg-white outline-none focus:border-[#1E65FF] transition-colors resize-y placeholder:text-slate-500"></textarea>
+        <button type="submit" className="w-full bg-[#1E65FF] text-white rounded-[8px] py-3.5 font-bold text-base hover:bg-[#1455E1] transition-colors cursor-pointer border-none mt-1.5 shadow-sm">
           Contact Agent
         </button>
       </form>

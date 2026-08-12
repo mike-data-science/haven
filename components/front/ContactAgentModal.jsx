@@ -49,7 +49,7 @@ export function ContactAgentModal({ isOpen, onClose, agent, propertyTitle }) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Decorative Gradient */}
-        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#0B3D91] via-[#2B7FFF] to-[#7360F2]" />
+        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#1E65FF] via-[#2B7FFF] to-[#7360F2]" />
 
         {/* Close Button */}
         <button 
@@ -72,7 +72,7 @@ export function ContactAgentModal({ isOpen, onClose, agent, propertyTitle }) {
                 className="w-16 h-16 rounded-full object-cover border-2 border-blue-500/20 shadow-md"
               />
             ) : (
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#0B3D91] to-[#2B7FFF] text-white flex items-center justify-center font-serif font-bold text-2xl shadow-md">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#1E65FF] to-[#2B7FFF] text-white flex items-center justify-center font-serif font-bold text-2xl shadow-md">
                 {(agent?.name || "A").charAt(0)}
               </div>
             )}
@@ -86,14 +86,14 @@ export function ContactAgentModal({ isOpen, onClose, agent, propertyTitle }) {
               <h3 className="font-serif text-lg sm:text-xl font-bold text-[#1A1A18] truncate">
                 {agent?.name || "Haven Advisor"}
               </h3>
-              <span className="bg-blue-50 text-[#0B3D91] text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border border-blue-100 shrink-0">
+              <span className="bg-blue-50 text-[#1E65FF] text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border border-blue-100 shrink-0">
                 ★ Verified
               </span>
             </div>
             <p className="font-sans text-xs sm:text-sm text-slate-500 font-medium truncate mt-0.5">
               {agent?.role || "Real Estate Specialist"}
             </p>
-            <p className="font-sans text-xs font-semibold text-[#0B3D91] mt-1">
+            <p className="font-sans text-xs font-semibold text-[#1E65FF] mt-1">
               {links.displayPhone}
             </p>
           </div>
@@ -112,7 +112,7 @@ export function ContactAgentModal({ isOpen, onClose, agent, propertyTitle }) {
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-[#25D366] text-white flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
                 <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                  <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zM12 2C6.477 2 2 6.477 2 12c0 1.891.524 3.655 1.436 5.168L2.167 21.833l4.802-1.249A9.954 9.954 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/>
+                  <path d="M12.012 2C6.502 2 2.023 6.479 2.023 11.989c0 1.761.464 3.481 1.346 5l-1.41 5.148 5.267-1.382c1.46.804 3.11 1.228 4.787 1.228h.004c5.51 0 9.989-4.479 9.989-9.989C22.006 6.479 17.522 2 12.012 2zm5.412 14.391c-.227.643-1.325 1.233-1.815 1.353-.453.111-1.041.196-3.239-.714-2.817-1.161-4.606-4.041-4.743-4.223-.137-.183-1.134-1.509-1.134-2.879 0-1.37.712-2.046.963-2.316.251-.271.55-.339.734-.339.183 0 .367.004.527.012.164.008.384-.061.6.46.229.551.782 1.908.851 2.046.069.138.115.298.023.481-.092.183-.138.298-.275.459-.138.161-.289.344-.413.481-.137.151-.286.315-.126.591.161.275.717 1.183 1.543 1.92 1.068.951 1.961 1.246 2.236 1.383.275.138.436.115.596-.069.16-.183.687-.798.871-1.073.183-.275.367-.229.619-.138.252.092 1.594.752 1.869.889.275.138.459.206.527.321.069.115.069.664-.158 1.307z"/>
                 </svg>
               </div>
               <div className="text-left">
@@ -158,7 +158,7 @@ export function ContactAgentModal({ isOpen, onClose, agent, propertyTitle }) {
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-[#7360F2] text-white flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
                 <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                  <path d="M19.333 4.667C17.74 3.073 15.626 2 12.875 2c-5.74 0-10.4 4.542-10.4 10.146 0 2.292.833 4.396 2.188 6.042l-1.458 3.5c-.104.25-.042.541.145.729.146.146.354.208.563.167l3.75-.938c1.583.917 3.396 1.458 5.208 1.458 5.74 0 10.4-4.542 10.4-10.146 0-2.708-1.146-5.25-3.938-8.291zM17.5 16.5c-.313.792-1.75 1.542-2.52 1.583-.584.042-1.126-.146-2.584-.75-2.083-.854-3.833-2.458-4.916-4.354-.771-1.354-1.042-2.313-.938-3.021.083-.875.875-2.083 1.708-2.417.313-.125.667-.083.917.146.458.417 1.042 1.563 1.188 1.958.125.333.063.708-.167.979l-.542.667c.604 1.167 1.542 2.104 2.708 2.708l.667-.542c.271-.229.646-.292.979-.167.396.146 1.542.729 1.958 1.188.229.25.271.604.146.917z"/>
+                  <path d="M11.398.002C9.473.028 5.331.344 3.014 2.467 1.294 4.177.693 6.698.623 9.82c-.06 3.11-.13 8.95 5.5 10.541v2.42s-.038.97.602 1.17c.79.25 1.24-.499 1.99-1.299l1.4-1.58c3.85.32 6.8-.419 7.14-.529.78-.25 5.181-.811 5.901-6.652.74-6.031-.36-9.831-2.34-11.551l-.01-.002c-.6-.55-3-2.3-8.37-2.32 0 0-.396-.025-1.038-.016zm.067 1.697c.545-.003.88.02.88.02 4.54.01 6.711 1.38 7.221 1.84 1.67 1.429 2.528 4.856 1.9 9.892-.6 4.88-4.17 5.19-4.83 5.4-.28.09-2.88.73-6.152.52 0 0-2.439 2.941-3.199 3.701-.12.13-.26.17-.35.15-.13-.03-.17-.19-.16-.41l.02-4.019c-4.771-1.32-4.491-6.302-4.441-8.902.06-2.6.55-4.732 2-6.172 1.957-1.77 5.475-2.01 7.11-2.02zm.36 2.6a.299.299 0 0 0-.3.299.3.3 0 0 0 .3.3 5.631 5.631 0 0 1 4.03 1.59c1.09 1.06 1.621 2.48 1.641 4.34a.3.3 0 0 0 .3.3v-.009a.3.3 0 0 0 .3-.3 6.451 6.451 0 0 0-1.81-4.76c-1.19-1.16-2.692-1.76-4.462-1.76zm-3.954.69a.955.955 0 0 0-.615.12h-.012c-.41.24-.788.54-1.148.94-.27.32-.421.639-.461.949a1.24 1.24 0 0 0 .05.541l.02.01a13.722 13.722 0 0 0 1.2 2.6 15.383 15.383 0 0 0 2.32 3.171l.03.04.04.03.03.03.03.03a15.603 15.603 0 0 0 3.18 2.33c1.32.72 2.122 1.06 2.602 1.2v.01c.14.04.268.06.398.06a1.84 1.84 0 0 0 1.102-.472c.39-.35.7-.738.93-1.148v-.01c.23-.43.15-.841-.18-1.121a13.632 13.632 0 0 0-2.15-1.54c-.51-.28-1.03-.11-1.24.17l-.45.569c-.23.28-.65.24-.65.24l-.012.01c-3.12-.8-3.95-3.959-3.95-3.959s-.04-.43.25-.65l.56-.45c.27-.22.46-.74.17-1.25a13.522 13.522 0 0 0-1.54-2.15.843.843 0 0 0-.504-.3zm4.473.89a.3.3 0 0 0 .002.6 3.78 3.78 0 0 1 2.65 1.15 3.5 3.5 0 0 1 .9 2.57.3.3 0 0 0 .3.299l.01.012a.3.3 0 0 0 .3-.301c.03-1.19-.34-2.19-1.07-2.99-.73-.8-1.75-1.25-3.05-1.34a.3.3 0 0 0-.042 0zm.49 1.619a.305.305 0 0 0-.018.611c.99.05 1.47.55 1.53 1.58a.3.3 0 0 0 .3.29h.01a.3.3 0 0 0 .29-.32c-.07-1.34-.8-2.091-2.1-2.161a.305.305 0 0 0-.012 0z"/>
                 </svg>
               </div>
               <div className="text-left">
@@ -174,10 +174,10 @@ export function ContactAgentModal({ isOpen, onClose, agent, propertyTitle }) {
           {/* Direct Phone Call */}
           <a
             href={links.call}
-            className="group flex items-center justify-between w-full p-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 hover:text-[#0B3D91] border border-slate-200 transition-colors cursor-pointer no-underline mt-1"
+            className="group flex items-center justify-between w-full p-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 hover:text-[#1E65FF] border border-slate-200 transition-colors cursor-pointer no-underline mt-1"
           >
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-slate-200 text-slate-700 group-hover:bg-[#0B3D91] group-hover:text-white flex items-center justify-center transition-colors">
+              <div className="w-8 h-8 rounded-lg bg-slate-200 text-slate-700 group-hover:bg-[#1E65FF] group-hover:text-white flex items-center justify-center transition-colors">
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
                   <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
                 </svg>
@@ -186,7 +186,7 @@ export function ContactAgentModal({ isOpen, onClose, agent, propertyTitle }) {
                 Direct phone call ({links.displayPhone})
               </span>
             </div>
-            <span className="font-sans text-xs font-bold text-slate-400 group-hover:text-[#0B3D91]">
+            <span className="font-sans text-xs font-bold text-slate-400 group-hover:text-[#1E65FF]">
               Call →
             </span>
           </a>
@@ -210,7 +210,7 @@ export function ContactAgentButton({ agent, propertyTitle = "", className = "", 
           e.stopPropagation();
           setIsModalOpen(true);
         }}
-        className={className || "w-full bg-[#0B3D91] hover:bg-[#1e58bd] text-white font-sans text-sm font-medium py-3 rounded-xl transition-colors cursor-pointer flex items-center justify-center"}
+        className={className || "w-full bg-[#1E65FF] hover:bg-[#1455E1] text-white font-sans text-sm font-medium py-3 rounded-xl transition-colors cursor-pointer flex items-center justify-center"}
       >
         {children || "Contact Agent"}
       </button>

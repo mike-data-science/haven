@@ -28,8 +28,26 @@ export default function ListingsPage({ properties, agents, categories, searchPar
     }
   }, [selectedId]);
 
-  // Filter States
-  const initType = searchParams.type && searchParams.type !== 'any' ? searchParams.type.charAt(0).toUpperCase() + searchParams.type.slice(1) : "All";
+  const typeOptionsMap = useMemo(() => {
+    const map = new Map();
+    const defaultTypes = [
+      { name: "Apartment", slug: "apartment" },
+      { name: "House", slug: "house" },
+      { name: "Land", slug: "land" },
+      { name: "Commercial", slug: "commercial" }
+    ];
+    defaultTypes.forEach(t => map.set(t.slug, t.name));
+    return map;
+  }, []);
+
+  const typeOptions = useMemo(() => ["All", ...Array.from(typeOptionsMap.values())], [typeOptionsMap]);
+
+  // Parse initType correctly from slug
+  const paramSlug = searchParams?.type?.toLowerCase();
+  const initType = (paramSlug && paramSlug !== 'any' && typeOptionsMap.has(paramSlug))
+    ? typeOptionsMap.get(paramSlug)
+    : "All";
+
   const initRegion = searchParams.region && searchParams.region !== 'any' ? searchParams.region : "all";
   const initRooms = searchParams.rooms && searchParams.rooms !== 'any' ? searchParams.rooms : "all";
   
@@ -54,7 +72,7 @@ export default function ListingsPage({ properties, agents, categories, searchPar
     // Filter by Type
     if (!selectedTypes.has("All")) {
       result = result.filter(p => {
-        return Array.from(selectedTypes).some(t => p.type.toLowerCase().includes(t.toLowerCase()));
+        return Array.from(selectedTypes).some(t => p.type === t);
       });
     }
 
@@ -120,33 +138,43 @@ export default function ListingsPage({ properties, agents, categories, searchPar
     <div className="flex flex-col gap-7 pb-4 pr-5">
       <div className="flex flex-col gap-1.5">
         <label className="text-[13px] font-bold text-[#1A1A18]">Sort By</label>
-        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-[13px] bg-slate-50 outline-none focus:border-[#0B3D91] focus:ring-1 focus:ring-[#0B3D91] transition-all text-[#1A1A18] cursor-pointer hover:bg-slate-100">
-          <option>Recommended</option>
-          <option>Price: Low to High</option>
-          <option>Price: High to Low</option>
-          <option>Newest</option>
-        </select>
+        <div className="relative">
+          <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="w-full appearance-none border border-slate-200 rounded-xl px-3.5 py-2.5 pr-10 text-[13px] bg-slate-50 outline-none focus:border-[#1E65FF] focus:ring-1 focus:ring-[#1E65FF] transition-all text-[#1A1A18] cursor-pointer hover:bg-slate-100">
+            <option>Recommended</option>
+            <option>Price: Low to High</option>
+            <option>Price: High to Low</option>
+            <option>Newest</option>
+          </select>
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-slate-500">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+          </div>
+        </div>
       </div>
       <div className="flex flex-col gap-1.5">
         <label className="text-[13px] font-bold text-[#1A1A18]">City / Sector</label>
-        <select value={location} onChange={(e) => setLocation(e.target.value)} className="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-[13px] bg-slate-50 outline-none focus:border-[#0B3D91] focus:ring-1 focus:ring-[#0B3D91] transition-all text-[#1A1A18] cursor-pointer hover:bg-slate-100">
-          <option value="all">Chișinău (All)</option>
-          <option value="centru">Chișinău, Centru</option>
-          <option value="botanica">Chișinău, Botanica</option>
-          <option value="buiucani">Chișinău, Buiucani</option>
-          <option value="ciocana">Chișinău, Ciocana</option>
-          <option value="riscani">Chișinău, Rîșcani</option>
-          <option value="telecentru">Chișinău, Telecentru</option>
-          <option value="posta-veche">Chișinău, Poșta Veche</option>
-        </select>
+        <div className="relative">
+          <select value={location} onChange={(e) => setLocation(e.target.value)} className="w-full appearance-none border border-slate-200 rounded-xl px-3.5 py-2.5 pr-10 text-[13px] bg-slate-50 outline-none focus:border-[#1E65FF] focus:ring-1 focus:ring-[#1E65FF] transition-all text-[#1A1A18] cursor-pointer hover:bg-slate-100">
+            <option value="all">Chișinău (All)</option>
+            <option value="centru">Chișinău, Centru</option>
+            <option value="botanica">Chișinău, Botanica</option>
+            <option value="buiucani">Chișinău, Buiucani</option>
+            <option value="ciocana">Chișinău, Ciocana</option>
+            <option value="riscani">Chișinău, Rîșcani</option>
+            <option value="telecentru">Chișinău, Telecentru</option>
+            <option value="posta-veche">Chișinău, Poșta Veche</option>
+          </select>
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-slate-500">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+          </div>
+        </div>
       </div>
 
       <div className="flex flex-col gap-2.5">
         <label className="text-[13px] font-bold text-[#1A1A18]">Type of place</label>
-        <div className="flex flex-col gap-2">
-          {["All", "Apartment", "House", "Land", "Commercial"].map(t => (
-            <label key={t} className="flex items-center gap-3 text-[13px] font-medium text-slate-700 cursor-pointer group">
-              <div className={`w-4 h-4 rounded-[4px] border flex items-center justify-center transition-colors shadow-sm ${selectedTypes.has(t) ? 'bg-[#0B3D91] border-[#0B3D91]' : 'bg-white border-slate-300 group-hover:border-[#0B3D91]'}`}>
+        <div className="flex flex-col gap-2 pl-2">
+          {typeOptions.map(t => (
+            <label key={t} onClick={() => toggleType(t)} className="flex items-center gap-3 text-[13px] font-medium text-slate-700 cursor-pointer group">
+              <div className={`w-4 h-4 rounded-[4px] border flex items-center justify-center transition-colors shadow-sm ${selectedTypes.has(t) ? 'bg-[#1E65FF] border-[#1E65FF]' : 'bg-white border-slate-300 group-hover:border-[#1E65FF]'}`}>
                 {selectedTypes.has(t) && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>}
               </div>
               {t}
@@ -157,13 +185,18 @@ export default function ListingsPage({ properties, agents, categories, searchPar
 
       <div className="flex flex-col gap-1.5">
         <label className="text-[13px] font-bold text-[#1A1A18]">Rooms</label>
-        <select value={rooms} onChange={(e) => setRooms(e.target.value)} className="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-[13px] bg-slate-50 outline-none focus:border-[#0B3D91] focus:ring-1 focus:ring-[#0B3D91] transition-all text-[#1A1A18] cursor-pointer hover:bg-slate-100">
-          <option value="all">Any</option>
-          <option value="1">1+ Rooms</option>
-          <option value="2">2+ Rooms</option>
-          <option value="3">3+ Rooms</option>
-          <option value="4">4+ Rooms</option>
-        </select>
+        <div className="relative">
+          <select value={rooms} onChange={(e) => setRooms(e.target.value)} className="w-full appearance-none border border-slate-200 rounded-xl px-3.5 py-2.5 pr-10 text-[13px] bg-slate-50 outline-none focus:border-[#1E65FF] focus:ring-1 focus:ring-[#1E65FF] transition-all text-[#1A1A18] cursor-pointer hover:bg-slate-100">
+            <option value="all">Any</option>
+            <option value="1">1+ Rooms</option>
+            <option value="2">2+ Rooms</option>
+            <option value="3">3+ Rooms</option>
+            <option value="4">4+ Rooms</option>
+          </select>
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-slate-500">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+          </div>
+        </div>
       </div>
 
       <div className="flex flex-col gap-1.5">
@@ -174,9 +207,11 @@ export default function ListingsPage({ properties, agents, categories, searchPar
             <input 
               placeholder="Min" 
               type="number"
+              min="0"
+              onKeyDown={(e) => { if (e.key === '-' || e.key === 'e') e.preventDefault(); }}
               value={minPrice}
               onChange={(e) => setMinPrice(e.target.value)}
-              className="w-full border border-slate-200 rounded-xl pl-6 pr-3 py-2.5 text-[13px] outline-none focus:border-[#0B3D91] focus:ring-1 focus:ring-[#0B3D91] transition-all bg-slate-50 text-[#1A1A18] placeholder:text-slate-400 hover:bg-slate-100" 
+              className="w-full border border-slate-200 rounded-xl pl-6 pr-3 py-2.5 text-[13px] outline-none focus:border-[#1E65FF] focus:ring-1 focus:ring-[#1E65FF] transition-all bg-slate-50 text-[#1A1A18] placeholder:text-slate-400 hover:bg-slate-100" 
             />
           </div>
           <div className="relative">
@@ -184,9 +219,11 @@ export default function ListingsPage({ properties, agents, categories, searchPar
             <input 
               placeholder="Max" 
               type="number"
+              min="0"
+              onKeyDown={(e) => { if (e.key === '-' || e.key === 'e') e.preventDefault(); }}
               value={maxPrice}
               onChange={(e) => setMaxPrice(e.target.value)}
-              className="w-full border border-slate-200 rounded-xl pl-6 pr-3 py-2.5 text-[13px] outline-none focus:border-[#0B3D91] focus:ring-1 focus:ring-[#0B3D91] transition-all bg-slate-50 text-[#1A1A18] placeholder:text-slate-400 hover:bg-slate-100" 
+              className="w-full border border-slate-200 rounded-xl pl-6 pr-3 py-2.5 text-[13px] outline-none focus:border-[#1E65FF] focus:ring-1 focus:ring-[#1E65FF] transition-all bg-slate-50 text-[#1A1A18] placeholder:text-slate-400 hover:bg-slate-100" 
             />
           </div>
         </div>
@@ -199,9 +236,11 @@ export default function ListingsPage({ properties, agents, categories, searchPar
             <input 
               placeholder="Min" 
               type="number"
+              min="0"
+              onKeyDown={(e) => { if (e.key === '-' || e.key === 'e') e.preventDefault(); }}
               value={minSize}
               onChange={(e) => setMinSize(e.target.value)}
-              className="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-[13px] outline-none focus:border-[#0B3D91] focus:ring-1 focus:ring-[#0B3D91] transition-all bg-slate-50 text-[#1A1A18] placeholder:text-slate-400 hover:bg-slate-100" 
+              className="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-[13px] outline-none focus:border-[#1E65FF] focus:ring-1 focus:ring-[#1E65FF] transition-all bg-slate-50 text-[#1A1A18] placeholder:text-slate-400 hover:bg-slate-100" 
             />
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-[10px]">m²</span>
           </div>
@@ -209,9 +248,11 @@ export default function ListingsPage({ properties, agents, categories, searchPar
             <input 
               placeholder="Max" 
               type="number"
+              min="0"
+              onKeyDown={(e) => { if (e.key === '-' || e.key === 'e') e.preventDefault(); }}
               value={maxSize}
               onChange={(e) => setMaxSize(e.target.value)}
-              className="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-[13px] outline-none focus:border-[#0B3D91] focus:ring-1 focus:ring-[#0B3D91] transition-all bg-slate-50 text-[#1A1A18] placeholder:text-slate-400 hover:bg-slate-100" 
+              className="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-[13px] outline-none focus:border-[#1E65FF] focus:ring-1 focus:ring-[#1E65FF] transition-all bg-slate-50 text-[#1A1A18] placeholder:text-slate-400 hover:bg-slate-100" 
             />
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-[10px]">m²</span>
           </div>
@@ -232,7 +273,7 @@ export default function ListingsPage({ properties, agents, categories, searchPar
         <div className="flex items-center gap-3">
           <button 
             onClick={() => setLayoutMode(prev => prev === 'list' ? 'grid' : 'list')}
-            className="w-[34px] h-[34px] flex items-center justify-center rounded-full bg-slate-50 border border-slate-200 text-[#0B3D91] transition-colors"
+            className="w-[34px] h-[34px] flex items-center justify-center rounded-full bg-slate-50 border border-slate-200 text-[#1E65FF] transition-colors"
           >
             {layoutMode === 'list' ? (
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
@@ -258,7 +299,7 @@ export default function ListingsPage({ properties, agents, categories, searchPar
             <h2 className="font-serif text-lg font-semibold text-ink">Filter</h2>
             <button 
               onClick={() => setLayoutMode(prev => prev === 'list' ? 'grid' : 'list')}
-              className="w-7 h-7 flex items-center justify-center rounded-full bg-white border border-[#E8E5DF] hover:border-[#0B3D91] text-[#1A1A18] transition-colors cursor-pointer"
+              className="w-7 h-7 flex items-center justify-center rounded-full bg-white border border-[#E8E5DF] hover:border-[#1E65FF] text-[#1A1A18] transition-colors cursor-pointer"
               title="Toggle layout"
             >
               {layoutMode === 'list' ? (
@@ -356,7 +397,7 @@ export default function ListingsPage({ properties, agents, categories, searchPar
                           onClick={() => setCurrentPage(page)}
                           className={`w-8 h-8 sm:w-10 sm:h-10 shrink-0 rounded-lg text-sm font-semibold transition-colors ${
                             currentPage === page 
-                              ? "bg-[#0B3D91] text-white shadow-md shadow-[#0B3D91]/20" 
+                              ? "bg-[#1E65FF] text-white shadow-md shadow-[#1E65FF]/20" 
                               : "border border-slate-200 text-slate-700 hover:bg-slate-50"
                           }`}
                         >

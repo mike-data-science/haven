@@ -7,10 +7,10 @@ export default function Loading() {
       <Navbar />
 
       {/* Hero Section Skeleton */}
-      <section className="relative z-30 w-full min-h-94 h-auto flex flex-col items-center justify-center text-center pt-21 pb-9">
+      <section className="relative z-[100] w-full flex flex-col items-center justify-center text-center pt-24 md:pt-32 pb-12 md:pb-16 bg-[#FAFAF8]">
         <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 flex flex-col items-center mt-0 pointer-events-none opacity-80">
           <h1 className="font-serif text-[clamp(2.25rem,5vw,3.75rem)] font-bold leading-[1.1] tracking-[-0.5px] mb-5 drop-shadow-sm text-[#1A1A18] md:whitespace-nowrap">
-            Find your <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#0B3D91] to-[#4388FF]">Haven.</span>
+            Find your <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#1E65FF] to-[#4388FF]">Haven.</span>
           </h1>
           <p className="font-sans text-base sm:text-lg text-[#4A5568] max-w-2xl leading-[1.6] mb-6 font-medium md:whitespace-nowrap">
             Browse curated houses, condos, and apartments from agents who actually answer the phone.
@@ -35,10 +35,22 @@ export default function Loading() {
                 <div className="w-full h-5 bg-slate-100 rounded"></div>
               </div>
               <div className="col-span-2 lg:col-span-1 flex justify-center mt-2 lg:mt-0 p-1.5 lg:p-0">
-                <div className="w-full lg:w-23 bg-slate-200 h-10 lg:h-full lg:ml-1.5 rounded-[9px] lg:rounded-full"></div>
+                <div className="w-full lg:w-23 bg-[#1E65FF]/20 h-10 lg:h-full lg:ml-1.5 rounded-[9px] lg:rounded-full"></div>
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Property Types Skeleton */}
+      <section className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 pt-10 pb-6 md:pb-8 relative z-20 -mt-8 overflow-hidden">
+        <div className="flex gap-5 md:gap-6 overflow-x-hidden pb-6">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="flex-none w-[320px] md:w-[360px] h-[200px] md:h-[240px] bg-white rounded-[24px] md:rounded-[32px] p-6 shadow-[0_8px_24px_rgba(0,0,0,0.04)] border border-[#E8E5DF]/60 animate-pulse flex flex-col justify-between">
+              <div className="h-6 w-1/2 bg-slate-100 rounded"></div>
+              <div className="mt-auto h-12 w-16 bg-slate-100 rounded"></div>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -79,6 +91,24 @@ export default function Loading() {
           <div className="h-8 sm:h-12 w-3/4 max-w-2xl bg-white/20 rounded-xl mb-4"></div>
           <div className="h-5 w-1/2 max-w-xl bg-white/10 rounded-lg mb-10"></div>
           <div className="w-full h-[280px] sm:h-[380px] md:h-[480px] lg:h-[560px] rounded-[20px] bg-white/10 border border-white/20"></div>
+        </div>
+      </section>
+
+      {/* Features Skeleton */}
+      <section className="w-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-16 md:py-24 bg-white">
+        <div className="text-center max-w-2xl mx-auto mb-16 animate-pulse">
+          <div className="h-10 w-2/3 mx-auto bg-slate-200 rounded-xl mb-4"></div>
+          <div className="h-6 w-3/4 mx-auto bg-slate-100 rounded-lg"></div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="bg-white rounded-[32px] p-8 md:p-10 border border-slate-100 flex flex-col animate-pulse">
+              <div className="w-16 h-16 rounded-2xl bg-slate-200 mb-8"></div>
+              <div className="h-6 w-3/4 bg-slate-200 rounded mb-4"></div>
+              <div className="h-4 w-full bg-slate-100 rounded mb-2"></div>
+              <div className="h-4 w-5/6 bg-slate-100 rounded"></div>
+            </div>
+          ))}
         </div>
       </section>
 

@@ -57,7 +57,8 @@ const getListingsData = cache(async () => {
   }));
 
   const categories = rawCategories.map(c => ({
-    type: c.name,
+    name: c.name,
+    slug: c.slug,
     count: rawProperties.filter(p => p.category?.id === c.id).length
   }));
 

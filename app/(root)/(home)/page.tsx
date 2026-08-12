@@ -17,6 +17,21 @@ const getHomeData = cache(async () => {
     take: 4,
   });
 
+  const categories = await prisma.category.findMany({
+    include: {
+      _count: {
+        select: {
+          properties: {
+            where: {
+              status: 'APPROVED',
+              isDeleted: false,
+            }
+          }
+        }
+      }
+    }
+  });
+
   const properties = rawProperties.map(p => ({
     id: p.id,
     title: p.title,
@@ -51,13 +66,13 @@ const getHomeData = cache(async () => {
     role: a.title || "Agent",
     deals: 80 + idx * 24,
     listings: 8 + idx * 3,
-    image: a.avatarUrl || "/agents/agent1.png"
+    image: a.avatarUrl || `/agents/agent${(idx % 4) + 1}.png`
   }));
 
-  return { properties, agents };
+  return { properties, agents, categories };
 });
 
 export default async function Page() {
-  const { properties, agents } = await getHomeData();
-  return <HomePage properties={properties} agents={agents} />;
+  const { properties, agents, categories } = await getHomeData();
+  return <HomePage properties={properties} agents={agents} categories={categories} />;
 }

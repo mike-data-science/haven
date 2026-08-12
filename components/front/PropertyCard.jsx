@@ -136,7 +136,7 @@ export function PropertyCard({ listing, compact = false, selected = false, showO
             <Link 
               href={`/property/${listing.id}`}
               onClick={(e) => e.stopPropagation()}
-              className="bg-[#0B3D91]/90 backdrop-blur-md text-white font-bold px-5 py-2.5 rounded-full shadow-2xl hover:bg-[#1e58bd] hover:scale-105 transition-all flex items-center gap-2 pointer-events-auto"
+              className="bg-[#1E65FF]/90 backdrop-blur-md text-white font-bold px-5 py-2.5 rounded-full shadow-2xl hover:bg-[#1455E1] hover:scale-105 transition-all flex items-center gap-2 pointer-events-auto"
             >
               <span>View Details</span>
               <ArrowUpRight className="w-4 h-4" />
@@ -150,15 +150,15 @@ export function PropertyCard({ listing, compact = false, selected = false, showO
         <div>
           <div className="flex items-center gap-4 text-[13px] font-medium text-slate-600 mb-1.5">
             <div className="flex items-center gap-1.5">
-              <BedDouble className="w-3.5 h-3.5 text-[#0B3D91]" />
+              <BedDouble className="w-3.5 h-3.5 text-[#1E65FF]" />
               <span>{listing.beds}-cam.</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <BathIcon className="w-3.5 h-3.5 text-[#0B3D91]" />
+              <BathIcon className="w-3.5 h-3.5 text-[#1E65FF]" />
               <span>{listing.baths} ba.</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <Maximize2 className="w-3.5 h-3.5 text-[#0B3D91]" />
+              <Maximize2 className="w-3.5 h-3.5 text-[#1E65FF]" />
               <span>{listing.sqft?.toLocaleString()} m²</span>
             </div>
           </div>
@@ -169,13 +169,13 @@ export function PropertyCard({ listing, compact = false, selected = false, showO
             </h3>
             {isApartment && listing.floor !== undefined && listing.floor !== null && (
               <div className="flex items-center gap-1.5 text-[13px] font-semibold text-slate-600 whitespace-nowrap shrink-0">
-                <LayersIcon className="w-4 h-4 text-[#0B3D91]" />
+                <LayersIcon className="w-4 h-4 text-[#1E65FF]" />
                 <span>{listing.floor}/{listing.totalFloors || 9} etaj</span>
               </div>
             )}
           </div>
           <div className="flex items-center gap-1.5 text-slate-500">
-             <MapPin className="w-3.5 h-3.5 flex-shrink-0 text-[#0B3D91]" />
+             <MapPin className="w-3.5 h-3.5 flex-shrink-0 text-[#1E65FF]" />
              <span className="font-sans text-[13px] font-medium truncate">{locationFirstWord}, Chișinău</span>
           </div>
         </div>
@@ -184,7 +184,7 @@ export function PropertyCard({ listing, compact = false, selected = false, showO
         
         <div className="flex justify-between items-center mt-auto">
           <div className="flex flex-col">
-            <span className="font-serif text-lg font-bold text-[#0B3D91]">
+            <span className={`font-serif text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-[#1A1A18]'}`}>
               {isRent ? `${formattedFullPrice}/lun.` : formattedFullPrice}
             </span>
           </div>
@@ -230,7 +230,7 @@ export function PropertyCard({ listing, compact = false, selected = false, showO
                  <Link 
                    href={`/property/${listing.id}`}
                    onClick={(e) => e.stopPropagation()}
-                   className="bg-[#0B3D91]/90 backdrop-blur-md text-white font-bold px-3 py-1.5 rounded-full shadow-2xl hover:bg-[#1e58bd] hover:scale-105 transition-all flex items-center gap-1.5 text-[11px] sm:text-xs pointer-events-auto"
+                   className="bg-[#1E65FF]/90 backdrop-blur-md text-white font-bold px-3 py-1.5 rounded-full shadow-2xl hover:bg-[#1455E1] hover:scale-105 transition-all flex items-center gap-1.5 text-[11px] sm:text-xs pointer-events-auto"
                  >
                    <span>View</span>
                    <ArrowUpRight className="w-3.5 h-3.5" />
@@ -248,13 +248,13 @@ export function PropertyCard({ listing, compact = false, selected = false, showO
                     </h3>
                     {isApartment && listing.floor !== undefined && listing.floor !== null && (
                       <div className="flex items-center gap-1 text-[12px] font-semibold text-slate-600 whitespace-nowrap shrink-0">
-                        <LayersIcon className="w-3.5 h-3.5 text-[#0B3D91]" />
+                        <LayersIcon className="w-3.5 h-3.5 text-[#1E65FF]" />
                         <span>{listing.floor}/{listing.totalFloors || 9} etaj</span>
                       </div>
                     )}
                   </div>
                   <div className="flex flex-col items-start sm:items-end shrink-0">
-                    <span className="font-serif text-[14px] sm:text-[16px] font-bold text-[#0B3D91] whitespace-nowrap">
+                    <span className={`font-serif text-[14px] sm:text-[16px] font-bold whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-[#1A1A18]'}`}>
                       {isRent ? `${formattedFullPrice}/lun.` : formattedFullPrice}
                     </span>
                   </div>
@@ -262,7 +262,7 @@ export function PropertyCard({ listing, compact = false, selected = false, showO
 
                 <div className={`w-full h-px my-2 sm:my-3 ${theme === 'dark' ? 'bg-slate-800' : 'bg-[#E8E5DF]/50'}`} />
                 <div className="flex items-center gap-1 text-slate-500 mb-1 sm:mb-2">
-                  <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0 text-[#0B3D91]" />
+                  <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0 text-[#1E65FF]" />
                   <span className="font-sans text-[11px] sm:text-xs font-medium truncate">{streetAddress}, {locationFirstWord}</span>
                 </div>
               </div>
@@ -270,15 +270,15 @@ export function PropertyCard({ listing, compact = false, selected = false, showO
              <div className="flex justify-between items-center pt-2 sm:pt-3 mt-auto gap-2">
                <div className="flex gap-2 sm:gap-3 text-[11px] sm:text-xs font-semibold text-slate-600 min-w-0 overflow-hidden">
                  <div className="flex items-center gap-1 whitespace-nowrap">
-                   <BedDouble className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#0B3D91] shrink-0" />
+                   <BedDouble className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#1E65FF] shrink-0" />
                    <span>{listing.beds} <span className="hidden xl:inline">cam.</span></span>
                  </div>
                  <div className="flex items-center gap-1 whitespace-nowrap">
-                   <BathIcon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#0B3D91] shrink-0" />
+                   <BathIcon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#1E65FF] shrink-0" />
                    <span>{listing.baths} <span className="hidden xl:inline">ba.</span></span>
                  </div>
                  <div className="flex items-center gap-1 whitespace-nowrap">
-                   <Maximize2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#0B3D91] shrink-0" />
+                   <Maximize2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#1E65FF] shrink-0" />
                    <span>{listing.sqft?.toLocaleString()} <span className="hidden lg:inline">m²</span></span>
                  </div>
                </div>
